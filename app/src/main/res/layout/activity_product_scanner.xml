@@ -4,31 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainRelLayout"
     android:background="@color/backgroundYellow"
-    android:padding="20dp"
-    tools:context=".MainActivity">
+    android:padding="20dp">
 
 
     <TextView
+        android:id="@+id/scanningTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/appNameTextView"
-        android:layout_centerInParent="true"
-        android:text="@string/app_name"
-        android:textSize="40sp" />
+        android:text="Scanning..." />
 
     <Button
-        android:id="@+id/scanButton"
+        android:id="@+id/scanBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/mainRelLayout"
-        android:layout_below="@id/appNameTextView"
-        android:layout_marginTop="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:background="@color/buttonColor"
-        android:text="@string/scan_product"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp" />
-
+        android:text="@string/scan_product" />
 
 </RelativeLayout>

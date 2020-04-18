@@ -5,4 +5,8 @@
     <string name="saturates">w tym kwasy nasycone</string>
     <string name="food_image">Zdjęcie produktu</string>
     <string name="nutrValues100g">Wartości odzywcze w 100g:</string>
+    <string name="scan_product">Skanuj produkt</string>
+    <string name="scanning">Skanowanie...</string>
+    <string name="protein">Białko</string>
+    <string name="salt">Sól</string>
 </resources>

@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Food Check</string>
+    <string name="last_ate">Last ate</string>
+    <string name="saturates">of which saturates</string>
+    <string name="food_image">Food Image</string>
+    <string name="nutrValues100g">Nutritional Values in 100g:</string>
+    <string name="scan_product">Scan Product</string>
+    <string name="food_name">Food name</string>
+    <string name="fat">Fat</string>
+    <string name="carbohydrates">Carbohydrates</string>
+    <string name="sugars">of which sugars</string>
+    <string name="scanning">Scanning...</string>
+    <string name="salt">Salt</string>
 </resources>

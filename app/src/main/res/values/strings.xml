@@ -11,4 +11,6 @@
     <string name="protein">Protein</string>
     <string name="salt">Salt</string>
     <string name="food_image">Food Image</string>
+    <string name="scan_product">Scan Product</string>
+    <string name="scanning">Scanning...</string>
 </resources>
