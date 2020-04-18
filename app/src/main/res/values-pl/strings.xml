@@ -9,4 +9,5 @@
     <string name="scanning">Skanowanie...</string>
     <string name="protein">Białko</string>
     <string name="salt">Sól</string>
+    <string name="food_name">Nazwa produktu</string>
 </resources>

@@ -12,4 +12,6 @@
     <string name="sugars">of which sugars</string>
     <string name="scanning">Scanning...</string>
     <string name="salt">Salt</string>
+    <string name="energy">Energy</string>
+    <string name="protein">Protein</string>
 </resources>
