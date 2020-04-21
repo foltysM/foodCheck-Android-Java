@@ -10,4 +10,8 @@
     <string name="protein">Białko</string>
     <string name="salt">Sól</string>
     <string name="food_name">Nazwa produktu</string>
+    <string name="sugars">w tym cukry</string>
+    <string name="carbohydrates">Węglowodany</string>
+    <string name="fat">Tłuszcz</string>
+    <string name="energy">Energia</string>
 </resources>

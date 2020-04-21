@@ -9,7 +9,4 @@ public class FoodProduct {
     private double protein;
     private double salt;
     private double weight;
-
-
-
 }

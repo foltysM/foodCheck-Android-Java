@@ -13,6 +13,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     private Button scanButton;
+    private Button debugButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         scanButton = findViewById(R.id.scanButton);
+        debugButton = findViewById(R.id.debugButton);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,11 +30,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+        debugButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, AfterScanActivity.class);
+                startActivity(myIntent);
+            }
+        });
 
         DatabaseAsyncTask databaseAsyncTask = new DatabaseAsyncTask();
         databaseAsyncTask.execute();
-
-
     }
 
 

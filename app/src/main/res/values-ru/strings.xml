@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Food Check</string>
+    <string name="protein">велок</string>
+    <string name="scanning">" сканирование"</string>
+    <string name="salt">соль</string>
+    <string name="carbohydrates">" углеводы"</string>
+    <string name="fat">жиру</string>
+    <string name="energy">калорииность</string>
+    <string name="nutrValues100g">Энергитическая ценность в 100г:</string>
+    <string name="sugars">в т.ч. сахар</string>
+    <string name="saturates">в т.ч. насыщенные кислоты</string>
 </resources>

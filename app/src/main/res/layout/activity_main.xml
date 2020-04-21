@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRelLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainRelLayout"
     android:background="@color/backgroundYellow"
     android:padding="20dp"
     tools:context=".MainActivity">
 
 
     <TextView
+        android:id="@+id/appNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/appNameTextView"
         android:layout_centerInParent="true"
         android:text="@string/app_name"
         android:textSize="40sp" />
@@ -22,13 +22,19 @@
         android:id="@+id/scanButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/mainRelLayout"
         android:layout_below="@id/appNameTextView"
         android:layout_marginTop="150dp"
         android:background="@color/buttonColor"
         android:text="@string/scan_product"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/debugButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scanButton"
+        android:text="DEBUG GO TO AFTERSCAN" />
 
 
 </RelativeLayout>
