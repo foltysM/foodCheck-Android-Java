@@ -10,4 +10,6 @@
     <string name="nutrValues100g">Энергитическая ценность в 100г:</string>
     <string name="sugars">в т.ч. сахар</string>
     <string name="saturates">в т.ч. насыщенные кислоты</string>
+    <string name="barcode">штрихкод</string>
+    <string name="g">г</string>
 </resources>

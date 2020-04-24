@@ -53,10 +53,8 @@ public class SQliteDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("fibre", fibre);
         contentValues.put("protein", protein);
         contentValues.put("salt", salt);
-        //TODO imURL
-        /*
-        contentValues.put("imURL", ""+barcode");
-         */
+        String url = "http://foltys.net/food-check/img/" + barcode + ".jpg";
+        contentValues.put("imURL", url);
         contentValues.put("fav", false);
 
         db.insert("past_scans", null, contentValues);
@@ -75,11 +73,8 @@ public class SQliteDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("fibre", fibre);
         contentValues.put("protein", protein);
         contentValues.put("salt", salt);
-        //TODO imURL
-        /*
-        contentValues.put("imURL", ""+barcode");
-         */
-
+        String url = "http://foltys.net/food-check/img/" + barcode + ".jpg";
+        contentValues.put("imURL", url);
         db.insert("favorite", null, contentValues);
     }
 

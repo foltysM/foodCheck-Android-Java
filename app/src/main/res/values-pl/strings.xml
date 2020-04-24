@@ -14,4 +14,13 @@
     <string name="carbohydrates">Węglowodany</string>
     <string name="fat">Tłuszcz</string>
     <string name="energy">Energia</string>
+    <string name="barcode">Kod kreskowy</string>
+    <string name="weight">Waga</string>
+    <string name="fibre">Błonnik</string>
+    <string name="g">g</string>
+    <string name="error_occured">Wystąpił błąd</string>
+    <string name="back">Powrót</string>
+    <string name="language">Język</string>
+    <string name="just_scanned">Zeskanowałeś:</string>
+    <string name="help">Pomoc</string>
 </resources>

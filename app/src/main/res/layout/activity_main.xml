@@ -9,7 +9,6 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
-
     <TextView
         android:id="@+id/appNameTextView"
         android:layout_width="wrap_content"

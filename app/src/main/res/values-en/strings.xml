@@ -14,4 +14,14 @@
     <string name="salt">Salt</string>
     <string name="energy">Energy</string>
     <string name="protein">Protein</string>
+    <string name="barcode">Barcode</string>
+    <string name="weight">Weight</string>
+    <string name="fibre">Fibre</string>
+    <string name="g">g</string>
+    <string name="discard">Discard</string>
+    <string name="save">Save</string>
+    <string name="error_occured">Error occured</string>
+    <string name="back">Back</string>
+    <string name="language">Language</string>
+    <string name="just_scanned">You\'ve just scanned:</string>
 </resources>

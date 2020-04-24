@@ -7,4 +7,7 @@
     <string name="carbohydrates">Kohlenhydrate</string>
     <string name="scan_product">Produkt scannen</string>
     <string name="food_name">Essen Name</string>
+    <string name="barcode">" Strichcode"</string>
+    <string name="g">g</string>
+    <string name="language">Sprache</string>
 </resources>
