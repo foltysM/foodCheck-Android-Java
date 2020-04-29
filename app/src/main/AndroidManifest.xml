@@ -15,13 +15,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".PastScansActivity" />
+        <activity android:name=".SettingsActivity" />
         <activity android:name=".AfterScanActivity" />
         <activity android:name=".ProductScannerActivity" />
-        <activity android:name=".FavItemsActivity" />
+        <activity
+            android:name=".FavItemsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

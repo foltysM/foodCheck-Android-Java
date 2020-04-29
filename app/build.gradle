@@ -44,4 +44,3 @@ dependencies {
     implementation "com.microsoft.appcenter:appcenter-analytics:3.2.0"
     implementation "com.microsoft.appcenter:appcenter-crashes:3.2.0"
 }
-

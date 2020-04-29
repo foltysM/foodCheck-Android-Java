@@ -8,8 +8,10 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,11 +27,22 @@ public class ProductScannerActivity extends AppCompatActivity implements ZXingSc
     private Button scanButton2;
 
     private static final int CAPTURE_IMAGE = 2;
-
+    private static final String TAG = "ProductScannerActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_scanner);
+        // TODO intent database
+        try {
+            Intent intent = getIntent();
+            //String name = intent.getStringExtra(getResources().getString("name"));
+            //SQLiteDatabase database = intent.getda
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, "onCreate: NO INTENT VALUE");
+        }
+
+
         //TODO skanowanie kodów
         scannerView = new ZXingScannerView(this);
         scanButton2 = findViewById(R.id.scanBtn);
@@ -45,7 +58,7 @@ public class ProductScannerActivity extends AppCompatActivity implements ZXingSc
 //        }
 
 
-        new IntentIntegrator(this).initiateScan();
+        //new IntentIntegrator(this).initiateScan();
 
     }
 

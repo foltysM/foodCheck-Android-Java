@@ -24,6 +24,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class AfterScanActivity extends AppCompatActivity {
 
     private static final String TAG = "AfterScanActivity";
@@ -51,6 +53,7 @@ public class AfterScanActivity extends AppCompatActivity {
         Button discardButton = findViewById(R.id.discardButton);
         activityInit();
 
+        final Calendar calendar = Calendar.getInstance();
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +67,12 @@ public class AfterScanActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO inserting into database after scan
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("date", "");
+                String year = Integer.toString(calendar.get(Calendar.YEAR));
+                String month = Integer.toString(calendar.get(Calendar.MONTH));
+                String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+                String date = year + "/" + month + "/" + day;
+
+                contentValues.put("date", date);
                 contentValues.put("barcode", 00000);
                 contentValues.put("name", "");
                 contentValues.put("weight", "");
@@ -90,6 +98,7 @@ public class AfterScanActivity extends AppCompatActivity {
 
         // TODO uzyskanie barcode
         long barcode = 5904730161183L; // dev only0
+        // TODO niepoprawne wyświetlanie barcode
         barcodeResultTextView.setText(Double.toString(barcode));
 
         // TODO polaczenie z baza w necie
