@@ -24,4 +24,10 @@
     <string name="back">Back</string>
     <string name="language">Language</string>
     <string name="just_scanned">You\'ve just scanned:</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="progress">Progress</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="scan_history">Scan history</string>
+    <string name="fav_products">Favorite products</string>
 </resources>

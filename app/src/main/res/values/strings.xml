@@ -36,4 +36,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="home">Home</string>
     <string name="other">Other</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="ask_before_del">Ask before record delete</string>
+    <string name="data_saved">Data Saved!</string>
 </resources>

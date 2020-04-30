@@ -24,4 +24,10 @@
     <string name="just_scanned">Zeskanowałeś:</string>
     <string name="help">Pomoc</string>
     <string name="other">Inne</string>
+    <string name="settings">Ustawienia</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="grant_permission">Przyznaj uprawnienie</string>
+    <string name="progress">Postępy</string>
+    <string name="fav_products">Ulubione produkty</string>
+    <string name="save">Zapisz</string>
 </resources>
