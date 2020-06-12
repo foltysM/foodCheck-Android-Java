@@ -9,22 +9,25 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
+        android:id="@+id/personPhotoHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/profile_picture"
         android:src="@mipmap/ic_launcher_round" />
 
     <TextView
+        android:id="@+id/nameHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="PLACEHOLDER"
+        android:text="@string/placeholder"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
+        android:id="@+id/emailHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLACEHOLDER" />
+        android:text="@string/placeholder" />
 
 
 </LinearLayout>

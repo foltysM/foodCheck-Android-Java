@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Button scanButton;
     private Button debugButton;
+    private Button debugTestBtn;
     private static final String TAG = "MainActivity";
     private SQLiteDatabase database;
     private Cursor cursor;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
+    private TextView nameTextViewHeader;
+    private TextView emailTextViewHeader;
+    private Uri personPhotoHeader;
 
     @Override
     public void onBackPressed() {
@@ -84,15 +89,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Logging init
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("391481534194-b4806r19t5c9v8vntan1pm5js964f0mh.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
-
+        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Sign in button init
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
+        nameTextViewHeader = findViewById(R.id.nameHeaderTextView);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,11 +161,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i(TAG, "Executed onStart method");
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        System.out.println("hello");
-        //updateUI(account); TODO update
+        updateUI(account);
     }
 
     @Override
@@ -230,6 +237,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_settings:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                break;
+            case R.id.nav_share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                // TODO remove placeholder
+                String url = "http://foltys.net/food-check/app/foodCheck1_0_0.apk";
+                intent.putExtra(Intent.EXTRA_TEXT, getApplicationContext().getResources().getString(R.string.try_app) + url);
+                intent.setType("text/*");
+                Intent chooser = new Intent(Intent.createChooser(intent, getApplicationContext().getResources().getString(R.string.choose_app)));
+                startActivity(chooser);
                 break;
             case R.id.nav_help:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
@@ -335,8 +351,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateUI(GoogleSignInAccount acc) {
         if (acc == null) {
             // TODO zerowanie danych
+
         } else {
             // TODO wpisywanko
+            String personName = acc.getDisplayName();
+            nameTextViewHeader.setText(personName);
+            //String personGivenName = acc.getGivenName();
+            //String personFamilyName = acc.getFamilyName();
+            String personEmail = acc.getEmail();
+            //String personId = acc.getId();
+            Uri personPhoto = acc.getPhotoUrl();
         }
     }
 }

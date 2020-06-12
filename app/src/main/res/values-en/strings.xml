@@ -30,4 +30,16 @@
     <string name="grant_permission">Grant permission</string>
     <string name="scan_history">Scan history</string>
     <string name="fav_products">Favorite products</string>
+    <string name="choose_app">Choose an application</string>
+    <string name="try_app">Try new app for scanning food and keeping diet! Download FoodCheck:</string>
+    <string name="help">Help</string>
+    <string name="other">Other</string>
+    <string name="recommend_friend">Recommend to a friend!</string>
+    <string name="need_camera_permission">This app needs Camera permission!</string>
+    <string name="data_saved">Data saved!</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="ask_before_del">Ask before record delete</string>
+    <string name="home">Home</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="placeholder">placeholder</string>
 </resources>

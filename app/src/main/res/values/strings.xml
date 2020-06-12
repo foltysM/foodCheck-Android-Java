@@ -38,5 +38,8 @@
     <string name="other">Other</string>
     <string name="profile_picture">Profile picture</string>
     <string name="ask_before_del">Ask before record delete</string>
-    <string name="data_saved">Data Saved!</string>
+    <string name="data_saved">Data saved!</string>
+    <string name="try_app">Try new app for scanning food and keeping diet! Download FoodCheck:</string>
+    <string name="choose_app">Choose an application</string>
+    <string name="placeholder">placeholder</string>
 </resources>

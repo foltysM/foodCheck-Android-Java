@@ -30,4 +30,17 @@
     <string name="progress">Postępy</string>
     <string name="fav_products">Ulubione produkty</string>
     <string name="save">Zapisz</string>
+    <string name="choose_app">Wybierz aplikację</string>
+    <string name="profile_picture">Zdjęcie profilowe</string>
+    <string name="scan_history">Historia skanów</string>
+    <string name="need_camera_permission">Ta aplikacja potrzebuje uprawnień do używania aparatu!</string>
+    <string name="navigation_drawer_open">Otwórz zasobnik boczny</string>
+    <string name="navigation_drawer_close">Zamknij zasobnik boczny</string>
+    <string name="data_saved">Dane zapisane!</string>
+    <string name="discard">Odrzuć</string>
+    <string name="recommend_friend">Poleć znajomemu!</string>
+    <string name="ask_before_del">Pytaj przed usunięciem rekordu</string>
+    <string name="home">Strona główna</string>
+    <string name="try_app">"Wypróbuj nową aplikację do skanowania żywności i trzymania diety! Pobierz FoodCheck: "</string>
+    <string name="placeholder">trzymacz miejsca</string>
 </resources>

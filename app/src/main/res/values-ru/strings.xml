@@ -12,4 +12,5 @@
     <string name="saturates">в т.ч. насыщенные кислоты</string>
     <string name="barcode">штрихкод</string>
     <string name="g">г</string>
+    <string name="language">" язык"</string>
 </resources>
