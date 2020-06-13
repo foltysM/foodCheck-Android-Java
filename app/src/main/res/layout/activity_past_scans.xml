@@ -12,16 +12,30 @@
     <!--        android:id="@+id/backFloatingButton"-->
     <!--        android:layout_alignParentBottom="true"-->
     <!--        />-->
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/backFloatingButton"
-        android:layout_width="match_parent"
+    <!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+    <!--        android:id="@+id/backFloatingButton"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:layout_marginBottom="20dp"-->
+    <!--        android:text="@string/back" />-->
+    <!-- tu inny view-->
+    <TextView
+        android:id="@+id/pastScansTitleTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/back" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/scan_history"
+        android:textSize="40sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:id="@+id/cardViewPastScans"
+        android:layout_below="@id/pastScansTitleTextView" />
 
 
 </RelativeLayout>

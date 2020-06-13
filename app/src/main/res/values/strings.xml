@@ -43,4 +43,8 @@
     <string name="choose_app">Choose an application</string>
     <string name="placeholder">placeholder</string>
     <string name="logout_successful">Logout successful!</string>
+    <string name="default_date" translatable="false">0000-00-00</string>
+    <string name="product_image">Product image</string>
+    <string name="favorite_button">Favorite Button</string>
+    <string name="product_name">Product Name</string>
 </resources>

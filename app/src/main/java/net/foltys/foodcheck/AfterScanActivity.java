@@ -42,12 +42,13 @@ public class AfterScanActivity extends AppCompatActivity {
     private TextView fibreResultTextView;
     private TextView proteinResultTextView;
     private TextView saltResultTextView;
+    private String scannedBarcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_scan);
-
+        scannedBarcode = getIntent().getStringExtra("barcode");
         Button favoriteButton = findViewById(R.id.favoriteButton);
         Button saveButton = findViewById(R.id.saveButton);
         Button discardButton = findViewById(R.id.discardButton);
@@ -97,7 +98,7 @@ public class AfterScanActivity extends AppCompatActivity {
 
 
         // TODO uzyskanie barcode
-        long barcode = 5904730161183L; // dev only0
+        long barcode = Long.parseLong(scannedBarcode);
         // TODO niepoprawne wyświetlanie barcode
         barcodeResultTextView.setText(Double.toString(barcode));
 

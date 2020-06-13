@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -26,6 +27,7 @@ public class ProductScannerActivity extends AppCompatActivity {
 
     //private ZXingScannerView scannerView;
     private Button scanButton2;
+    private EditText barcodeEditText;
 
     private static final int CAPTURE_IMAGE = 2;
 
@@ -37,12 +39,17 @@ public class ProductScannerActivity extends AppCompatActivity {
 
         //scannerView = new ZXingScannerView(this);
         scanButton2 = findViewById(R.id.scanBtn);
+        // for debug purposes TODO delete
+        barcodeEditText = findViewById(R.id.barcodeEditText);
+        barcodeEditText.setText("5904730161183");
 
         scanButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO odczytanie edittext
+                String barcode = barcodeEditText.getText().toString();
                 Intent intent = new Intent(ProductScannerActivity.this, AfterScanActivity.class);
+                intent.putExtra("barcode", barcode);
                 startActivity(intent);
             }
         });

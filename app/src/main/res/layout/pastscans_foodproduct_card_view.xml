@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/dateNameRelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/datePastScans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_date"
+                android:textSize="21sp" />
+
+            <TextView
+                android:id="@+id/productNamePast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_toStartOf="@id/favBtnPast"
+                android:text="@string/product_name"
+                android:textSize="21sp" />
+
+            <ImageView
+                android:id="@+id/favBtnPast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="@string/favorite_button"
+                android:onClick="favoriteClicked"
+                android:src="@drawable/ic_favorite_border" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/nutValuesRelLayoutLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateNameRelLayout"
+            android:layout_toEndOf="@id/productImagePast">
+
+            <TextView
+                android:id="@+id/nutValues"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nutrValues100g" />
+
+            <TextView
+                android:id="@+id/energyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nutValues"
+                android:text="@string/energy" />
+
+            <TextView
+                android:id="@+id/fatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/energyTextView"
+                android:text="@string/fat" />
+
+            <TextView
+                android:id="@+id/saturatesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fatTextView"
+                android:text="@string/saturates" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/nutValuesRelLayoutRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateNameRelLayout"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/nutValuesRelLayoutLeft">
+
+            <TextView
+                android:id="@+id/carbohydratesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carbohydrates" />
+
+            <TextView
+                android:id="@+id/sugarsPastTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/carbohydratesTextView"
+                android:text="@string/sugars" />
+
+            <TextView
+                android:id="@+id/proteinPastTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sugarsPastTextView"
+                android:text="@string/protein" />
+
+            <TextView
+                android:id="@+id/saltPastTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/proteinPastTextView"
+                android:text="@string/salt" />
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/productImagePast"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_below="@id/dateNameRelLayout"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/product_image"
+            android:src="@mipmap/ic_launcher" />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

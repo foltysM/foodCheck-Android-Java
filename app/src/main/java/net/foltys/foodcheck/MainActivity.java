@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int RC_SIGN_IN = 2;
 
     private Button scanButton;
-    private Button debugButton;
-    private Button debugTestBtn;
     private static final String TAG = "MainActivity";
     private SQLiteDatabase database;
     private Cursor cursor;
@@ -134,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         databaseAsyncTask.execute();
 
         scanButton = findViewById(R.id.scanButton);
-        debugButton = findViewById(R.id.debugButton);
 
 
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -163,14 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-        debugButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, AfterScanActivity.class);
-                startActivity(myIntent);
-            }
-        });
-
 
     }
 
@@ -242,7 +231,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // TODO przekierowanie
                 break;
             case R.id.nav_history:
-                // TODO przekierowanie
+                Intent intentPast = new Intent(MainActivity.this, PastScansActivity.class);
+                startActivity(intentPast);
                 break;
             case R.id.nav_fav_products:
                 // TODO przekierowanie

@@ -2,6 +2,7 @@ package net.foltys.foodcheck;
 
 public class FoodProduct {
     private int id;
+    private String Date;
     private String name;
     private String barcode;
     private int energy;
@@ -14,9 +15,11 @@ public class FoodProduct {
     private double salt;
     private double weight;
     private String url;
+    private boolean favorite;
 
-    public FoodProduct(int id, String name, String barcode, int energy, double fat, double saturates, double carbohydrates, double sugar, double fibre, double protein, double salt, double weight, String url) {
+    public FoodProduct(int id, String date, String name, String barcode, int energy, double fat, double saturates, double carbohydrates, double sugar, double fibre, double protein, double salt, double weight, String url, boolean favorite) {
         this.id = id;
+        Date = date;
         this.name = name;
         this.barcode = barcode;
         this.energy = energy;
@@ -29,6 +32,7 @@ public class FoodProduct {
         this.salt = salt;
         this.weight = weight;
         this.url = url;
+        this.favorite = favorite;
     }
 
     public int getId() {
@@ -37,6 +41,14 @@ public class FoodProduct {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
     }
 
     public String getName() {
@@ -135,10 +147,19 @@ public class FoodProduct {
         this.url = url;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     @Override
     public String toString() {
         return "FoodProduct{" +
                 "id=" + id +
+                ", Date='" + Date + '\'' +
                 ", name='" + name + '\'' +
                 ", barcode='" + barcode + '\'' +
                 ", energy=" + energy +
@@ -151,6 +172,7 @@ public class FoodProduct {
                 ", salt=" + salt +
                 ", weight=" + weight +
                 ", url='" + url + '\'' +
+                ", favorite=" + favorite +
                 '}';
     }
 }
