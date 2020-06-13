@@ -42,4 +42,5 @@
     <string name="try_app">Try new app for scanning food and keeping diet! Download FoodCheck:</string>
     <string name="choose_app">Choose an application</string>
     <string name="placeholder">placeholder</string>
+    <string name="logout_successful">Logout successful!</string>
 </resources>

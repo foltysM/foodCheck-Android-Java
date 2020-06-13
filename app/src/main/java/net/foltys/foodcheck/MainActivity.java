@@ -22,22 +22,29 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -54,9 +61,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
+
+    // below variables of header
     private TextView nameTextViewHeader;
     private TextView emailTextViewHeader;
-    private Uri personPhotoHeader;
+    private ImageView personPhotoHeader;
+    // end of variables of header
+
+    private boolean userLogged;
 
     @Override
     public void onBackPressed() {
@@ -72,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO wlaczony internet check
+        // TODO isOn? internet check
 
         parent = findViewById(R.id.mainRelLayout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -89,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Logging init
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("391481534194-b4806r19t5c9v8vntan1pm5js964f0mh.apps.googleusercontent.com")
+                .requestIdToken("391481534194-j4e5bl0pub7t1etg9kav0ibmn0es1otu.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -99,7 +111,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        nameTextViewHeader = findViewById(R.id.nameHeaderTextView);
+        // variables connected with header
+        View header = navigationView.getHeaderView(0);
+        nameTextViewHeader = header.findViewById(R.id.nameHeaderTextView);
+        emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
+        personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,6 +267,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
                 startActivity(browserIntent);
                 break;
+            case R.id.nav_logout:
+                if (userLogged) {
+                    //Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show();
+                    logout();
+                } else
+                    Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -339,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Signed in successfully, show authenticated UI.
             updateUI(account);
-            Log.d(TAG, "signInResult: git");
+            Log.d(TAG, "signInResult: Signed-In");
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -350,17 +373,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateUI(GoogleSignInAccount acc) {
         if (acc == null) {
-            // TODO zerowanie danych
+            // clearing person data
+            nameTextViewHeader.setVisibility(View.GONE);
+            emailTextViewHeader.setVisibility(View.GONE);
+            //personPhotoHeader.setImageResource(R.mipmap.ic_launcher_round);
+            signInButton.setVisibility(View.VISIBLE);
+            userLogged = false;
 
         } else {
-            // TODO wpisywanko
-            String personName = acc.getDisplayName();
-            nameTextViewHeader.setText(personName);
-            //String personGivenName = acc.getGivenName();
-            //String personFamilyName = acc.getFamilyName();
-            String personEmail = acc.getEmail();
-            //String personId = acc.getId();
-            Uri personPhoto = acc.getPhotoUrl();
+            nameTextViewHeader.setVisibility(View.VISIBLE);
+            nameTextViewHeader.setText(acc.getDisplayName());
+            emailTextViewHeader.setVisibility(View.VISIBLE);
+            emailTextViewHeader.setText(acc.getEmail());
+            personPhotoHeader.setVisibility(View.VISIBLE);
+            // TODO photo
+            //Uri urllll =
+            String photoUrl = Objects.requireNonNull(acc.getPhotoUrl()).toString();
+            Glide.with(getApplicationContext()).load(photoUrl)
+                    .thumbnail(0.5f)
+                    .transition(new DrawableTransitionOptions()
+                            .crossFade())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(personPhotoHeader);
+            //Log.d(TAG, "Photo url: "+urllll);
+            personPhotoHeader.setImageURI(null);
+            Log.d(TAG, "Image set to null");
+
+            //personPhotoHeader.setImageURI(urllll);
+            Log.d(TAG, "Image set to url");
+            signInButton.setVisibility(View.GONE);
+            userLogged = true;
         }
+    }
+
+    private void logout() {
+        updateUI(null);
+        userLogged = false;
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_SHORT).show();
+            }
+        });
+        signInButton.setVisibility(View.VISIBLE);
     }
 }
