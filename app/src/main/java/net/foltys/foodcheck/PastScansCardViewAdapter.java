@@ -41,12 +41,20 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder called");
         holder.productName.setText(products.get(position).getName());
+        holder.productDate.setText(products.get(position).getDate());
+        holder.productEnergy.setText(context.getResources().getString(R.string.energy) + " - " + products.get(position).getEnergy() + context.getResources().getString(R.string.g));
+        holder.productFat.setText(context.getResources().getString(R.string.fat) + " - " + products.get(position).getFat() + context.getResources().getString(R.string.g));
+        holder.productSaturates.setText(context.getResources().getString(R.string.saturates) + " - " + products.get(position).getSaturates() + context.getResources().getString(R.string.g));
+        holder.productCarbohydrates.setText(context.getResources().getString(R.string.carbohydrates) + " - " + products.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
+        holder.productSugars.setText(context.getResources().getString(R.string.sugars) + " - " + products.get(position).getSugar() + context.getResources().getString(R.string.g));
+        holder.productProtein.setText(context.getResources().getString(R.string.protein) + " - " + products.get(position).getProtein() + context.getResources().getString(R.string.g));
+        holder.productSalt.setText(context.getResources().getString(R.string.salt) + " - " + products.get(position).getSalt() + context.getResources().getString(R.string.g));
 
-        //holder.productImage;
+        //TODO wyswietlanie zdjecia
         Glide.with(context)
                 .asBitmap()
                 .load(products.get(position).getUrl())
-                .thumbnail(0.5f)
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.productImage);
     }
@@ -64,12 +72,28 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView productName;
         private ImageView productImage;
+        private TextView productDate;
+        private TextView productEnergy;
+        private TextView productFat;
+        private TextView productSaturates;
+        private TextView productCarbohydrates;
+        private TextView productSugars;
+        private TextView productProtein;
+        private TextView productSalt;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             productImage = itemView.findViewById(R.id.productImagePast);
             productName = itemView.findViewById(R.id.productNamePast);
+            productDate = itemView.findViewById(R.id.datePastScans);
+            productEnergy = itemView.findViewById(R.id.energyTextView);
+            productFat = itemView.findViewById(R.id.fatTextView);
+            productSaturates = itemView.findViewById(R.id.saturatesTextView);
+            productCarbohydrates = itemView.findViewById(R.id.carbohydratesTextView);
+            productSugars = itemView.findViewById(R.id.sugarsPastTextView);
+            productProtein = itemView.findViewById(R.id.proteinPastTextView);
+            productSalt = itemView.findViewById(R.id.saltPastTextView);
         }
     }
 }

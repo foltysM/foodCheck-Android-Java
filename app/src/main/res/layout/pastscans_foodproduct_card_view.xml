@@ -117,8 +117,8 @@
 
         <ImageView
             android:id="@+id/productImagePast"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_below="@id/dateNameRelLayout"
             android:layout_margin="10dp"
             android:contentDescription="@string/product_image"

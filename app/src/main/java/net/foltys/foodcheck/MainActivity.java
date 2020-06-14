@@ -235,8 +235,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intentPast);
                 break;
             case R.id.nav_fav_products:
-                // TODO przekierowanie
-                Toast.makeText(this, "THIS IS TOAST MESSAGE", Toast.LENGTH_SHORT).show();
+                Intent intent_fav = new Intent(MainActivity.this, FavItemsActivity.class);
+                startActivity(intent_fav);
                 break;
             case R.id.nav_progress:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
@@ -246,8 +246,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                // TODO remove placeholder
-                String url = "http://foltys.net/food-check/app/foodCheck1_0_0.apk";
+                String url = "http://foltys.net/food-check/app/foodCheck.apk";
                 intent.putExtra(Intent.EXTRA_TEXT, getApplicationContext().getResources().getString(R.string.try_app) + url);
                 intent.setType("text/*");
                 Intent chooser = new Intent(Intent.createChooser(intent, getApplicationContext().getResources().getString(R.string.choose_app)));
@@ -259,7 +258,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_logout:
                 if (userLogged) {
-                    //Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show();
                     logout();
                 } else
                     Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show();
