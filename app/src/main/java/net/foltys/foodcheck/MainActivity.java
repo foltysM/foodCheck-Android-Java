@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO checking permission
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // checks if able to show permission request
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
@@ -198,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         // checks if able to show permission request
-                        // TODO wykrzyknik ponizej czy nie?
                         if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
                             // shows snackbar
                             Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
@@ -228,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
-                // TODO przekierowanie
+                Intent intent_home = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent_home);
                 break;
             case R.id.nav_history:
                 Intent intentPast = new Intent(MainActivity.this, PastScansActivity.class);
@@ -375,7 +374,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             emailTextViewHeader.setText(acc.getEmail());
             personPhotoHeader.setVisibility(View.VISIBLE);
             // TODO photo
-            //Uri urllll =
             String photoUrl = Objects.requireNonNull(acc.getPhotoUrl()).toString();
             Glide.with(getApplicationContext()).load(photoUrl)
                     .thumbnail(0.5f)
