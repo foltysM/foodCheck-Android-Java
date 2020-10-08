@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/afterScanRelLayout"
+    android:id="@+id/drawer_layout_after"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundYellow"
     tools:context=".AfterScanActivity">
+
 
     <RelativeLayout
         android:id="@+id/titleRelLayout"
@@ -18,7 +18,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/just_scanned"
-            android:textSize="27sp" />
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/favoriteButton"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:background="@color/buttonColor"
+            android:drawableLeft="@drawable/ic_favorite_full" />
 
         <TextView
             android:id="@+id/productNameTextView"
@@ -26,34 +37,24 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/justScannedTextView"
             android:text="@string/food_name"
-            android:textSize="21sp" />
+            android:textSize="19sp" />
 
         <TextView
             android:id="@+id/weightTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/justScannedTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/productNameTextView"
-            android:text="@string/weight"
-            android:textSize="21sp" />
+            android:layout_below="@id/productNameTextView"
 
-        <Button
-            android:id="@+id/favoriteButton"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            app:icon="@drawable/ic_favorite_vector" />
+            android:text="@string/weight"
+            android:textSize="19sp" />
+
+
 
         <TextView
             android:id="@+id/barcodeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/productNameTextView"
+            android:layout_below="@id/weightTextView"
             android:text="@string/barcode" />
 
         <TextView
@@ -79,6 +80,12 @@
             android:layout_height="200dp"
             android:contentDescription="@string/food_image"
             android:src="@mipmap/ic_launcher" />
+
+        <ProgressBar
+            android:id="@+id/imageProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
     </RelativeLayout>
 
@@ -251,6 +258,7 @@
             android:text="@string/save"
             android:textColor="#FFFFFF" />
 
+
         <Button
             android:id="@+id/discardButton"
             android:layout_width="150dp"
@@ -263,3 +271,4 @@
             android:textColor="#FFFFFF" />
     </RelativeLayout>
 </RelativeLayout>
+

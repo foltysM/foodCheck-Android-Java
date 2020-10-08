@@ -43,4 +43,8 @@
     <string name="home">Strona główna</string>
     <string name="try_app">"Wypróbuj nową aplikację do skanowania żywności i trzymania diety! Pobierz FoodCheck: "</string>
     <string name="placeholder">trzymacz miejsca</string>
+    <string name="logout_successful">Wylogowano pomyślnie!</string>
+    <string name="product_image">Zdjęcie produktu</string>
+    <string name="product_name">Nazwa produktu</string>
+    <string name="kcal">kcal</string>
 </resources>

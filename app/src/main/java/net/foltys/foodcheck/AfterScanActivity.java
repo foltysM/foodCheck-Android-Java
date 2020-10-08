@@ -1,28 +1,36 @@
 package net.foltys.foodcheck;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.foltys.foodcheck.data.PastScan;
 
 import java.util.Calendar;
 
@@ -43,23 +51,49 @@ public class AfterScanActivity extends AppCompatActivity {
     private TextView proteinResultTextView;
     private TextView saltResultTextView;
     private String scannedBarcode;
+    private Boolean isFav = false;
+    private double carbohydrates;
+    private double energy;
+    private double fat;
+    private double fibre;
+    private String name;
+    private double protein;
+    private double salt;
+    private double saturates;
+    private double sugar;
+    private double weight;
+
+    private ProgressBar imgProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_scan);
         scannedBarcode = getIntent().getStringExtra("barcode");
-        Button favoriteButton = findViewById(R.id.favoriteButton);
+        final Button favoriteButton = findViewById(R.id.favoriteButton);
+        imgProgressBar = findViewById(R.id.imageProgressBar);
         Button saveButton = findViewById(R.id.saveButton);
         Button discardButton = findViewById(R.id.discardButton);
+
         activityInit();
+        // TODO sprawdzenie czy jest w bazie fav
 
         final Calendar calendar = Calendar.getInstance();
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO zmiana ikony i dodanie do bazy danych fav
+                if (isFav) {
+                    isFav = false;
+                    favoriteButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_border, 0, 0, 0);
+                    // TODO usuniecie z bazy fav
+                } else {
+                    isFav = true;
+                    favoriteButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_full, 0, 0, 0);
+                    // TODO dodanie do bazy fav
+                }
+                favoriteButton.setTextColor(Color.BLACK);
+
             }
         });
 
@@ -67,14 +101,15 @@ public class AfterScanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO inserting into database after scan
-                ContentValues contentValues = new ContentValues();
+                //ContentValues contentValues = new ContentValues();
                 String year = Integer.toString(calendar.get(Calendar.YEAR));
                 String month = Integer.toString(calendar.get(Calendar.MONTH));
                 String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
                 String date = year + "/" + month + "/" + day;
 
-                contentValues.put("date", date);
-                contentValues.put("barcode", 00000);
+                insertDataToDatabase();
+                /*contentValues.put("date", date);
+                contentValues.put("barcode", scannedBarcode);
                 contentValues.put("name", "");
                 contentValues.put("weight", "");
                 contentValues.put("energy", "");
@@ -82,7 +117,11 @@ public class AfterScanActivity extends AppCompatActivity {
 
 
                 contentValues.put("protein", 1.1);
-                //db.insert("past_scans", null, contentValues);
+                //db.insert("past_scans", null, contentValues);*/
+
+
+                Intent toHistoryIntent = new Intent(AfterScanActivity.this, PastScansActivity.class);
+                startActivity(toHistoryIntent);
 
             }
         });
@@ -95,39 +134,63 @@ public class AfterScanActivity extends AppCompatActivity {
             }
         });
 
+        barcodeResultTextView.setText(scannedBarcode);
 
-
-        // TODO uzyskanie barcode
-        long barcode = Long.parseLong(scannedBarcode);
-        // TODO niepoprawne wyświetlanie barcode
-        barcodeResultTextView.setText(Double.toString(barcode));
-
-        // TODO polaczenie z baza w necie
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = "https://murmuring-coast-47385.herokuapp.com/api/products/" + barcode;
+        String url = "https://murmuring-coast-47385.herokuapp.com/api/products/" + scannedBarcode;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //resultTextView.setText(response);
+
                 Log.d(TAG, response);
                 Gson gson = new Gson();
                 // we get array with one element as a result
                 FoodProduct[] product = gson.fromJson(response, FoodProduct[].class);
                 Log.d(TAG, "Product barcode: " + product[0].getBarcode());
-                nameTextView.setText(product[0].getName());
-                weightResultTextView.setText(Double.toString(product[0].getWeight()));
-                energyResultTextView.setText(Double.toString(product[0].getEnergy()));
-                fatResultTextView.setText(Double.toString((product[0].getFat())));
-                saturatesResultTextView.setText(Double.toString(product[0].getSaturates()));
-                carbohydratesResultTextView.setText(Double.toString(product[0].getCarbohydrates()));
-                sugarsResultTextView.setText(Double.toString(product[0].getSugar()));
-                fibreResultTextView.setText(Double.toString(product[0].getFibre()));
-                proteinResultTextView.setText(Double.toString(product[0].getProtein()));
-                saltResultTextView.setText(Double.toString(product[0].getSalt()));
-                // TODO Glide.with(AfterScanActivity.class).asBitmap().load(product[0].getUrl()).into(productImg);
+                name = product[0].getName();
+                nameTextView.setText(name);
+                weight = product[0].getWeight();
+                weightResultTextView.setText(String.format(Double.toString(weight), getResources().getString(R.string.g)));
+                energy = product[0].getEnergy();
+                energyResultTextView.setText(String.format(Double.toString(energy), getResources().getString(R.string.kcal)));
+                fat = product[0].getFat();
+                fatResultTextView.setText(String.format(Double.toString(fat), getResources().getString(R.string.g)));
+                saturates = product[0].getSaturates();
+                saturatesResultTextView.setText(String.format(Double.toString(saturates), getResources().getString(R.string.g)));
+                carbohydrates = product[0].getCarbohydrates();
+                carbohydratesResultTextView.setText(String.format(Double.toString(carbohydrates), getResources().getString(R.string.g)));
+                sugar = product[0].getSugar();
+                sugarsResultTextView.setText(String.format(Double.toString(sugar), getResources().getString(R.string.g)));
+                fibre = product[0].getFibre();
+                fibreResultTextView.setText(String.format(Double.toString(fibre), getResources().getString(R.string.g)));
+                protein = product[0].getProtein();
+                proteinResultTextView.setText(String.format(Double.toString(protein), getResources().getString(R.string.g)));
+                salt = product[0].getSalt();
+                saltResultTextView.setText(String.format(Double.toString(salt), getResources().getString(R.string.g)));
+                product[0].setUrl("http://foltys.net/food-check/img/" + scannedBarcode + ".jpg");
+                Glide.with(AfterScanActivity.this)
+                        .asBitmap()
+                        .load(product[0].getUrl())
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                imgProgressBar.setVisibility(View.GONE);
+                                Toast.makeText(AfterScanActivity.this, R.string.imgLoadFailed, Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
 
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                imgProgressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .override(200, 200)
+                        .error(R.drawable.ic_baseline_broken_image_24)
+                        .transform(new RoundedCorners(10))
+                        .into(productImg);
 
 
             }
@@ -158,5 +221,9 @@ public class AfterScanActivity extends AppCompatActivity {
         productImg = findViewById(R.id.productImage);
     }
 
+    private void insertDataToDatabase() {
 
+    }
 }
+
+

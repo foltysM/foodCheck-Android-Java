@@ -15,28 +15,22 @@ import java.util.ArrayList;
 
 public class PastScansActivity extends AppCompatActivity {
 
-    // inaczej
-    private RecyclerView pastScansCardView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_scans);
 
-        // FloatingActionButton backButton = findViewById(R.id.backFloatingButton);
-        pastScansCardView = findViewById(R.id.cardViewPastScans);
-        //pastScansCardView = findViewById(R.layout.pastscans_foodproduct_card_view);
+        FloatingActionButton newScanFloatingActionBtn = findViewById(R.id.newScanFloatingActionButton);
+        // inaczej
+        RecyclerView pastScansCardView = findViewById(R.id.cardViewPastScans);
 
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO faktycznie back, a nie do main
-//                // TODO zamienić na taki ładny, nowiutki wygląd
-//                Intent intent = new Intent(PastScansActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        newScanFloatingActionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO nowy skan
+            }
+        });
 
         PastScansCardViewAdapter adapter = new PastScansCardViewAdapter(this);
         pastScansCardView.setAdapter(adapter);

@@ -6,22 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".PastScansActivity">
 
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:id="@+id/backFloatingButton"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        />-->
-    <!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
-    <!--        android:id="@+id/backFloatingButton"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_alignParentBottom="true"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginEnd="20dp"-->
-    <!--        android:layout_marginBottom="20dp"-->
-    <!--        android:text="@string/back" />-->
-    <!-- tu inny view-->
     <TextView
         android:id="@+id/pastScansTitleTextView"
         android:layout_width="wrap_content"
@@ -32,23 +16,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:id="@+id/cardViewPastScans"
         android:layout_below="@id/pastScansTitleTextView" />
 
-    <Button
-
-        android:id="@+id/backButton"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newScanFloatingActionButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:drawableEnd="@drawable/ic_arrow_back"
-        android:text="@string/back" />
-
-
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 </RelativeLayout>

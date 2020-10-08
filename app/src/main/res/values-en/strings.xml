@@ -42,4 +42,6 @@
     <string name="home">Home</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="placeholder">placeholder</string>
+    <string name="logout_successful">Logout successful!</string>
+    <string name="kcal">kcal</string>
 </resources>

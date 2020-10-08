@@ -64,7 +64,7 @@
                     android:textSize="20sp"
                     app:icon="@drawable/ic_barcode"
                     app:iconGravity="start"
-                    app:iconSize="200sp" />
+                    app:iconSize="100sp" />
 
             </RelativeLayout>
         </FrameLayout>

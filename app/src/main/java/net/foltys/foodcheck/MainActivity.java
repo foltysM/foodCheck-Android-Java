@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int CAMERA_REQUEST_CODE = 1;
     private static final int RC_SIGN_IN = 2;
+    private static final int RC_BARCODE_SCAN = 49374;
 
     private Button scanButton;
     private static final String TAG = "MainActivity";
@@ -154,8 +157,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                     }
                 } else {
-                    Intent myIntent = new Intent(MainActivity.this, ProductScannerActivity.class);
-                    startActivity(myIntent);
+                    // Permission granted, can scan a barcode
+                    IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+                    integrator.setCaptureActivity(CaptureAct.class);
+                    integrator.setOrientationLocked(true); // TODO czy na pewno?
+                    integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                    integrator.setPrompt(getResources().getString(R.string.scanning));
+                    integrator.initiateScan();
                 }
             }
         });
@@ -178,8 +186,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // zamykanie bazy i zamykanie cursora
         cursor.close();
         database.close();
-
-
     }
 
 
@@ -340,6 +346,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        }
+        if (requestCode == RC_BARCODE_SCAN) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            Log.d("requestCode", Integer.toString(requestCode));
+            if (result != null) {
+                if (result.getContents() != null) {
+                    Intent afterScanIntent = new Intent(MainActivity.this, AfterScanActivity.class);
+                    afterScanIntent.putExtra("barcode", result.getContents());
+                    startActivity(afterScanIntent);
+                }
+            }
         }
     }
 

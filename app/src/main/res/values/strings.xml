@@ -47,4 +47,6 @@
     <string name="product_image">Product image</string>
     <string name="favorite_button">Favorite Button</string>
     <string name="product_name">Product Name</string>
+    <string name="kcal">kcal</string>
+    <string name="imgLoadFailed">Image loading failed!</string>
 </resources>
