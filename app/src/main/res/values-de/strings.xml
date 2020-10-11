@@ -7,7 +7,15 @@
     <string name="carbohydrates">Kohlenhydrate</string>
     <string name="scan_product">Produkt scannen</string>
     <string name="food_name">Essen Name</string>
-    <string name="barcode">" Strichcode"</string>
+    <string name="barcode">Strichcode</string>
     <string name="g">g</string>
     <string name="language">Sprache</string>
+    <string name="back">Zurück</string>
+    <string name="energy">Energie</string>
+    <string name="fat">Fett</string>
+    <string name="kcal">kcal</string>
+    <string name="protein">Eiweiß</string>
+    <string name="saturates">davon ges. Fettsäuren</string>
+    <string name="sugars">davon Zucker</string>
+    <string name="nutrValues100g">Nährwerte pro 100g:</string>
 </resources>

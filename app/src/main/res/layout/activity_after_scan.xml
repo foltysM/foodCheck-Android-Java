@@ -44,11 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/productNameTextView"
-
             android:text="@string/weight"
             android:textSize="19sp" />
-
-
 
         <TextView
             android:id="@+id/barcodeTextView"
@@ -61,7 +58,7 @@
             android:id="@+id/barcodeResultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/productNameTextView"
+            android:layout_below="@id/weightTextView"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/barcodeTextView" />
 

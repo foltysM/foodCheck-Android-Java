@@ -14,15 +14,6 @@
         android:layout_height="wrap_content"
         android:text="@string/scanning" />
 
-    <EditText
-        android:id="@+id/barcodeEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scanningTextView"
-        android:autofillHints="5904730161183"
-        android:hint="@string/barcode"
-        android:inputType="number" />
-
     <Button
         android:id="@+id/scanBtn"
         android:layout_width="match_parent"

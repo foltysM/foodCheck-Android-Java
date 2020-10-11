@@ -5,23 +5,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+
+
+import net.foltys.foodcheck.data.FavProd;
+import net.foltys.foodcheck.data.FavProdViewModel;
+import net.foltys.foodcheck.data.PastScan;
+import net.foltys.foodcheck.data.PastScanViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCardViewAdapter.ViewHolder> {
     private static final String TAG = "PastScansCardViewAdapter";
 
-    private ArrayList<FoodProduct> products = new ArrayList<>();
+    private List<PastScan> pastScanProducts = new ArrayList<>();
     private Context context;
 
     public PastScansCardViewAdapter(Context context) {
@@ -35,44 +41,53 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         ViewHolder holder = new ViewHolder(view);
         // TODO clickable fav button
         return holder;
+        //FavProdViewModel mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class); // todo check czy jest fav czy nie
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder called");
-        holder.productName.setText(products.get(position).getName());
-        holder.productDate.setText(products.get(position).getDate());
-        holder.productEnergy.setText(context.getResources().getString(R.string.energy) + " - " + products.get(position).getEnergy() + context.getResources().getString(R.string.g));
-        holder.productFat.setText(context.getResources().getString(R.string.fat) + " - " + products.get(position).getFat() + context.getResources().getString(R.string.g));
-        holder.productSaturates.setText(context.getResources().getString(R.string.saturates) + " - " + products.get(position).getSaturates() + context.getResources().getString(R.string.g));
-        holder.productCarbohydrates.setText(context.getResources().getString(R.string.carbohydrates) + " - " + products.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
-        holder.productSugars.setText(context.getResources().getString(R.string.sugars) + " - " + products.get(position).getSugar() + context.getResources().getString(R.string.g));
-        holder.productProtein.setText(context.getResources().getString(R.string.protein) + " - " + products.get(position).getProtein() + context.getResources().getString(R.string.g));
-        holder.productSalt.setText(context.getResources().getString(R.string.salt) + " - " + products.get(position).getSalt() + context.getResources().getString(R.string.g));
+        holder.productName.setText(pastScanProducts.get(position).getName());
+        holder.productDate.setText(pastScanProducts.get(position).getDate());
+        holder.productHour.setText(pastScanProducts.get(position).getHour());
+        holder.productEnergy.setText(context.getResources().getString(R.string.energy) + " - " + pastScanProducts.get(position).getEnergy() + context.getResources().getString(R.string.g));
+        holder.productFat.setText(context.getResources().getString(R.string.fat) + " - " + pastScanProducts.get(position).getFat() + context.getResources().getString(R.string.g));
+        holder.productSaturates.setText(context.getResources().getString(R.string.saturates) + " - " + pastScanProducts.get(position).getSaturates() + context.getResources().getString(R.string.g));
+        holder.productCarbohydrates.setText(context.getResources().getString(R.string.carbohydrates) + " - " + pastScanProducts.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
+        holder.productSugars.setText(context.getResources().getString(R.string.sugars) + " - " + pastScanProducts.get(position).getSugars() + context.getResources().getString(R.string.g));
+        holder.productProtein.setText(context.getResources().getString(R.string.protein) + " - " + pastScanProducts.get(position).getProtein() + context.getResources().getString(R.string.g));
+        holder.productSalt.setText(context.getResources().getString(R.string.salt) + " - " + pastScanProducts.get(position).getSalt() + context.getResources().getString(R.string.g));
 
-        //TODO wyswietlanie zdjecia
+        String url = "http://foltys.net/food-check/img/" + pastScanProducts.get(position).getBarcode() + ".jpg";
+
         Glide.with(context)
                 .asBitmap()
-                .load(products.get(position).getUrl())
+                .load(url)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.productImage);
+
     }
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return pastScanProducts.size();
     }
 
-    public void setProducts(ArrayList<FoodProduct> products) {
-        this.products = products;
+    public void setProducts(List<PastScan> products) {
+        this.pastScanProducts = products;
         notifyDataSetChanged();
+    }
+
+    public PastScan getPastAt(int pos) {
+        return pastScanProducts.get(pos);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView productName;
         private ImageView productImage;
         private TextView productDate;
+        private TextView productHour;
         private TextView productEnergy;
         private TextView productFat;
         private TextView productSaturates;
@@ -80,6 +95,7 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         private TextView productSugars;
         private TextView productProtein;
         private TextView productSalt;
+        private Button favButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +103,7 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
             productImage = itemView.findViewById(R.id.productImagePast);
             productName = itemView.findViewById(R.id.productNamePast);
             productDate = itemView.findViewById(R.id.datePastScans);
+            productHour = itemView.findViewById(R.id.hourTextViewPast);
             productEnergy = itemView.findViewById(R.id.energyTextView);
             productFat = itemView.findViewById(R.id.fatTextView);
             productSaturates = itemView.findViewById(R.id.saturatesTextView);
@@ -94,6 +111,7 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
             productSugars = itemView.findViewById(R.id.sugarsPastTextView);
             productProtein = itemView.findViewById(R.id.proteinPastTextView);
             productSalt = itemView.findViewById(R.id.saltPastTextView);
+            favButton = itemView.findViewById(R.id.favoriteButton);
         }
     }
 }

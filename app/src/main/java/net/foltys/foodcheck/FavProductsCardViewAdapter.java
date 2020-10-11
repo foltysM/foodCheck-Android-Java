@@ -11,12 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import net.foltys.foodcheck.data.FavProd;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProductsCardViewAdapter.ViewHolder> {
     private static final String TAG = "FavProductsCardViewAdapter";
 
-    private ArrayList<FavFoodProduct> favProducts = new ArrayList<>(); // TODO inna klasa
+    private List<FavProd> favProds = new ArrayList<>();
     private Context context;
 
     public FavProductsCardViewAdapter(Context context) {
@@ -34,28 +40,41 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // TODO uzupelnic o obrazek
+
         Log.d(TAG, "Fav onBind called");
-        holder.productNameFav.setText(favProducts.get(position).getName());
-        holder.lastAteFav.setText(favProducts.get(position).getLastAte());
-        holder.energyFav.setText(context.getResources().getString(R.string.energy) + " - " + favProducts.get(position).getEnergy() + context.getResources().getString(R.string.g));
-        holder.fatFav.setText(context.getResources().getString(R.string.fat) + " - " + favProducts.get(position).getFat() + context.getResources().getString(R.string.g));
-        holder.saturatesFav.setText(context.getResources().getString(R.string.saturates) + " - " + favProducts.get(position).getSaturates() + context.getResources().getString(R.string.g));
-        holder.sugarsFav.setText(context.getResources().getString(R.string.sugars) + " - " + favProducts.get(position).getSugar() + context.getResources().getString(R.string.g));
-        holder.carbohydratesFav.setText(context.getResources().getString(R.string.carbohydrates) + " - " + favProducts.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
-        holder.saltFav.setText(context.getResources().getString(R.string.salt) + " - " + favProducts.get(position).getSalt() + context.getResources().getString(R.string.g));
+        holder.productNameFav.setText(favProds.get(position).getName());
+        holder.lastAteFav.setText("PLACEHOLDER"); //TODO Last ate
+        holder.energyFav.setText(context.getResources().getString(R.string.energy) + " - " + favProds.get(position).getEnergy() + context.getResources().getString(R.string.g));
+        holder.fatFav.setText(context.getResources().getString(R.string.fat) + " - " + favProds.get(position).getFat() + context.getResources().getString(R.string.g));
+        holder.saturatesFav.setText(context.getResources().getString(R.string.saturates) + " - " + favProds.get(position).getSaturates() + context.getResources().getString(R.string.g));
+        holder.sugarsFav.setText(context.getResources().getString(R.string.sugars) + " - " + favProds.get(position).getSugars() + context.getResources().getString(R.string.g));
+        holder.carbohydratesFav.setText(context.getResources().getString(R.string.carbohydrates) + " - " + favProds.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
+        holder.saltFav.setText(context.getResources().getString(R.string.salt) + " - " + favProds.get(position).getSalt() + context.getResources().getString(R.string.g));
+
+        String url = "http://foltys.net/food-check/img/" + favProds.get(position).getBarcode() + ".jpg";
+
+        Glide.with(context)
+                .asBitmap()
+                .load(url)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageFav);
 
     }
 
 
     @Override
     public int getItemCount() {
-        return favProducts.size();
+        return favProds.size();
     }
 
-    public void setFavProducts(ArrayList<FavFoodProduct> favProducts) {
-        this.favProducts = favProducts;
+    public void setFavProducts(List<FavProd> favProducts) {
+        this.favProds = favProducts;
         notifyDataSetChanged();
+    }
+
+    public FavProd getFavAt(int pos) {
+        return favProds.get(pos);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +91,7 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageFav = itemView.findViewById(R.id.productImage);
+            imageFav = itemView.findViewById(R.id.productImageFav);
             productNameFav = itemView.findViewById(R.id.titleTextView);
             lastAteFav = itemView.findViewById(R.id.lastAteTextView);
             energyFav = itemView.findViewById(R.id.energyTextView);

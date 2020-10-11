@@ -8,6 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,6 +47,9 @@ import com.google.zxing.integration.android.IntentResult;
 import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
+
+import net.foltys.foodcheck.data.PastScan;
+import net.foltys.foodcheck.data.PastScanViewModel;
 
 import java.util.Objects;
 
@@ -94,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        //mWordViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -130,12 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AppCenter.start(getApplication(), "bb5ba2c0-ac45-4e09-937b-08d97e6c789c",
                 Analytics.class, Crashes.class);
 
-        // creating database
-        DatabaseAsyncTask databaseAsyncTask = new DatabaseAsyncTask();
-        databaseAsyncTask.execute();
-
         scanButton = findViewById(R.id.scanButton);
-
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case CAMERA_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(MainActivity.this, ProductScannerActivity.class);
-                    //intent.putExtra("database", database);
                     startActivity(intent);
                 } else {
                     if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -270,73 +273,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    // Creating database as a background task
-    private class DatabaseAsyncTask extends AsyncTask<Void, Void, String> {
-        private SQliteDatabaseHelper databaseHelper;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            databaseHelper = new SQliteDatabaseHelper(MainActivity.this);
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-
-            try {
-                database = databaseHelper.getWritableDatabase();
-                //databaseHelper.insertPastScans(database, 556, "Test product", 1, 1, 2, 2, 2, 2, 2, 2, 2);
-                //database.delete("past_scans", )
-                cursor = database.query(true, "past_scans", null, null, null, null, null, null, null, null);
-
-                String returnString = "";
-                if (cursor.moveToFirst()) {
-//                    do{
-//                        for(int i = 0; i<cursor.getColumnCount();i++)
-//                        {
-//                            returnString = returnString + cursor.getColumnName(i)+": " + cursor.getString(i);
-//
-//                        }
-//                        returnString += "**************";
-//                        cursor.moveToNext();
-//
-//                    }while(!cursor.isLast());
-                    for (int i = 0; i < cursor.getCount(); i++) {
-                        // po każdej kolumnie
-                        for (int j = 0; j < cursor.getColumnCount(); j++) {
-                            cursor.getColumnName(j);
-                            cursor.getDouble(j);
-                            cursor.getString(j);
-
-                        }
-                        cursor.moveToNext();
-
-                    }
-
-
-                    //String name = cursor.getString(3);
-                    Log.d(TAG, returnString);
-                    System.out.println(returnString);
-                    return returnString;
-
-
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            //Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

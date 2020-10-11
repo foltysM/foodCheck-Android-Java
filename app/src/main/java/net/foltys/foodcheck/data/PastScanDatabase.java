@@ -14,13 +14,13 @@ import java.util.concurrent.Executors;
 public abstract class PastScanDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS); // for running database operations asynchronously
-    private static volatile PastScanDatabase INSTANCE; // Creating a singleton
+    private volatile static PastScanDatabase INSTANCE; // Creating a singleton
 
     static PastScanDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (PastScanDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PastScanDatabase.class, "scan_database").build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PastScanDatabase.class, "scan_database").allowMainThreadQueries().build(); //TODO moze jednak nie main thread
                 }
             }
         }

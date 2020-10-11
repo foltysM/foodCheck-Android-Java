@@ -2,8 +2,8 @@ package net.foltys.foodcheck;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -30,7 +30,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 
+import net.foltys.foodcheck.data.FavProd;
+import net.foltys.foodcheck.data.FavProdViewModel;
 import net.foltys.foodcheck.data.PastScan;
+import net.foltys.foodcheck.data.PastScanViewModel;
 
 import java.util.Calendar;
 
@@ -62,8 +65,11 @@ public class AfterScanActivity extends AppCompatActivity {
     private double saturates;
     private double sugar;
     private double weight;
+    private FavProdViewModel mFavProdViewModel;
 
     private ProgressBar imgProgressBar;
+
+    private PastScanViewModel mPastScanViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +81,10 @@ public class AfterScanActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
         Button discardButton = findViewById(R.id.discardButton);
 
+        mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class); // error here
+        mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
         activityInit();
-        // TODO sprawdzenie czy jest w bazie fav
 
-        final Calendar calendar = Calendar.getInstance();
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +96,8 @@ public class AfterScanActivity extends AppCompatActivity {
                 } else {
                     isFav = true;
                     favoriteButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_full, 0, 0, 0);
-                    // TODO dodanie do bazy fav
+                    insertToFav();
+
                 }
                 favoriteButton.setTextColor(Color.BLACK);
 
@@ -100,29 +107,9 @@ public class AfterScanActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO inserting into database after scan
-                //ContentValues contentValues = new ContentValues();
-                String year = Integer.toString(calendar.get(Calendar.YEAR));
-                String month = Integer.toString(calendar.get(Calendar.MONTH));
-                String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
-                String date = year + "/" + month + "/" + day;
-
                 insertDataToDatabase();
-                /*contentValues.put("date", date);
-                contentValues.put("barcode", scannedBarcode);
-                contentValues.put("name", "");
-                contentValues.put("weight", "");
-                contentValues.put("energy", "");
-                contentValues.put("carbohydrates", "");
-
-
-                contentValues.put("protein", 1.1);
-                //db.insert("past_scans", null, contentValues);*/
-
-
                 Intent toHistoryIntent = new Intent(AfterScanActivity.this, PastScansActivity.class);
                 startActivity(toHistoryIntent);
-
             }
         });
 
@@ -202,7 +189,17 @@ public class AfterScanActivity extends AppCompatActivity {
         });
         queue.add(stringRequest);
 
+        //Checks if the product is in the favorite database
+        FavProd fav = mFavProdViewModel.getOneFav(scannedBarcode);
 
+        if (fav == null) {
+            //no such record in favorite database
+            favoriteButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_border, 0, 0, 0);
+            isFav = false;
+        } else {
+            favoriteButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_full, 0, 0, 0);
+            isFav = true;
+        }
     }
 
     private void activityInit() {
@@ -222,7 +219,19 @@ public class AfterScanActivity extends AppCompatActivity {
     }
 
     private void insertDataToDatabase() {
+        final Calendar calendar = Calendar.getInstance();
+        String year = Integer.toString(calendar.get(Calendar.YEAR));
+        String month = Integer.toString(calendar.get(Calendar.MONTH) + 1);
+        String day = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+        String date = year + "/" + month + "/" + day;
+        String hour = Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + calendar.get(Calendar.MINUTE);
+        PastScan scan = new PastScan(0, scannedBarcode, name, weight, date, hour, energy, carbohydrates, protein, fat, saturates, sugar, fibre, salt);  //TODO id
+        mPastScanViewModel.insertPast(scan);
+    }
 
+    private void insertToFav() {
+        FavProd fav = new FavProd(scannedBarcode, name, weight, energy, carbohydrates, protein, fat, saturates, sugar, fibre, salt);
+        mFavProdViewModel.insertFav(fav);
     }
 }
 

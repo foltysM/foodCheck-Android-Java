@@ -1,21 +1,25 @@
 package net.foltys.foodcheck.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface PastScanDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public void insertScan(PastScan scan);
+    void insertScan(PastScan scan);
+
+    @Query("DELETE FROM past_scans_table WHERE 'id'=(:scanId)")
+    void deleteScan(int scanId);
+
+    @Query("SELECT * FROM past_scans_table ORDER BY 'date', 'hour' DESC")
+    LiveData<List<PastScan>> loadAll();
 
     @Delete
-    public void deleteScan(PastScan scan);
-
-    @Query("SELECT * FROM past_scans_table") // TODO moze jakiś order by?
-    public PastScan[] loadAll();
-
-
+    void deletePast(PastScan pastScan);
 }

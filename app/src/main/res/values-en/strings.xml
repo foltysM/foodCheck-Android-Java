@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Food Check</string>
-    <string name="last_ate">Last ate</string>
+    <string name="last_ate">Last ate:</string>
     <string name="saturates">of which saturates</string>
     <string name="food_image">Food Image</string>
     <string name="nutrValues100g">Nutritional Values in 100g:</string>
@@ -44,4 +44,7 @@
     <string name="placeholder">placeholder</string>
     <string name="logout_successful">Logout successful!</string>
     <string name="kcal">kcal</string>
+    <string name="favorite_button">Favorite Button</string>
+    <string name="product_name">Product name</string>
+    <string name="product_image">Product image</string>
 </resources>

@@ -20,26 +20,40 @@
                 android:id="@+id/datePastScans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/productNamePast"
                 android:text="@string/default_date"
-                android:textSize="17sp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/hourTextViewPast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/productNamePast"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/datePastScans"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/productNamePast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@id/favBtnPast"
+                android:layout_alignParentStart="true"
                 android:text="@string/product_name"
                 android:textSize="17sp" />
 
-            <ImageView
-                android:id="@+id/favBtnPast"
+
+            <Button
+                android:id="@+id/favoriteButton"
+                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:contentDescription="@string/favorite_button"
-                android:onClick="favoriteClicked"
-                android:src="@drawable/ic_favorite_border" />
+                android:layout_centerInParent="true"
+                android:background="@color/buttonColor"
+                android:drawableEnd="@drawable/ic_favorite_full" />
+
 
         </RelativeLayout>
 
@@ -131,7 +145,5 @@
             android:layout_margin="10dp"
             android:contentDescription="@string/product_image"
             android:src="@mipmap/ic_launcher" />
-
-
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Food Check</string>
-    <string name="last_ate">Ostatnio zjedzone</string>
+    <string name="last_ate">Ostatnio zjedzone:</string>
     <string name="saturates">w tym kwasy nasycone</string>
     <string name="food_image">Zdjęcie produktu</string>
     <string name="nutrValues100g">Wartości odzywcze w 100g:</string>

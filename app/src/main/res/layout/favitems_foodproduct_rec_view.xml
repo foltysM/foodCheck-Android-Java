@@ -23,19 +23,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/lastAteTextView"
-
+                android:layout_alignParentTop="true"
                 android:text="@string/food_name"
-                android:textSize="21sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/lastAteTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:layout_marginEnd="10dp"
-                android:text="@string/last_ate" />
+                android:layout_below="@id/titleTextView"
+                android:layout_alignParentStart="true"
+                android:text="@string/last_ate"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleTextView"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/lastAteTextView"
+                android:text="@string/default_date"
+                android:textSize="14sp" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -46,7 +55,7 @@
             android:layout_marginTop="10dp">
 
             <ImageView
-                android:id="@+id/productImagePast"
+                android:id="@+id/productImageFav"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:layout_margin="10dp"
@@ -72,28 +81,32 @@
                     android:id="@+id/nutrValues100gTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/nutrValues100g" />
+                    android:text="@string/nutrValues100g"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/energyTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/nutrValues100gTextView"
-                    android:text="@string/energy" />
+                    android:text="@string/energy"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/fatTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/energyTextView"
-                    android:text="@string/fat" />
+                    android:text="@string/fat"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/saturatesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/fatTextView"
-                    android:text="@string/saturates" />
+                    android:text="@string/saturates"
+                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -109,28 +122,32 @@
                     android:id="@+id/carbohydratesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/carbohydrates" />
+                    android:text="@string/carbohydrates"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/sugarsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/carbohydratesTextView"
-                    android:text="@string/sugars" />
+                    android:text="@string/sugars"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/proteinTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/sugarsTextView"
-                    android:text="@string/sugars" />
+                    android:text="@string/sugars"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/saltTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/proteinTextView"
-                    android:text="@string/salt" />
+                    android:text="@string/salt"
+                    android:textSize="12sp" />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
