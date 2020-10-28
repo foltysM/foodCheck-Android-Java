@@ -17,7 +17,7 @@ public interface PastScanDao {
     @Query("DELETE FROM past_scans_table WHERE 'id'=(:scanId)")
     void deleteScan(int scanId);
 
-    @Query("SELECT * FROM past_scans_table ORDER BY 'date', 'hour' DESC")
+    @Query("SELECT * FROM past_scans_table ORDER BY 'minutes' ASC")
     LiveData<List<PastScan>> loadAll();
 
     @Delete

@@ -1,23 +1,13 @@
 package net.foltys.foodcheck;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -29,16 +19,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,9 +46,6 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import net.foltys.foodcheck.data.PastScan;
-import net.foltys.foodcheck.data.PastScanViewModel;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,10 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int RC_SIGN_IN = 2;
     private static final int RC_BARCODE_SCAN = 49374;
 
-    private Button scanButton;
     private static final String TAG = "MainActivity";
-    private SQLiteDatabase database;
-    private Cursor cursor;
     private RelativeLayout parent;
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
@@ -86,11 +78,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO isOn? internet check
+
+        Button testButton = findViewById(R.id.testButton);
+        testButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, TestActivity.class);
+            startActivity(intent);
+
+        });
+
+        Button testSetButton = findViewById(R.id.testSetButton);
+        testSetButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         parent = findViewById(R.id.mainRelLayout);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -98,10 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        //mWordViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
-
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -127,51 +132,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
         personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
+        signInButton.setOnClickListener(v -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
         //Microsoft SDK
         AppCenter.start(getApplication(), "bb5ba2c0-ac45-4e09-937b-08d97e6c789c",
                 Analytics.class, Crashes.class);
 
-        scanButton = findViewById(R.id.scanButton);
+        Button scanButton = findViewById(R.id.scanButton);
 
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // checks if able to show permission request
-                    if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
-                        // shows snackbar
-                        Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                .setAction(R.string.grant_permission, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + getPackageName()));
-                                        startActivity(intent);
-                                    }
-                                }).show();
-                    } else {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                    }
+        scanButton.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                // checks if able to show permission request
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
+                    // shows snackbar
+                    Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.grant_permission, v1 -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            }).show();
                 } else {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+                }
+            } else {
+                //check if there is an Internet connection
+                if (isOnline()) {
+                    Log.d(TAG, "online");
                     // Permission granted, can scan a barcode
                     IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
                     integrator.setCaptureActivity(CaptureAct.class);
-                    integrator.setOrientationLocked(true); // TODO czy na pewno?
+                    integrator.setOrientationLocked(true);
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
                     integrator.setPrompt(getResources().getString(R.string.scanning));
                     integrator.initiateScan();
+                } else {
+                    Log.d(TAG, "offline");
+                    String[] options = {getResources().getString(R.string.turn_on_wifi), getResources().getString(R.string.turn_on_mobile_data), getResources().getString(R.string.cancel)};
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle(getResources().getString(R.string.no_internet_connection));
+                    builder.setItems(options, (dialog, which) -> {
+                        switch (which) {
+                            case 0:
+                                //Turn on WiFi
+                                WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                                wifi.setWifiEnabled(true);
+                                break;
+                            case 1:
+                                //Turn on mobile data
+                                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(intent);
+                                break;
+                            case 2:
+                            default:
+                                break;
+                        }
+                    });
+                    builder.show();
                 }
+
             }
         });
 
+    }
+
+    private void refreshNotification() {
     }
 
     @Override
@@ -187,9 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // zamykanie bazy i zamykanie cursora
-        cursor.close();
-        database.close();
+
     }
 
 
@@ -209,13 +235,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
                             // shows snackbar
                             Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.grant_permission, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                            intent.setData(Uri.parse("package:" + getPackageName()));
-                                            startActivity(intent);
-                                        }
+                                    .setAction(R.string.grant_permission, v -> {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.parse("package:" + getPackageName()));
+                                        startActivity(intent);
                                     }).show();
                         } else {
                             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
@@ -314,9 +337,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateUI(GoogleSignInAccount acc) {
         if (acc == null) {
             // clearing person data
-            nameTextViewHeader.setVisibility(View.GONE);
+            nameTextViewHeader.setText(R.string.guest);
             emailTextViewHeader.setVisibility(View.GONE);
-            //personPhotoHeader.setImageResource(R.mipmap.ic_launcher_round);
+            personPhotoHeader.setImageResource(R.mipmap.ic_launcher_round);
             signInButton.setVisibility(View.VISIBLE);
             userLogged = false;
 
@@ -326,19 +349,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             emailTextViewHeader.setVisibility(View.VISIBLE);
             emailTextViewHeader.setText(acc.getEmail());
             personPhotoHeader.setVisibility(View.VISIBLE);
-            // TODO photo
+
             String photoUrl = Objects.requireNonNull(acc.getPhotoUrl()).toString();
-            Glide.with(getApplicationContext()).load(photoUrl)
-                    .thumbnail(0.5f)
-                    .transition(new DrawableTransitionOptions()
-                            .crossFade())
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(photoUrl)
+                    .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(personPhotoHeader);
-            //Log.d(TAG, "Photo url: "+urllll);
             personPhotoHeader.setImageURI(null);
-            Log.d(TAG, "Image set to null");
 
-            //personPhotoHeader.setImageURI(urllll);
             Log.d(TAG, "Image set to url");
             signInButton.setVisibility(View.GONE);
             userLogged = true;
@@ -348,12 +368,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void logout() {
         updateUI(null);
         userLogged = false;
-        mGoogleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_SHORT).show();
-            }
-        });
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_SHORT).show());
         signInButton.setVisibility(View.VISIBLE);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

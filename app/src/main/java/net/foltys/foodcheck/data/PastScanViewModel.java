@@ -13,7 +13,6 @@ public class PastScanViewModel extends AndroidViewModel {
 
     private LiveData<List<PastScan>> mAllPastScans;
 
-    //TODO back powinien prowadzic do menu głównego, czasem zdarza się ze prowadzi do after (WRONG)
 
     public PastScanViewModel(@NonNull Application application) {
         super(application);

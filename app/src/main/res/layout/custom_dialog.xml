@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="@string/adjust_eaten_product_amount"
+        android:textSize="19sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/percentage" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/percentageEdiTextCustomDialog"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:digits="0123456789."
+        android:gravity="center"
+        android:hint="@string/_100percent" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sliderCustomDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:value="100"
+        android:valueFrom="0"
+        android:valueTo="100" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weight" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/weightEditTextCustomDialog"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:digits="0123456789."
+        android:gravity="center"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/buttonCustomDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save" />
+
+
+</LinearLayout>

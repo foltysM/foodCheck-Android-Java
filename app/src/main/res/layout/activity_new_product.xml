@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topRelLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:paddingTop="10dp"
+    tools:context=".NewProductActivity">
+
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textAlignment="center">
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/barcodeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/barcode" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/barcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:text="@string/barcode"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/food_name" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/weight" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weightEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginTop="20dp"
+                android:text="@string/nutrValues100g" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/energy" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/energyEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/fat" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fatEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/saturates" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/saturatesEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/carbohydrates" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/carbohydratesEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/sugars" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sugarsEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/fibre" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fibreEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:hint="@string/if_not_given"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/protein" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/proteinEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:text="@string/salt" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/saltEditText"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+        </TableRow>
+
+        <TableRow>
+
+            <RelativeLayout
+                android:layout_column="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addPhotoCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="@string/take_a_photo" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addPhotoButton123"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addPhotoCamera"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/from_gallery" />
+            </RelativeLayout>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/productImage"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_column="2" />
+        </TableRow>
+
+        <TableRow>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:text="@string/save_scan" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/cancel" />
+        </TableRow>
+    </TableLayout>
+</ScrollView>

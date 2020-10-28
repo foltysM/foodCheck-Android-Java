@@ -42,17 +42,16 @@
                 android:text="@string/product_name"
                 android:textSize="17sp" />
 
-
-            <Button
-                android:id="@+id/favoriteButton"
-                style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+            <ImageView
+                android:id="@+id/favButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:background="@color/buttonColor"
-                android:drawableEnd="@drawable/ic_favorite_full" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/favorite_button"
+                android:src="@drawable/ic_favorite_full" />
 
 
         </RelativeLayout>
@@ -68,7 +67,7 @@
                 android:id="@+id/nutValues"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/nutrValues100g"
+                android:text="@string/eatenNutrValues"
                 android:textSize="12sp" />
 
             <TextView

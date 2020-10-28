@@ -17,8 +17,7 @@ public interface FavProdDao {
     @Delete
     void deleteFav(FavProd favProd);
 
-    @Query("SELECT * FROM fav_prod_table")
-        //TODO ORDER BY name?
+    @Query("SELECT * FROM fav_prod_table ORDER BY `name`")
     LiveData<List<FavProd>> loadAllFav();
 
     @Query("SELECT * FROM fav_prod_table WHERE barcode=:bar LIMIT 1")

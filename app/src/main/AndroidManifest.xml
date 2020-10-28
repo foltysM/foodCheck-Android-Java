@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.autofocus" />
@@ -19,7 +23,9 @@
         android:roundIcon="@mipmap/ic_launcher_foodcheck2_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PastScanFragment"></activity>
+        <activity android:name=".NewProductActivity" />
+        <activity android:name=".TestSettingsActivity" />
+        <activity android:name=".TestActivity" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="locale|orientation" />
@@ -34,6 +40,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SENDTO" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -43,6 +50,10 @@
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <provider
+            android:name="CachedFileProvider"
+            android:authorities="com.stephendnicholas.gmailattach.provider" />
     </application>
 
 </manifest>

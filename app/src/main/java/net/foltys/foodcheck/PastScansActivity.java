@@ -1,41 +1,45 @@
 package net.foltys.foodcheck;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
-import android.content.DialogInterface;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.foltys.foodcheck.data.FavProd;
+import net.foltys.foodcheck.data.FavProdViewModel;
 import net.foltys.foodcheck.data.PastScan;
 import net.foltys.foodcheck.data.PastScanViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PastScansActivity extends AppCompatActivity {
@@ -44,6 +48,11 @@ public class PastScansActivity extends AppCompatActivity {
     private static final int RC_BARCODE_SCAN = 49374;
     PastScansCardViewAdapter adapter;
     private RelativeLayout parent;
+
+    final static String CALORIES_METER_CHANNEL_ID = "calories_meter";
+    SharedPreferences sharedPref;
+    private List<PastScan> pasts = new ArrayList<>();
+    private List<FavProd> favs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,48 +66,46 @@ public class PastScansActivity extends AppCompatActivity {
         RecyclerView pastScansCardView = findViewById(R.id.cardViewPastScans);
         PastScanViewModel mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
 
-        newScanFloatingActionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(PastScansActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // checks if able to show permission request
-                    if (!ActivityCompat.shouldShowRequestPermissionRationale(PastScansActivity.this, Manifest.permission.CAMERA)) {
-                        // shows snackbar
-                        Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                .setAction(R.string.grant_permission, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + getPackageName()));
-                                        startActivity(intent);
-                                    }
-                                }).show();
-                    } else {
-                        ActivityCompat.requestPermissions(PastScansActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                    }
+        newScanFloatingActionBtn.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(PastScansActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                // checks if able to show permission request
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(PastScansActivity.this, Manifest.permission.CAMERA)) {
+                    // shows snackbar
+                    Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.grant_permission, v1 -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                            }).show();
                 } else {
-                    // Permission granted, can scan a barcode
-                    IntentIntegrator integrator = new IntentIntegrator(PastScansActivity.this);
-                    integrator.setCaptureActivity(CaptureAct.class);
-                    integrator.setOrientationLocked(true); // TODO czy na pewno?
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                    integrator.setPrompt(getResources().getString(R.string.scanning));
-                    integrator.initiateScan();
+                    ActivityCompat.requestPermissions(PastScansActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                 }
-
+            } else {
+                // Permission granted, can scan a barcode
+                IntentIntegrator integrator = new IntentIntegrator(PastScansActivity.this);
+                integrator.setCaptureActivity(CaptureAct.class);
+                integrator.setOrientationLocked(true);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                integrator.setPrompt(getResources().getString(R.string.scanning));
+                integrator.initiateScan();
             }
+
         });
 
         adapter = new PastScansCardViewAdapter(this);
         pastScansCardView.setAdapter(adapter);
         pastScansCardView.setLayoutManager(new LinearLayoutManager(this));
 
-        mPastScanViewModel.getAllPastScans().observe(this, new Observer<List<PastScan>>() {
-            @Override
-            public void onChanged(@Nullable final List<PastScan> scans) {
-                adapter.setProducts(scans);
-                Log.d(TAG, "changed");
-            }
+        mPastScanViewModel.getAllPastScans().observe(this, scans -> {
+            adapter.setProducts(scans, favs);
+            pasts = scans;
+            Log.d(TAG, "changed past");
+        });
+        FavProdViewModel mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
+        mFavProdViewModel.getAllFav().observe(this, favProds -> {
+            adapter.setProducts(pasts, favProds);
+            favs = favProds;
+            Log.d(TAG, "changed fav");
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
@@ -115,6 +122,103 @@ public class PastScansActivity extends AppCompatActivity {
                 Toast.makeText(PastScansActivity.this, R.string.scan_deleted, Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(pastScansCardView);
+
+        // creates an instance of SharedPreferences class to read settings
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        createNotificationChannelExceed();
+
+        checkNotifications();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkNotifications();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        checkNotifications();
+    }
+
+    private void checkNotifications() {
+        if (sharedPref.getBoolean("show_calories_progress", false) || sharedPref.getBoolean("calories_exceeded_alert", true)) {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            double sum = 0;
+            for (int i = 0; i < pasts.size(); i++) {
+                if (pasts.get(i).getDay() == day && pasts.get(i).getMonth() == month && pasts.get(i).getYear() == year)
+                    sum = sum + pasts.get(i).getEnergy(); //TODO zero zanim zaciągnie z bazy
+            }
+            Log.d("energySum", Double.toString(sum));
+
+            if (sharedPref.getBoolean("show_calories_progress", false)) {
+                refreshNotificationMeter(sum);
+            }
+            if (sharedPref.getBoolean("calories_exceeded_alert", true)) {
+                if (sum > sharedPref.getInt("calories_limit", 2000))
+                    notificationAlert();
+            }
+        }
+
+
+    }
+
+    private void refreshNotificationMeter(double sum) {
+        //TODO
+    }
+
+    private void notificationAlert() {
+
+        Intent intent = new Intent(this, PastScansActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(intent);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CALORIES_METER_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_warning_24)
+                .setContentTitle(getString(R.string.drop_cookies))
+                .setContentText(getString(R.string.calories_exceeded))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        int notificationId = 1;
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, builder.build());
+    }
+
+    private void createNotificationChannelExceed() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CALORIES_METER_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent goToMain = new Intent(PastScansActivity.this, MainActivity.class);
+        goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(goToMain);
     }
 
     @Override
@@ -132,13 +236,10 @@ public class PastScansActivity extends AppCompatActivity {
                         if (!ActivityCompat.shouldShowRequestPermissionRationale(PastScansActivity.this, Manifest.permission.CAMERA)) {
                             // shows snackbar
                             Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.grant_permission, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                            intent.setData(Uri.parse("package:" + getPackageName()));
-                                            startActivity(intent);
-                                        }
+                                    .setAction(R.string.grant_permission, v -> {
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        intent.setData(Uri.parse("package:" + getPackageName()));
+                                        startActivity(intent);
                                     }).show();
                         } else {
                             ActivityCompat.requestPermissions(PastScansActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);

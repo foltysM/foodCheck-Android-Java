@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <SwitchPreferenceCompat
+        app:key="notifications"
+        app:title="Enable message notifications" />
+    <CheckBoxPreference
+
+        />
+
+    <SeekBarPreference android:title="@string/calories_alert_per_day" />
+
+    <Preference
+        app:key="feedback"
+        app:summary="Report technical issues or suggest new features"
+        app:title="Send feedback" />
+
+    <SwitchPreferenceCompat
+        app:key="notifications"
+        app:title="Enable message notifications" />
+
+    <PreferenceCategory android:title="@string/account_settings">
+        <Preference
+            app:key="feedback2"
+            app:summary="Report technical issues or suggest new features"
+            app:title="Send feedback" />
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

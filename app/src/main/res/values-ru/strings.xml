@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Food Check</string>
     <string name="protein">велок</string>
     <string name="scanning">" сканирование"</string>
     <string name="salt">соль</string>
@@ -12,5 +11,8 @@
     <string name="saturates">в т.ч. насыщенные кислоты</string>
     <string name="barcode">штрихкод</string>
     <string name="g">г</string>
-    <string name="language">" язык"</string>
+    <string name="language">язык</string>
+    <string name="yes">да</string>
+    <string name="no">нет</string>
+    <string name="kcal">ккал</string>
 </resources>

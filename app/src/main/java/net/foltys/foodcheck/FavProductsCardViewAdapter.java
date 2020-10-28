@@ -23,7 +23,7 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     private static final String TAG = "FavProductsCardViewAdapter";
 
     private List<FavProd> favProds = new ArrayList<>();
-    private Context context;
+    private final Context context;
 
     public FavProductsCardViewAdapter(Context context) {
         this.context = context;
@@ -43,15 +43,15 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
 
         Log.d(TAG, "Fav onBind called");
         holder.productNameFav.setText(favProds.get(position).getName());
-        holder.lastAteFav.setText("PLACEHOLDER"); //TODO Last ate
-        holder.energyFav.setText(context.getResources().getString(R.string.energy) + " - " + favProds.get(position).getEnergy() + context.getResources().getString(R.string.g));
-        holder.fatFav.setText(context.getResources().getString(R.string.fat) + " - " + favProds.get(position).getFat() + context.getResources().getString(R.string.g));
-        holder.saturatesFav.setText(context.getResources().getString(R.string.saturates) + " - " + favProds.get(position).getSaturates() + context.getResources().getString(R.string.g));
-        holder.sugarsFav.setText(context.getResources().getString(R.string.sugars) + " - " + favProds.get(position).getSugars() + context.getResources().getString(R.string.g));
-        holder.carbohydratesFav.setText(context.getResources().getString(R.string.carbohydrates) + " - " + favProds.get(position).getCarbohydrates() + context.getResources().getString(R.string.g));
-        holder.saltFav.setText(context.getResources().getString(R.string.salt) + " - " + favProds.get(position).getSalt() + context.getResources().getString(R.string.g));
+        holder.lastAteFav.setText(R.string.placeholder); //TODO Last ate
+        holder.energyFav.setText(String.format("%s", context.getResources().getString(R.string.energy) + " - " + favProds.get(position).getEnergy() + context.getResources().getString(R.string.g)));
+        holder.fatFav.setText(String.format("%s", context.getResources().getString(R.string.fat) + " - " + favProds.get(position).getFat() + context.getResources().getString(R.string.g)));
+        holder.saturatesFav.setText(String.format("%s", context.getResources().getString(R.string.saturates) + " - " + favProds.get(position).getSaturates() + context.getResources().getString(R.string.g)));
+        holder.sugarsFav.setText(String.format("%s", context.getResources().getString(R.string.sugars) + " - " + favProds.get(position).getSugars() + context.getResources().getString(R.string.g)));
+        holder.carbohydratesFav.setText(String.format("%s", context.getResources().getString(R.string.carbohydrates) + " - " + favProds.get(position).getCarbohydrates() + context.getResources().getString(R.string.g)));
+        holder.saltFav.setText(String.format("%s", context.getResources().getString(R.string.salt) + " - " + favProds.get(position).getSalt() + context.getResources().getString(R.string.g)));
 
-        String url = "http://foltys.net/food-check/img/" + favProds.get(position).getBarcode() + ".jpg";
+        String url = favProds.get(position).getUrl();
 
         Glide.with(context)
                 .asBitmap()
@@ -78,15 +78,15 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageFav;
-        private TextView productNameFav;
-        private TextView lastAteFav;
-        private TextView energyFav;
-        private TextView fatFav;
-        private TextView saturatesFav;
-        private TextView carbohydratesFav;
-        private TextView sugarsFav;
-        private TextView saltFav;
+        private final ImageView imageFav;
+        private final TextView productNameFav;
+        private final TextView lastAteFav;
+        private final TextView energyFav;
+        private final TextView fatFav;
+        private final TextView saturatesFav;
+        private final TextView carbohydratesFav;
+        private final TextView sugarsFav;
+        private final TextView saltFav;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Food Check</string>
+    <string name="app_name" translatable="false">Food Check</string>
     <string name="food_name">Food name</string>
     <string name="last_ate">Last ate:</string>
     <string name="nutrValues100g">Nutritional Values in 100g:</string>
@@ -12,11 +12,11 @@
     <string name="salt">Salt</string>
     <string name="food_image">Food Image</string>
     <string name="scan_product">Scan Product</string>
-    <string name="scanning">Scanning...</string>
+    <string name="scanning">Scanning…</string>
     <string name="barcode">Barcode</string>
     <string name="weight">Weight</string>
     <string name="fibre">Fibre</string>
-    <string name="error_occured">Error occured</string>
+    <string name="error_occured">Error occurred</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
     <string name="g">g</string>
@@ -54,4 +54,60 @@
     <string name="confirm_deletion">Confirm deletion</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="favorite_removed">Favorite removed!</string>
+    <string name="no_internet_connection">No Internet connection!</string>
+    <string name="turn_on_wifi">Turn on WiFi</string>
+    <string name="turn_on_mobile_data">Turn on mobile data</string>
+    <string name="cancel">Cancel</string>
+    <string name="account_settings">Account settings</string>
+    <string name="calories_alert_per_day">Calories alert (per day)</string>
+    <string-array name="sort_by">
+        <item name="by_days">By days</item>
+        <item name="by_months">By months</item>
+        <item name="by years">By years</item>
+    </string-array>
+    <string name="sort_by_days">Sort by days</string>
+    <string name="sort_by_months">Sort by months</string>
+    <string name="sort_by_years">Sort by years</string>
+    <string name="show">Show:</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="refresh">Refresh</string>
+    <string name="calories">Calories</string>
+    <string name="saturates_only">Saturates</string>
+    <string name="sugars_only">Sugars</string>
+    <string name="dates">Dates</string>
+    <string name="consumption_by_dates">consumption by dates</string>
+    <string name="no_data_to_show">No data to show!</string>
+    <string name="guest">Guest</string>
+    <string name="no_product_found">Product not found in the database!</string>
+    <string name="add_new_product_manually_question">Do you want to add product manually?</string>
+    <string name="save_scan">Save scan</string>
+    <string name="add_photo">Add photo</string>
+    <string name="if_not_given">0, if not given</string>
+    <string name="send_email_using">Send email using...</string>
+    <string name="scan_added">Scan added!</string>
+    <string name="add_to_official_database">Do you want to send email to request adding the product to official database?</string>
+    <string name="send_without_changing">PLEASE SEND THIS EMAIL WITHOUT CHANGING</string>
+    <string name="image_not_picked">Image not picked!</string>
+    <string name="no_email_clients_installed">No email clients installed.</string>
+    <string name="percent_eaten">Percent of product eaten</string>
+    <string name="fill_weight_first">Fill weight first</string>
+    <string name="show_calories_progress">Show calories progress</string>
+    <string name="calories_limit">Set calories limit</string>
+    <string name="calories_exceeded_alert">Calories limit exceeded alert</string>
+    <string name="hide">hide</string>
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="all_fields_must_be_filled">All fields must be filled!</string>
+    <string name="channel_name" translatable="false">calories_meter_channel</string>
+    <string name="channel_description">Channel used for showing calories meter notifications</string>
+    <string name="calories_exceeded">You\'ve exceeded your calories limit!</string>
+    <string name="drop_cookies">Drop the cookies!</string>
+    <string name="eaten_food_percentage">Eaten food percentage</string>
+    <string name="adjust_eaten_product_amount">Please adjust eaten product amount</string>
+    <string name="percentage">Percentage:</string>
+    <string name="_100percent" translatable="false">100%</string>
+    <string name="eatenNutrValues">Eaten nutritional values</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="take_a_photo">Take a photo</string>
 </resources>

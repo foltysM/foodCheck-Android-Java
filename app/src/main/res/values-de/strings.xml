@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Food Check</string>
     <string name="scanning">Scannen...</string>
     <string name="salt">Salz</string>
     <string name="food_image">" Produktfoto"</string>
@@ -18,4 +17,8 @@
     <string name="saturates">davon ges. Fettsäuren</string>
     <string name="sugars">davon Zucker</string>
     <string name="nutrValues100g">Nährwerte pro 100g:</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="help">Hilfe</string>
+    <string name="guest">Gast</string>
 </resources>
