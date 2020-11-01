@@ -1,12 +1,9 @@
 package net.foltys.foodcheck;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -192,9 +189,6 @@ public class AfterScanActivity extends AppCompatActivity {
             favoriteButton.setImageResource(R.drawable.ic_favorite_full);
             isFav = true;
         }
-
-
-        //Todo how much eaten
     }
 
     private void activityInit() {
@@ -232,99 +226,77 @@ public class AfterScanActivity extends AppCompatActivity {
 
         Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);
         Button button = customDialog.findViewById(R.id.buttonCustomDialog);
+        Button okWeightButton = customDialog.findViewById(R.id.okWeightButton);
+        Button okPercentageButton = customDialog.findViewById(R.id.okPercentageButton);
         EditText weightEditText = customDialog.findViewById(R.id.weightEditTextCustomDialog);
         EditText percentageEditText = customDialog.findViewById(R.id.percentageEdiTextCustomDialog);
         percentageEditText.setText(R.string._100percent);
         weightEditText.setText(String.format("%s", weight));
 
-        slider.addOnChangeListener((Slider.OnChangeListener) (slider1, value, fromUser) -> {
-            percentageEditText.setText(String.format("%s", value + "%"));
+        slider.addOnChangeListener((slider1, value, fromUser) -> {
+
+            percentageEditText.setText(String.format("%s", shortenDecimal(value) + "%"));
+
             double val = (value * weight) / 100;
-            @SuppressLint("DefaultLocale") String valStr = String.format("%.2f", val);
-            weightEditText.setText(String.format("%s", valStr + getString(R.string.g)));
-            percent[0] = (double) value;
+
+            weightEditText.setText(String.format("%s", shortenDecimal(val) + getString(R.string.g)));
+            double valueDouble = value;
+            valueDouble = shortenDecimal((valueDouble));
+            percent[0] = valueDouble;
         });
 
-        percentageEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String a = s.toString();
-                if ((!a.equals("")) && (!a.equals("%"))) {
-                    String b = a.substring(0, a.length() - 1);
-                    if ((!b.equals("")) && (!b.equals("%"))) {
-                        double doubleValue = 0;
-                        try {
-                            doubleValue = Double.parseDouble(b.replace(',', '.'));
-                        } catch (NumberFormatException e) {
-                            //Error
-                            Log.e(TAG, e.getMessage());
-                        }
-
-                        if (doubleValue <= 0)
-                            doubleValue = 0;
-
-                        if (doubleValue >= 100)
-                            doubleValue = 100;
-
-                        slider.setValue((float) doubleValue);
-                        double val = (doubleValue * weight) / 100;
-                        @SuppressLint("DefaultLocale") String valStr = String.format("%.2f", val);
-                        weightEditText.setText(String.format("%s", valStr + getString(R.string.g)));
-
-                        percent[0] = doubleValue;
+        okPercentageButton.setOnClickListener(v -> {
+            String a = percentageEditText.getText().toString();
+            if ((!a.equals("")) && (!a.equals("%"))) {
+                String b = a.substring(0, a.length() - 1);
+                if ((!b.equals("")) && (!b.equals("%"))) {
+                    double doubleValue = 0;
+                    try {
+                        doubleValue = Double.parseDouble(b.replace(',', '.'));
+                    } catch (NumberFormatException e) {
+                        //Error
+                        Log.e(TAG, e.getMessage());
                     }
+
+                    if (doubleValue <= 0)
+                        doubleValue = 0;
+
+                    if (doubleValue >= 100)
+                        doubleValue = 100;
+
+                    slider.setValue((float) doubleValue);
+                    percent[0] = doubleValue;
+                }
+            }
+
+        });
+
+
+        okWeightButton.setOnClickListener(v -> {
+            String a = weightEditText.getText().toString();
+            if ((!a.equals("")) && (!a.equals(getString(R.string.g)))) {
+                String b = a.substring(0, a.length() - 1);
+                Log.d("value b", b);
+                if ((!b.equals("")) && (!b.equals(getString(R.string.g)))) {
+                    double doubleValue = 0;
+                    try {
+                        doubleValue = Double.parseDouble(b.replace(',', '.'));
+                    } catch (NumberFormatException e) {
+                        //Error
+                        Log.e(TAG, e.getMessage());
+                    }
+
+                    if (doubleValue <= 0)
+                        doubleValue = 0;
+                    if (doubleValue > weight)
+                        doubleValue = weight;
+                    double d = (100 * doubleValue) / weight;
+                    slider.setValue((float) d);
+
+                    percent[0] = d;
                 }
             }
         });
-
-        weightEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String a = s.toString();
-                if ((!a.equals("")) && (!a.equals(getString(R.string.g)))) {
-                    String b = a.substring(0, a.length() - 1);
-                    Log.d("value b", b);
-                    if ((!b.equals("")) && (!b.equals(getString(R.string.g)))) {
-                        double doubleValue = 0;
-                        try {
-                            doubleValue = Double.parseDouble(b.replace(',', '.'));
-                        } catch (NumberFormatException e) {
-                            //Error
-                            Log.e(TAG, e.getMessage());
-                        }
-
-                        if (doubleValue <= 0)
-                            doubleValue = 0;
-                        if (doubleValue > weight)
-                            doubleValue = weight;
-                        double d = (100 * doubleValue) / weight;
-                        slider.setValue((float) d);
-                        percent[0] = d;
-                    }
-                }
-            }
-        });
-
 
         button.setOnClickListener(v ->
         {
@@ -347,7 +319,8 @@ public class AfterScanActivity extends AppCompatActivity {
                     shortenDecimal(sugar),
                     shortenDecimal(fibre),
                     shortenDecimal(salt),
-                    url);
+                    url,
+                    percent[0]);
             mPastScanViewModel.insertPast(scan);
             Intent toHistoryIntent = new Intent(AfterScanActivity.this, PastScansActivity.class);
             startActivity(toHistoryIntent);
@@ -356,7 +329,7 @@ public class AfterScanActivity extends AppCompatActivity {
     }
 
     private double shortenDecimal(double input) {
-        String a = decimalFormat.format(input * percent[0]);
+        String a = decimalFormat.format(input);
         double newDouble = 0;
         try {
             newDouble = Double.parseDouble(a.replace(',', '.'));

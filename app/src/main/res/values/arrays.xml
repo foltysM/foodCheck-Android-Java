@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_lang_option_labels">
+        <item>@string/english</item>
+        <item>@string/polski</item>
+        <item>@string/deutsch</item>
+        <item>@string/russkij</item>
+    </array>
+    <array name="pref_lang_option_values">
+        <item>"@string/en"</item>
+        <item>"@string/pl"</item>
+        <item>"@string/de"</item>
+        <item>"@string/ru"</item>
+    </array>
+
+</resources>

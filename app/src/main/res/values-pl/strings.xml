@@ -12,7 +12,7 @@
     <string name="sugars">w tym cukry</string>
     <string name="carbohydrates">Węglowodany</string>
     <string name="fat">Tłuszcz</string>
-    <string name="energy">Energia</string>
+    <string name="energy">Wartość energetyczna</string>
     <string name="barcode">Kod kreskowy</string>
     <string name="weight">Waga</string>
     <string name="fibre">Błonnik</string>
@@ -81,7 +81,7 @@
     <string name="calories">Kalorie</string>
     <string name="saturates_only">Kwasy tłuszczowe nasycone</string>
     <string name="consumption_by_dates">spożycie wg. dat</string>
-    <string name="no_product_found">Produkt nie znaleziony w bazie!</string>
+    <string name="no_product_found">Produkt nie został znaleziony w bazie!</string>
     <string name="save_scan">Zapisz skan</string>
     <string name="add_new_product_manually_question">Czy chcesz dodać produkt ręcznie?</string>
     <string name="hide">ukryj</string>
@@ -95,4 +95,20 @@
     <string name="calories_exceeded">Przekroczono limit kalorii!</string>
     <string name="all_fields_must_be_filled">Wszystkie pola muszą być uzupełnione!</string>
     <string name="off">wyłączony</string>
+    <string name="ok">Ok</string>
+    <string name="after_click_send">Po kliknięciu przycisku \\\"wyślij/\" zostaniesz przeniesiony do swojego klienta email, skąd będziesz mógł zaraportować błąd</string>
+    <string name="report_issue">Zgłoś błąd</string>
+    <string name="send">Wyślij</string>
+    <string name="show_calories_progress">Pokaż postępy w kaloriach</string>
+    <string name="pref_lang_label">Wybierz język aplikacji</string>
+    <string name="add_to_official_database">Czy chcesz wysłać email, aby dodać produkt do oficjalnej bazy produktów?</string>
+    <string name="fill_weight_first">Najpierw uzupełnij wagę produktu</string>
+    <string name="calories_exceeded_alert">Alert przekroczenia limitu kalorii</string>
+    <string name="channel_description">Kanał używany do pokazywania powiadomień miernika kalorii</string>
+    <string name="eaten_food_percentage">Procent zjedzonego produktu</string>
+    <string name="adjust_eaten_product_amount">Określ ilość zjedzonego produktu</string>
+    <string name="never">Nigdy</string>
+    <string name="permission_granted">Udzielono pozwolenia</string>
+    <string name="need_storage_permission">Potrzebne pozwolenie do czytania i zapisywania plików!</string>
+    <string name="permission_not_granted">Nie udzielono pozwolenia!</string>
 </resources>

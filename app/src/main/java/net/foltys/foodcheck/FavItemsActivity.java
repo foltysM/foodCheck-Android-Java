@@ -15,7 +15,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.foltys.foodcheck.data.FavProd;
 import net.foltys.foodcheck.data.FavProdViewModel;
+import net.foltys.foodcheck.data.PastScan;
+import net.foltys.foodcheck.data.PastScanViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FavItemsActivity extends AppCompatActivity {
@@ -23,6 +29,8 @@ public class FavItemsActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     public static final String TAG = "FavItemsActivity";
     FavProductsCardViewAdapter adapter;
+    private List<PastScan> pasts = new ArrayList<>();
+    private List<FavProd> favs = new ArrayList<>();
 
     @Override
     public void onBackPressed() {
@@ -56,8 +64,18 @@ public class FavItemsActivity extends AppCompatActivity {
         favProdCardView.setAdapter(adapter);
         favProdCardView.setLayoutManager(new LinearLayoutManager(this));
 
+        PastScanViewModel mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
+        mPastScanViewModel.getAllPastScans().observe(this, pastScans -> {
+            pasts = pastScans;
+            adapter.setFavProducts(favs, pastScans);
+
+            Log.d(TAG, "Changed");
+        });
+
         mFavProdViewModel.getAllFav().observe(this, favProds -> {
-            adapter.setFavProducts(favProds);
+            favs = favProds;
+            adapter.setFavProducts(favProds, pasts);
+
             Log.d(TAG, "Changed");
         });
 

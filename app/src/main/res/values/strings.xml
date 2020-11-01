@@ -110,4 +110,24 @@
     <string name="eatenNutrValues">Eaten nutritional values</string>
     <string name="from_gallery">From gallery</string>
     <string name="take_a_photo">Take a photo</string>
+    <string name="ok">Ok</string>
+    <string name="never">Never</string>
+    <string name="report_issue">Report issue</string>
+    <string name="send">Send</string>
+    <string name="after_click_send">After clicking the \"send\" button, you will be redirected to your email app. That way inform developer about issue that you encountered</string>
+    <string name="report_content">Please provide as much information as you can about the issue you encountered. Especially what was your app path before issue appeared. Please write us also your phone model and OS version. Thank you! You can also attach screenshots of this issue.</string>
+    <string name="add_new_scan_button">Add new scan button</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="need_storage_permission">Need permission to write and read files!</string>
+    <string name="permission_not_granted">Permission not granted!</string>
+    <string name="pref_lang_key" translatable="false">pref_lang_key</string>
+    <string name="pref_lang_label">Choose app language</string>
+    <string name="english" translatable="false">English</string>
+    <string name="polski" translatable="false">polski</string>
+    <string name="deutsch" translatable="false">Deutsch</string>
+    <string name="russkij" translatable="false">русский</string>
+    <string name="en" translatable="false">en</string>
+    <string name="ru" translatable="false">ru</string>
+    <string name="pl" translatable="false">pl</string>
+    <string name="de" translatable="false">de</string>
 </resources>

@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 public class CachedFileProvider extends ContentProvider {
 
     // The authority is the symbolic name for the provider class
-    public static final String AUTHORITY = "com.stephendnicholas.gmailattach.provider";
+    public static final String AUTHORITY = "net.foltys.foodcheck.provider";
     private static final String CLASS_NAME = "CachedFileProvider";
     // UriMatcher used to match against incoming requests
     private UriMatcher uriMatcher;

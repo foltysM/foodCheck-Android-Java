@@ -1,33 +1,39 @@
 package net.foltys.foodcheck;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.foltys.foodcheck.data.PastScan;
 import net.foltys.foodcheck.data.PastScanViewModel;
@@ -43,16 +49,19 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class NewProductActivity extends AppCompatActivity {
 
     public static final String TAG = "NewProductActivity";
     final static int RESULT_LOAD_IMG = 88;
     final static int CAMERA_REQUEST_CODE = 512;
+    final static int SEND_MAIL_REQUEST_CODE = 144;
     private final PastScan scan = new PastScan();
-    private final PastScan org = new PastScan();
+    private final static int STORAGE_PERMISSION_REQUEST_CODE = 12;
+
     private final double[] percent = {100};
     private final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-    MaterialButton addPhoto;
     MaterialButton saveButton, cancelButton, takePhoto;
     ImageView productImageView;
     EditText nameEditText, energyEditText, weightEditText, fatEditText, saturatesEditText, carbohydratesEditText, sugarsEditText, fibreEditText, proteinEditText, saltEditText;
@@ -60,6 +69,7 @@ public class NewProductActivity extends AppCompatActivity {
     TextView barcodeTextView;
     Uri URI = null;
     String attachmentFile;
+    ScrollView parent;
     private PastScanViewModel mPastScanViewModel;
 
     @Override
@@ -68,25 +78,19 @@ public class NewProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_product);
         Intent intent = getIntent();
         scan.setBarcode(intent.getStringExtra("barcode"));
-        nameEditText = findViewById(R.id.nameEditText);
-        energyEditText = findViewById(R.id.energyEditText);
-        weightEditText = findViewById(R.id.weightEditText);
-        fatEditText = findViewById(R.id.fatEditText);
-        saturatesEditText = findViewById(R.id.saturatesEditText);
-        carbohydratesEditText = findViewById(R.id.carbohydratesEditText);
-        sugarsEditText = findViewById(R.id.sugarsEditText);
-        fibreEditText = findViewById(R.id.fibreEditText);
-        proteinEditText = findViewById(R.id.proteinEditText);
-        saltEditText = findViewById(R.id.saltEditText);
-        productImageView = findViewById(R.id.productImage);
-        saveButton = findViewById(R.id.save);
-        cancelButton = findViewById(R.id.cancel);
-        addPhoto = findViewById(R.id.addPhotoButton123);
-        barcodeTextView = findViewById(R.id.barcode);
+
+        MaterialButton addPhoto = findViewById(R.id.addPhotoButton123);
+
         barcodeTextView.setText(scan.getBarcode());
-        takePhoto = findViewById(R.id.addPhotoCamera);
+
+        initView();
+
 
         mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
+        //0 = jest
+
+        Log.d("permission", Integer.toString(ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)));
+        requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
 
         takePhoto.setOnClickListener(v -> {
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -94,9 +98,13 @@ public class NewProductActivity extends AppCompatActivity {
         });
 
         addPhoto.setOnClickListener(v -> {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            if (ActivityCompat.checkSelfPermission(NewProductActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            } else {
+                requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+            }
         });
 
         cancelButton.setOnClickListener(v -> {
@@ -118,6 +126,8 @@ public class NewProductActivity extends AppCompatActivity {
 
                 Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);
                 Button button = customDialog.findViewById(R.id.buttonCustomDialog);
+                Button okWeightButton = customDialog.findViewById(R.id.okWeightButton);
+                Button okPercentageButton = customDialog.findViewById(R.id.okPercentageButton);
                 EditText weightEditTextDialog = customDialog.findViewById(R.id.weightEditTextCustomDialog);
                 EditText percentageEditText = customDialog.findViewById(R.id.percentageEdiTextCustomDialog);
                 percentageEditText.setText(R.string._100percent);
@@ -133,124 +143,89 @@ public class NewProductActivity extends AppCompatActivity {
                 weightEditTextDialog.setText(weightString);
 
                 double finalWeight = weight;
-                slider.addOnChangeListener((Slider.OnChangeListener) (slider1, value, fromUser) -> {
-                    //TODO miejsca po przecinku w percentage po usunieciu descrete
-//                    double abc = (double)value;
-//                    @SuppressLint("DefaultLocale") String valuStr = String.format("%.2f", abc);
-                    percentageEditText.setText(String.format("%s", value + "%"));
-                    double val = (value * finalWeight) / 100;
-                    @SuppressLint("DefaultLocale") String valStr = String.format("%.2f", val);
-                    weightEditTextDialog.setText(String.format("%s", valStr + getString(R.string.g)));
-                    percent[0] = (double) value;
+                slider.addOnChangeListener((slider1, value, fromUser) -> {
+
+                    double d = shortenDecimal(value);
+                    percentageEditText.setText(String.format("%s", d + "%"));
+                    double val = ((double) value * finalWeight) / 100;
+
+                    weightEditTextDialog.setText(String.format("%s", shortenDecimal(val) + getString(R.string.g)));
+
+                    percent[0] = d;
                 });
 
-                double finalWeight1 = weight;
-                percentageEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        String a = s.toString();
-                        if ((!a.equals("")) && (!a.equals("%"))) {
-                            String b = a.substring(0, a.length() - 1);
-                            if ((!b.equals("")) && (!b.equals("%"))) {
-                                double doubleValue = 0;
-                                try {
-                                    doubleValue = Double.parseDouble(b.replace(',', '.'));
-                                } catch (NumberFormatException e) {
-                                    //Error
-                                    Log.e(TAG, e.getMessage());
-                                }
-
-                                if (doubleValue <= 0)
-                                    doubleValue = 0;
-
-                                if (doubleValue >= 100)
-                                    doubleValue = 100;
-
-                                slider.setValue((float) doubleValue);
-                                double val = (doubleValue * finalWeight1) / 100;
-                                @SuppressLint("DefaultLocale") String valStr = String.format("%.2f", val);
-                                weightEditTextDialog.setText(String.format("%s", valStr + getString(R.string.g)));
-
-                                percent[0] = doubleValue;
+                okPercentageButton.setOnClickListener(v13 -> {
+                    String a = percentageEditText.getText().toString();
+                    if ((!a.equals("")) && (!a.equals("%"))) {
+                        String b = a.substring(0, a.length() - 1);
+                        if ((!b.equals("")) && (!b.equals("%"))) {
+                            double doubleValue = 0;
+                            try {
+                                doubleValue = Double.parseDouble(b.replace(',', '.'));
+                            } catch (NumberFormatException e) {
+                                //Error
+                                Log.e(TAG, e.getMessage());
                             }
+
+                            if (doubleValue <= 0)
+                                doubleValue = 0;
+
+                            if (doubleValue >= 100)
+                                doubleValue = 100;
+
+                            slider.setValue((float) doubleValue);
+
+                            percent[0] = doubleValue;
                         }
                     }
+
                 });
 
                 double finalWeight2 = weight;
-                weightEditTextDialog.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        String a = s.toString();
-                        if ((!a.equals("")) && (!a.equals(getString(R.string.g)))) {
-                            String b = a.substring(0, a.length() - 1);
-                            Log.d("value b", b);
-                            if ((!b.equals("")) && (!b.equals(getString(R.string.g)))) {
-                                double doubleValue = 0;
-                                try {
-                                    doubleValue = Double.parseDouble(b.replace(',', '.'));
-                                } catch (NumberFormatException e) {
-                                    //Error
-                                    Log.e(TAG, e.getMessage());
-                                }
-
-                                if (doubleValue <= 0)
-                                    doubleValue = 0;
-                                if (doubleValue > finalWeight2)
-                                    doubleValue = finalWeight2;
-                                double d = (100 * doubleValue) / finalWeight2;
-                                slider.setValue((float) d);
-                                percent[0] = d;
+                okWeightButton.setOnClickListener(v12 -> {
+                    String a = weightEditTextDialog.getText().toString();
+                    if ((!a.equals("")) && (!a.equals(getString(R.string.g)))) {
+                        String b = a.substring(0, a.length() - 1);
+                        Log.d("value b", b);
+                        if ((!b.equals("")) && (!b.equals(getString(R.string.g)))) {
+                            double doubleValue = 0;
+                            try {
+                                doubleValue = Double.parseDouble(b.replace(',', '.'));
+                            } catch (NumberFormatException e) {
+                                //Error
+                                Log.e(TAG, e.getMessage());
                             }
+
+                            if (doubleValue <= 0)
+                                doubleValue = 0;
+                            if (doubleValue > finalWeight2)
+                                doubleValue = finalWeight2;
+                            double d = (100 * doubleValue) / finalWeight2;
+                            slider.setValue((float) d);
+                            percent[0] = d;
                         }
                     }
+
                 });
 
 
                 button.setOnClickListener(v1 ->
                 {
                     //after closing eaten amount dialog
-
-                    org.setSalt(Double.parseDouble(saltEditText.getText().toString()));
                     scan.setSalt(convertEditToDouble(saltEditText));
                     scan.setName(nameEditText.getText().toString());
-                    org.setEnergy(Double.parseDouble(energyEditText.getText().toString()));
                     scan.setEnergy(convertEditToDouble(energyEditText));
-                    org.setWeight(Double.parseDouble(weightEditText.getText().toString()));
                     scan.setWeight(convertEditToDouble(weightEditText));
-                    org.setFat(Double.parseDouble(fatEditText.getText().toString()));
                     scan.setFat(convertEditToDouble(fatEditText));
-                    org.setSaturates(Double.parseDouble(saturatesEditText.getText().toString()));
                     scan.setSaturates(convertEditToDouble(saturatesEditText));
-                    org.setCarbohydrates(Double.parseDouble(carbohydratesEditText.getText().toString()));
                     scan.setCarbohydrates(convertEditToDouble(carbohydratesEditText));
-                    org.setSugars(Double.parseDouble(sugarsEditText.getText().toString()));
                     scan.setSugars(convertEditToDouble(sugarsEditText));
-                    org.setFibre(Double.parseDouble(fibreEditText.getText().toString()));
                     scan.setFibre(convertEditToDouble(fibreEditText));
-                    org.setProtein(Double.parseDouble(proteinEditText.getText().toString()));
                     scan.setProtein(convertEditToDouble(proteinEditText));
 
+                    scan.setPercentEaten(percent[0]);
 
                     final Calendar calendar = Calendar.getInstance();
                     scan.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -259,7 +234,7 @@ public class NewProductActivity extends AppCompatActivity {
                     scan.setHour(calendar.get(Calendar.HOUR_OF_DAY));
                     scan.setMinutes(calendar.get(Calendar.MINUTE));
 
-                    scan.setUrl("file://" + attachmentFile);
+                    scan.setUrl(URI.toString());
 
 
                     mPastScanViewModel.insertPast(scan);
@@ -285,8 +260,27 @@ public class NewProductActivity extends AppCompatActivity {
 
     }
 
+    private void initView() {
+        nameEditText = findViewById(R.id.nameEditText);
+        energyEditText = findViewById(R.id.energyEditText);
+        weightEditText = findViewById(R.id.weightEditText);
+        fatEditText = findViewById(R.id.fatEditText);
+        saturatesEditText = findViewById(R.id.saturatesEditText);
+        carbohydratesEditText = findViewById(R.id.carbohydratesEditText);
+        sugarsEditText = findViewById(R.id.sugarsEditText);
+        fibreEditText = findViewById(R.id.fibreEditText);
+        proteinEditText = findViewById(R.id.proteinEditText);
+        saltEditText = findViewById(R.id.saltEditText);
+        productImageView = findViewById(R.id.productImage);
+        saveButton = findViewById(R.id.save);
+        cancelButton = findViewById(R.id.cancel);
+        barcodeTextView = findViewById(R.id.barcode);
+        takePhoto = findViewById(R.id.addPhotoCamera);
+        parent = findViewById(R.id.topScrLayout);
+    }
+
     private double convertEditToDouble(@NotNull EditText text) {
-        String a = decimalFormat.format(Double.parseDouble(text.getText().toString()) * percent[0]);
+        String a = decimalFormat.format(Double.parseDouble(text.getText().toString()));
         double ans = 0;
         try {
             ans = Double.parseDouble(a.replace(',', '.'));
@@ -307,17 +301,18 @@ public class NewProductActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     try {
 
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("data"); // TODO bitmap save to Uri-> send
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         //URI = getImageUri(this, bitmap, scan.getBarcode());
                         //insert into ImageView
                         productImageView.setImageBitmap(bitmap);
                         photoSet = true;
-                        String absolutePath = saveToInternalStorage(bitmap, scan.getBarcode());
+                        //attachmentFile = saveToInternalStorage(bitmap, scan.getBarcode());
+                        attachmentFile = createDirectoryAndSaveFile(bitmap, scan.getBarcode());
 
 
-                        URI = Uri.parse("file://" + absolutePath);
+                        URI = Uri.parse("file://" + attachmentFile + "/" + scan.getBarcode() + ".jpg");
 
-                        //TODO poprawne załączanie z użyciem ContentProvider
+                        //TODO poprawne załączanie photo
 
 
                     } catch (Exception e) {
@@ -353,6 +348,11 @@ public class NewProductActivity extends AppCompatActivity {
                     Toast.makeText(this, R.string.image_not_picked, Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case SEND_MAIL_REQUEST_CODE:
+                Log.d("Send mail result code", String.valueOf(resultCode));
+                Intent goMain = new Intent(NewProductActivity.this, MainActivity.class);
+                startActivity(goMain);
+                break;
             default:
                 break;
         }
@@ -368,26 +368,27 @@ public class NewProductActivity extends AppCompatActivity {
         String body = getString(R.string.send_without_changing) + "\n" +
                 "Barcode: " + scan.getBarcode() +
                 "\nName: " + scan.getName() +
-                "\nEnergy: " + org.getEnergy() +
-                "\nWeight:" + org.getWeight() +
-                "\nFat:" + org.getFat() +
-                "\nSaturates: " + org.getSaturates() +
-                "\nCarbohydrates: " + org.getCarbohydrates() +
-                "\nSugars: " + org.getSugars() +
-                "\nFibre: " + org.getFibre() +
-                "\nProtein: " + org.getProtein();
+                "\nEnergy: " + scan.getEnergy() +
+                "\nWeight:" + scan.getWeight() +
+                "\nFat:" + scan.getFat() +
+                "\nSaturates: " + scan.getSaturates() +
+                "\nCarbohydrates: " + scan.getCarbohydrates() +
+                "\nSugars: " + scan.getSugars() +
+                "\nFibre: " + scan.getFibre() +
+                "\nProtein: " + scan.getProtein();
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
         if (URI != null) {
+            //emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CachedFileProvider.AUTHORITY + "/" + fileName));
+
             emailIntent.putExtra(Intent.EXTRA_STREAM, URI);
         }
 
         try {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email_using)));
+
+            startActivityForResult(Intent.createChooser(emailIntent, getString(R.string.send_email_using)), SEND_MAIL_REQUEST_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(NewProductActivity.this, getString(R.string.no_email_clients_installed), Toast.LENGTH_SHORT).show();
         }
-
-        //TODO po wysłaniu powrót do past maybe
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage, String title) {
@@ -399,7 +400,7 @@ public class NewProductActivity extends AppCompatActivity {
 
     private String saveToInternalStorage(Bitmap bitmapImage, String name) {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
+        // path to /data/data/net.foltys.foodcheck/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
         File myPath = new File(directory, name + ".jpg");
@@ -414,10 +415,79 @@ public class NewProductActivity extends AppCompatActivity {
         } finally {
             try {
                 fos.close();
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    private String createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
+
+        File direct = new File(Environment.getExternalStorageDirectory() + "/FoodCheck");
+
+        if (!direct.exists()) {
+            File photoDirectory = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/");
+
+
+            if (photoDirectory.mkdirs())
+                Log.d(TAG, "dir created");
+            else
+                Log.d(TAG, "dir not created");
+
+
+            File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/", fileName + "jpg");
+            if (file.exists()) {
+                file.delete();
+            }
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return direct.getAbsolutePath();
+    }
+
+    private double shortenDecimal(double input) {
+        String a = decimalFormat.format(input);
+        double newDouble = 0;
+        try {
+            newDouble = Double.parseDouble(a.replace(',', '.'));
+        } catch (NumberFormatException e) {
+            //Error
+            Log.e(TAG, e.getMessage());
+        }
+        return newDouble;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
+            } else {
+                if (ActivityCompat.checkSelfPermission(NewProductActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    // checks if able to show permission request
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(NewProductActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        // shows snackbar
+                        Snackbar.make(parent, R.string.need_storage_permission, Snackbar.LENGTH_LONG)
+                                .setAction(R.string.grant_permission, v -> {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    startActivity(intent);
+                                }).show();
+                    } else {
+                        ActivityCompat.requestPermissions(NewProductActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
+                    }
+                } else {
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 }

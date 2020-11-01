@@ -21,4 +21,14 @@
     <string name="no">Nein</string>
     <string name="help">Hilfe</string>
     <string name="guest">Gast</string>
+    <string name="on">ein</string>
+    <string name="off">aus</string>
+    <string name="take_a_photo">ein photo machen</string>
+    <string name="add_photo">Foto beilagen</string>
+    <string name="save_scan">Scan speichern</string>
+    <string name="refresh">Seite aktualisieren</string>
+    <string name="save">speichern</string>
+    <string name="settings">Einstellungen</string>
+    <string name="logout">Ausloggen</string>
+    <string name="pref_lang_label">App-Sprache wählen</string>
 </resources>

@@ -18,13 +18,27 @@
         android:layout_height="wrap_content"
         android:text="@string/percentage" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/percentageEdiTextCustomDialog"
-        android:layout_width="100dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:digits="0123456789."
-        android:gravity="center"
-        android:hint="@string/_100percent" />
+        android:gravity="center">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/percentageEdiTextCustomDialog"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:digits="0123456789."
+            android:gravity="center"
+            android:hint="@string/_100percent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/okPercentageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/percentageEdiTextCustomDialog"
+            android:text="@string/ok" />
+    </RelativeLayout>
 
     <com.google.android.material.slider.Slider
         android:id="@+id/sliderCustomDialog"
@@ -40,13 +54,27 @@
         android:layout_height="wrap_content"
         android:text="@string/weight" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/weightEditTextCustomDialog"
-        android:layout_width="100dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:digits="0123456789."
-        android:gravity="center"
-        android:inputType="numberDecimal" />
+        android:gravity="center">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/weightEditTextCustomDialog"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:digits="0123456789."
+            android:gravity="center"
+            android:inputType="numberDecimal" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/okWeightButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/weightEditTextCustomDialog"
+            android:text="@string/ok" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/buttonCustomDialog"

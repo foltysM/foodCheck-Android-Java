@@ -17,27 +17,39 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import net.foltys.foodcheck.data.FavProd;
 import net.foltys.foodcheck.data.PastScan;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 
 public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCardViewAdapter.ViewHolder> {
     private static final String TAG = "PastScansCardViewAdapter";
     private final Context context;
     private List<PastScan> pastScanProducts = new ArrayList<>();
     private List<FavProd> favProducts = new ArrayList<>();
+    private final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    private Observer<RxHelper> observer;
 
-    public PastScansCardViewAdapter(Context context) {
+    private Observable<RxHelper> emitter;
+
+    public PastScansCardViewAdapter(Context context, Observer<RxHelper> observer) {
         this.context = context;
+        this.observer = observer;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pastscans_foodproduct_card_view, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        // TODO clickable fav button
-        return holder;
-        //FavProdViewModel mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class); // todo check czy jest fav czy nie
+        return new ViewHolder(view);
+    }
+
+    public void goChangeFav(int pos, Boolean val) {
+        RxHelper rxHelper = new RxHelper(pos, val);
+        emitter = Observable.just(rxHelper);
+        emitter.subscribe(observer);
     }
 
     @Override
@@ -52,13 +64,13 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
             holder.productHour.setText(String.format("%s", pastScanProducts.get(position).getHour() + ":" + min));
         }
 
-        holder.productEnergy.setText(String.format("%s", context.getResources().getString(R.string.energy) + " - " + pastScanProducts.get(position).getEnergy() + context.getResources().getString(R.string.kcal)));
-        holder.productFat.setText(String.format("%s", context.getResources().getString(R.string.fat) + " - " + pastScanProducts.get(position).getFat() + context.getResources().getString(R.string.g)));
-        holder.productSaturates.setText(String.format("%s", context.getResources().getString(R.string.saturates) + " - " + pastScanProducts.get(position).getSaturates() + context.getResources().getString(R.string.g)));
-        holder.productCarbohydrates.setText(String.format("%s", context.getResources().getString(R.string.carbohydrates) + " - " + pastScanProducts.get(position).getCarbohydrates() + context.getResources().getString(R.string.g)));
-        holder.productSugars.setText(String.format("%s", context.getResources().getString(R.string.sugars) + " - " + pastScanProducts.get(position).getSugars() + context.getResources().getString(R.string.g)));
-        holder.productProtein.setText(String.format("%s", context.getResources().getString(R.string.protein) + " - " + pastScanProducts.get(position).getProtein() + context.getResources().getString(R.string.g)));
-        holder.productSalt.setText(String.format("%s", context.getResources().getString(R.string.salt) + " - " + pastScanProducts.get(position).getSalt() + context.getResources().getString(R.string.g)));
+        holder.productEnergy.setText(String.format("%s", context.getResources().getString(R.string.energy) + " - " + shortenDecimal(pastScanProducts.get(position).getEnergy() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.kcal)));
+        holder.productFat.setText(String.format("%s", context.getResources().getString(R.string.fat) + " - " + shortenDecimal(pastScanProducts.get(position).getFat() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
+        holder.productSaturates.setText(String.format("%s", context.getResources().getString(R.string.saturates) + " - " + shortenDecimal(pastScanProducts.get(position).getSaturates() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
+        holder.productCarbohydrates.setText(String.format("%s", context.getResources().getString(R.string.carbohydrates) + " - " + shortenDecimal(pastScanProducts.get(position).getCarbohydrates() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
+        holder.productSugars.setText(String.format("%s", context.getResources().getString(R.string.sugars) + " - " + shortenDecimal(pastScanProducts.get(position).getSugars() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
+        holder.productProtein.setText(String.format("%s", context.getResources().getString(R.string.protein) + " - " + shortenDecimal(pastScanProducts.get(position).getProtein() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
+        holder.productSalt.setText(String.format("%s", context.getResources().getString(R.string.salt) + " - " + shortenDecimal(pastScanProducts.get(position).getSalt() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
         Log.d(TAG, "ID in database" + pastScanProducts.get(position).getId());
 
         String url = pastScanProducts.get(position).getUrl();
@@ -69,15 +81,32 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.productImage);
+
+//        for (int i = 0; i < favProducts.size(); i++) {
+//            if (pastScanProducts.get(position).getBarcode().equals(favProducts.get(i).getBarcode())) {
+//                holder.favoriteButton.setImageResource(R.drawable.ic_favorite_full);
+//                holder.fav = true;
+//            }else
+//            {
+//                holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+//                holder.fav = false;
+//            }
+//        }
+
+
         // check if it is fav
-        holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+        boolean found = false;
         for (int i = 0; i < favProducts.size(); i++) {
             Log.d(TAG, "Loop");
             if (favProducts.get(i).getBarcode().equals(pastScanProducts.get(position).getBarcode())) {
                 holder.favoriteButton.setImageResource(R.drawable.ic_favorite_full);
                 holder.fav = true;
+                found = true;
             }
-
+        }
+        if (!found) {
+            holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+            holder.fav = false;
         }
 
     }
@@ -97,6 +126,20 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         return pastScanProducts.get(pos);
     }
 
+    private double shortenDecimal(double input) {
+        String a = decimalFormat.format(input);
+        double newDouble = 0;
+        try {
+            newDouble = Double.parseDouble(a.replace(',', '.'));
+        } catch (NumberFormatException e) {
+            //Error
+            Log.e(TAG, e.getMessage());
+        }
+        return newDouble;
+    }
+
+    //void addObservable(barcod)
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView productName;
         private final ImageView productImage;
@@ -114,6 +157,7 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
 
             productImage = itemView.findViewById(R.id.productImagePast);
             productName = itemView.findViewById(R.id.productNamePast);
@@ -133,15 +177,19 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
                 Log.d(TAG, position + " position");
 
                 if (fav) {
-                    //TODO delete z fav
                     fav = false;
                     favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                    goChangeFav(position, false);
                 } else {
-                    // TODO add to fav database
                     fav = true;
                     favoriteButton.setImageResource(R.drawable.ic_favorite_full);
+                    goChangeFav(position, true);
                 }
             });
         }
+
     }
+
+
 }
+

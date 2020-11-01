@@ -15,4 +15,5 @@
     <string name="yes">да</string>
     <string name="no">нет</string>
     <string name="kcal">ккал</string>
+    <string name="pref_lang_label">Выберите язык приложения</string>
 </resources>

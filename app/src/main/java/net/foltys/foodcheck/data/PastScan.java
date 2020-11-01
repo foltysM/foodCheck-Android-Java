@@ -25,8 +25,9 @@ public class PastScan {
     private double fibre;
     private double salt;
     private String url;
+    private double percentEaten;
 
-    public PastScan(String barcode, String name, double weight, int day, int month, int year, int hour, int minutes, double energy, double carbohydrates, double protein, double fat, double saturates, double sugars, double fibre, double salt, String url) {
+    public PastScan(String barcode, String name, double weight, int day, int month, int year, int hour, int minutes, double energy, double carbohydrates, double protein, double fat, double saturates, double sugars, double fibre, double salt, String url, double percentEaten) {
         this.barcode = barcode;
         this.name = name;
         this.weight = weight;
@@ -44,6 +45,7 @@ public class PastScan {
         this.fibre = fibre;
         this.salt = salt;
         this.url = url;
+        this.percentEaten = percentEaten;
     }
 
     @Ignore
@@ -57,6 +59,14 @@ public class PastScan {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getPercentEaten() {
+        return percentEaten;
+    }
+
+    public void setPercentEaten(double percentEaten) {
+        this.percentEaten = percentEaten;
     }
 
     public String getBarcode() {

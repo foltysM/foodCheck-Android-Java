@@ -3,7 +3,9 @@ package net.foltys.foodcheck;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -28,6 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -46,6 +49,7 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // end of variables of header
 
     private boolean userLogged;
+    String lang = "";
+    SharedPreferences sharedPref;
 
     @Override
     public void onBackPressed() {
@@ -80,33 +86,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        //SharedPreferences
+        lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),
+                getString(R.string.en)), getString(R.string.en));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
 
-
-        Button testButton = findViewById(R.id.testButton);
-        testButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, TestActivity.class);
-            startActivity(intent);
-
-        });
-
-        Button testSetButton = findViewById(R.id.testSetButton);
-        testSetButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
-
         parent = findViewById(R.id.mainRelLayout);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -148,55 +146,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // checks if able to show permission request
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
                     // shows snackbar
-                    Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_LONG)
                             .setAction(R.string.grant_permission, v1 -> {
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.parse("package:" + getPackageName()));
-                                startActivity(intent);
+                                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                             }).show();
                 } else {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                 }
             } else {
-                //check if there is an Internet connection
-                if (isOnline()) {
-                    Log.d(TAG, "online");
-                    // Permission granted, can scan a barcode
-                    IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
-                    integrator.setCaptureActivity(CaptureAct.class);
-                    integrator.setOrientationLocked(true);
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                    integrator.setPrompt(getResources().getString(R.string.scanning));
-                    integrator.initiateScan();
-                } else {
-                    Log.d(TAG, "offline");
-                    String[] options = {getResources().getString(R.string.turn_on_wifi), getResources().getString(R.string.turn_on_mobile_data), getResources().getString(R.string.cancel)};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle(getResources().getString(R.string.no_internet_connection));
-                    builder.setItems(options, (dialog, which) -> {
-                        switch (which) {
-                            case 0:
-                                //Turn on WiFi
-                                WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                                wifi.setWifiEnabled(true);
-                                break;
-                            case 1:
-                                //Turn on mobile data
-                                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                                startActivity(intent);
-                                break;
-                            case 2:
-                            default:
-                                break;
-                        }
-                    });
-                    builder.show();
-                }
-
+                requestScan();
             }
         });
 
+    }
+
+    private void requestScan() {
+        //check if there is an Internet connection
+        if (isOnline()) {
+            Log.d(TAG, "online");
+            // Permission granted, can scan a barcode
+            IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+            integrator.setCaptureActivity(CaptureAct.class);
+            integrator.setOrientationLocked(true);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt(getResources().getString(R.string.scanning));
+            integrator.initiateScan();
+        } else {
+            Log.d(TAG, "offline");
+            String[] options = {getResources().getString(R.string.turn_on_wifi), getResources().getString(R.string.turn_on_mobile_data), getResources().getString(R.string.cancel)};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle(getResources().getString(R.string.no_internet_connection));
+            builder.setItems(options, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        //Turn on WiFi
+                        WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                        wifi.setWifiEnabled(true);
+                        break;
+                    case 1:
+                        //Turn on mobile data
+                        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                    default:
+                        break;
+                }
+            });
+            builder.show();
+        }
     }
 
     private void refreshNotification() {
@@ -210,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);
+        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),
+                getString(R.string.en)), getString(R.string.en));
     }
 
     @Override
@@ -224,33 +226,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            case CAMERA_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MainActivity.this, ProductScannerActivity.class);
-                    startActivity(intent);
-                } else {
-                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        // checks if able to show permission request
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
-                            // shows snackbar
-                            Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.grant_permission, v -> {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + getPackageName()));
-                                        startActivity(intent);
-                                    }).show();
-                        } else {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                        }
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestScan();
+            } else {
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // checks if able to show permission request
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
+                        // shows snackbar
+                        Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                                .setAction(R.string.grant_permission, v -> {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    startActivity(intent);
+                                }).show();
                     } else {
-                        Intent myIntent = new Intent(MainActivity.this, ProductScannerActivity.class);
-                        startActivity(myIntent);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                     }
+                } else {
+                    requestScan();
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -270,22 +266,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent_fav);
                 break;
             case R.id.nav_progress:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();\
+                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                Intent intentSet = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intentSet);
                 break;
             case R.id.nav_share:
-                Intent intent = new Intent(Intent.ACTION_SEND);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 String url = "http://foltys.net/food-check/app/foodCheck.apk";
-                intent.putExtra(Intent.EXTRA_TEXT, getApplicationContext().getResources().getString(R.string.try_app) + url);
-                intent.setType("text/*");
-                Intent chooser = new Intent(Intent.createChooser(intent, getApplicationContext().getResources().getString(R.string.choose_app)));
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.try_app) + url);
+                shareIntent.setType("text/*");
+                Intent chooser = new Intent(Intent.createChooser(shareIntent, getApplicationContext().getResources().getString(R.string.choose_app)));
                 startActivity(chooser);
                 break;
             case R.id.nav_help:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
                 startActivity(browserIntent);
+                break;
+            case R.id.nav_report:
+                Intent reportIntent = new Intent(MainActivity.this, ReportIssueActivity.class);
+                startActivity(reportIntent);
                 break;
             case R.id.nav_logout:
                 if (userLogged) {
@@ -372,10 +376,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         signInButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Returns if the device has a connection with the Internet
+     *
+     * @return true, if it is connected, false if not
+     */
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+   /* @Override
+    protected void attachBaseContext(Context newBase) {
+        String lang = sharedPref.getString(getApplicationContext().getResources().getString((R.string.pref_lang_key)), "en"); // TODO SHARED PREF JEST NULL
+        super.attachBaseContext(FoodContextWrapper.wrap(newBase, lang));
+    }*/
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        super.applyOverrideConfiguration(overrideConfiguration);
+        Locale locale = new Locale(lang);
+        overrideConfiguration.setLocale(locale);
     }
 }

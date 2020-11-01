@@ -21,7 +21,7 @@ public abstract class PastScanDatabase extends RoomDatabase {
             synchronized (PastScanDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PastScanDatabase.class, "scan_database")
-                            .allowMainThreadQueries() //TODO moze jednak nie main thread
+                            .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build();
                 }

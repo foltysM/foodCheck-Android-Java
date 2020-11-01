@@ -42,6 +42,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 public class PastScansActivity extends AppCompatActivity {
     public static final String TAG = "PastScanActivity";
     private static final int CAMERA_REQUEST_CODE = 1;
@@ -53,6 +56,8 @@ public class PastScansActivity extends AppCompatActivity {
     SharedPreferences sharedPref;
     private List<PastScan> pasts = new ArrayList<>();
     private List<FavProd> favs = new ArrayList<>();
+    FavProdViewModel mFavProdViewModel;
+    private Observer<RxHelper> observer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,49 @@ public class PastScansActivity extends AppCompatActivity {
         setContentView(R.layout.activity_past_scans);
 
         parent = findViewById(R.id.parentRelLayoutPast);
+
+        observer = new Observer<RxHelper>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull RxHelper rxHelper) {
+                Log.d("onNext", Integer.toString(rxHelper.getPosition()));
+                Log.d("onNext", rxHelper.getValue().toString());
+
+                if (rxHelper.getValue()) {
+                    //add to fav
+                    FavProd fav = new FavProd(pasts.get(rxHelper.getPosition()).getBarcode(),
+                            pasts.get(rxHelper.getPosition()).getName(),
+                            pasts.get(rxHelper.getPosition()).getWeight(),
+                            pasts.get(rxHelper.getPosition()).getEnergy(),
+                            pasts.get(rxHelper.getPosition()).getCarbohydrates(),
+                            pasts.get(rxHelper.getPosition()).getProtein(),
+                            pasts.get(rxHelper.getPosition()).getFat(),
+                            pasts.get(rxHelper.getPosition()).getSaturates(),
+                            pasts.get(rxHelper.getPosition()).getSugars(),
+                            pasts.get(rxHelper.getPosition()).getFibre(),
+                            pasts.get(rxHelper.getPosition()).getSalt(),
+                            pasts.get(rxHelper.getPosition()).getUrl());
+                    mFavProdViewModel.insertFav(fav);
+                } else {
+                    //remove from fav
+                    mFavProdViewModel.deleteFav(mFavProdViewModel.getOneFav(pasts.get(rxHelper.getPosition()).getBarcode()));
+                }
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
 
         FloatingActionButton newScanFloatingActionBtn = findViewById(R.id.newScanFloatingActionButton);
 
@@ -82,29 +130,26 @@ public class PastScansActivity extends AppCompatActivity {
                 }
             } else {
                 // Permission granted, can scan a barcode
-                IntentIntegrator integrator = new IntentIntegrator(PastScansActivity.this);
-                integrator.setCaptureActivity(CaptureAct.class);
-                integrator.setOrientationLocked(true);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                integrator.setPrompt(getResources().getString(R.string.scanning));
-                integrator.initiateScan();
+                requestScan();
             }
 
         });
 
-        adapter = new PastScansCardViewAdapter(this);
+        adapter = new PastScansCardViewAdapter(this, observer);
         pastScansCardView.setAdapter(adapter);
         pastScansCardView.setLayoutManager(new LinearLayoutManager(this));
 
         mPastScanViewModel.getAllPastScans().observe(this, scans -> {
-            adapter.setProducts(scans, favs);
             pasts = scans;
+            adapter.setProducts(scans, favs);
+
             Log.d(TAG, "changed past");
         });
-        FavProdViewModel mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
+        mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
         mFavProdViewModel.getAllFav().observe(this, favProds -> {
-            adapter.setProducts(pasts, favProds);
             favs = favProds;
+            adapter.setProducts(pasts, favProds);
+
             Log.d(TAG, "changed fav");
         });
 
@@ -131,6 +176,7 @@ public class PastScansActivity extends AppCompatActivity {
         checkNotifications();
 
     }
+
 
     @Override
     protected void onResume() {
@@ -225,34 +271,37 @@ public class PastScansActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            case CAMERA_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(PastScansActivity.this, ProductScannerActivity.class);
-                    startActivity(intent);
-                } else {
-                    if (ActivityCompat.checkSelfPermission(PastScansActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        // checks if able to show permission request
-                        if (!ActivityCompat.shouldShowRequestPermissionRationale(PastScansActivity.this, Manifest.permission.CAMERA)) {
-                            // shows snackbar
-                            Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
-                                    .setAction(R.string.grant_permission, v -> {
-                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                        intent.setData(Uri.parse("package:" + getPackageName()));
-                                        startActivity(intent);
-                                    }).show();
-                        } else {
-                            ActivityCompat.requestPermissions(PastScansActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                        }
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestScan();
+            } else {
+                if (ActivityCompat.checkSelfPermission(PastScansActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // checks if able to show permission request
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(PastScansActivity.this, Manifest.permission.CAMERA)) {
+                        // shows snackbar
+                        Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                                .setAction(R.string.grant_permission, v -> {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.parse("package:" + getPackageName()));
+                                    startActivity(intent);
+                                }).show();
                     } else {
-                        Intent myIntent = new Intent(PastScansActivity.this, ProductScannerActivity.class);
-                        startActivity(myIntent);
+                        ActivityCompat.requestPermissions(PastScansActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                     }
+                } else {
+                    requestScan();
                 }
-                break;
-            default:
-                break;
+            }
         }
+    }
+
+    private void requestScan() {
+        IntentIntegrator integrator = new IntentIntegrator(PastScansActivity.this);
+        integrator.setCaptureActivity(CaptureAct.class);
+        integrator.setOrientationLocked(true);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt(getResources().getString(R.string.scanning));
+        integrator.initiateScan();
     }
 
     @Override

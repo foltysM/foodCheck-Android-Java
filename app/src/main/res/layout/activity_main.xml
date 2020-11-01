@@ -36,7 +36,8 @@
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -65,20 +66,6 @@
                     app:icon="@drawable/ic_barcode"
                     app:iconGravity="start"
                     app:iconSize="100sp" />
-
-                <Button
-                    android:id="@+id/testButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/scanButton"
-                    android:text="test" />
-
-                <Button
-                    android:id="@+id/testSetButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/testButton"
-                    android:text="testSet" />
 
             </RelativeLayout>
         </FrameLayout>

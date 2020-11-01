@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.foltys.foodcheck.data.FavProd;
+import net.foltys.foodcheck.data.PastScan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     private static final String TAG = "FavProductsCardViewAdapter";
 
     private List<FavProd> favProds = new ArrayList<>();
+    private List<PastScan> pastScans = new ArrayList<>();
     private final Context context;
 
     public FavProductsCardViewAdapter(Context context) {
@@ -34,7 +36,6 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favitems_foodproduct_rec_view, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        // TODO clickable fav button
         return holder;
     }
 
@@ -43,7 +44,20 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
 
         Log.d(TAG, "Fav onBind called");
         holder.productNameFav.setText(favProds.get(position).getName());
-        holder.lastAteFav.setText(R.string.placeholder); //TODO Last ate
+        //Searching for last ate date
+        String last = "0000-00-00";
+        for (int i = 0; i < pastScans.size(); i++) {
+            if (favProds.get(position).getBarcode().equals(pastScans.get(i).getBarcode())) {
+                String concatenated = pastScans.get(i).getYear() + "-" + pastScans.get(i).getMonth() + "-" + pastScans.get(i).getDay();
+                if (concatenated.compareTo(last) > 0) {
+                    last = concatenated;
+                }
+            }
+        }
+        if (last.equals("0000-00-00"))
+            holder.lastAteFav.setText(R.string.never);
+        else
+            holder.lastAteFav.setText(last);
         holder.energyFav.setText(String.format("%s", context.getResources().getString(R.string.energy) + " - " + favProds.get(position).getEnergy() + context.getResources().getString(R.string.g)));
         holder.fatFav.setText(String.format("%s", context.getResources().getString(R.string.fat) + " - " + favProds.get(position).getFat() + context.getResources().getString(R.string.g)));
         holder.saturatesFav.setText(String.format("%s", context.getResources().getString(R.string.saturates) + " - " + favProds.get(position).getSaturates() + context.getResources().getString(R.string.g)));
@@ -68,8 +82,9 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
         return favProds.size();
     }
 
-    public void setFavProducts(List<FavProd> favProducts) {
+    public void setFavProducts(List<FavProd> favProducts, List<PastScan> pastScans) {
         this.favProds = favProducts;
+        this.pastScans = pastScans;
         notifyDataSetChanged();
     }
 
@@ -93,7 +108,7 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
 
             imageFav = itemView.findViewById(R.id.productImageFav);
             productNameFav = itemView.findViewById(R.id.titleTextView);
-            lastAteFav = itemView.findViewById(R.id.lastAteTextView);
+            lastAteFav = itemView.findViewById(R.id.lastAteDate);
             energyFav = itemView.findViewById(R.id.energyTextView);
             fatFav = itemView.findViewById(R.id.fatTextView);
             saturatesFav = itemView.findViewById(R.id.saturatesTextView);
