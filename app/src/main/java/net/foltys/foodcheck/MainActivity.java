@@ -11,11 +11,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.Glide;
@@ -41,6 +42,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -49,20 +51,31 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import net.foltys.foodcheck.ui.activity.AfterScanActivity;
+import net.foltys.foodcheck.ui.fragment.FavoriteFragment;
+import net.foltys.foodcheck.ui.fragment.HomeFragment;
+import net.foltys.foodcheck.ui.fragment.PastFragment;
+import net.foltys.foodcheck.ui.fragment.ProgressFragment;
+
 import java.util.Locale;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 1;
     private static final int RC_SIGN_IN = 2;
     private static final int RC_BARCODE_SCAN = 49374;
 
+    //used to attach the fragments
+    private static final String TAG_HOME = "home";
+
     private static final String TAG = "MainActivity";
     private RelativeLayout parent;
     private DrawerLayout drawer;
+    private static final String TAG_HISTORY = "history";
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
+    private static final String TAG_FAVORITE = "favorite";
 
     // below variables of header
     private TextView nameTextViewHeader;
@@ -74,13 +87,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String lang = "";
     SharedPreferences sharedPref;
 
+    // TODO navbar poprawnie
+    private static final String TAG_PROGRESS = "progress";
+    private static final String TAG_SETTINGS = "settings";
+    //to identify current nav menu item
+    public static int navItemIndex = 0;
+    private static String CURRENT_TAG = TAG_HOME;
+    ExtendedFloatingActionButton scanButton;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    // toolbar titles respected to selected nav menu item
+    private String[] activityTitles;
+
+    // flag to load home fragment when user presses back key
+    private boolean shouldLoadHomeFragOnBackPress = true;
+    private Handler mHandler;
+
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+            drawer.closeDrawers();
+            return;
+
         } else {
-            super.onBackPressed();
+            if (shouldLoadHomeFragOnBackPress) {
+                // checking if user is on other navigation menu
+                // rather than home
+                if (navItemIndex != 0) {
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_HOME;
+                    loadHomeFragment();
+                    return;
+                }
+            }
+
         }
+        super.onBackPressed();
     }
 
     @Override
@@ -97,20 +140,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
 
-        parent = findViewById(R.id.mainRelLayout);
+        //parent = findViewById(R.id.mainRelLayout);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
+
+        mHandler = new Handler();
+
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView = findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(getAPP);
+
+
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        //drawer.addDrawerListener(toggle);
+        //toggle.syncState();
 
         // Logging init
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -121,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Sign in button init
-        signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        //signInButton = findViewById(R.id.sign_in_button);
+        //signInButton.setSize(SignInButton.SIZE_STANDARD);
 
         // variables connected with header
         View header = navigationView.getHeaderView(0);
@@ -130,16 +176,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
         personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
 
-        signInButton.setOnClickListener(v -> {
+        /*signInButton.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
-        });
+        });*/
 
         //Microsoft SDK
         AppCenter.start(getApplication(), "bb5ba2c0-ac45-4e09-937b-08d97e6c789c",
                 Analytics.class, Crashes.class);
 
-        Button scanButton = findViewById(R.id.scanButton);
+        scanButton = findViewById(R.id.scanButton);
 
         scanButton.setOnClickListener(v -> {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -158,6 +204,72 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        //updateUI();
+        setUpNavigationView();
+
+        if (savedInstanceState == null) {
+            navItemIndex = 0;
+            CURRENT_TAG = TAG_HOME;
+            loadHomeFragment();
+        }
+
+    }
+
+    private void loadHomeFragment() {
+        selectNavMenu();
+        //setToolbarTitle();
+
+        // if user choose the current menu again
+        if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            drawer.closeDrawers();
+
+            toggleFab();
+        }
+
+        /*Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Fragment fragment = getHomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame2, fragment, CURRENT_TAG);
+            }
+        };*/
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame2, getHomeFragment()).commit();
+        /*if(mPendingRunnable!=null)
+        {
+            mHandler.post(mPendingRunnable);
+        }*/
+
+        toggleFab();
+
+        drawer.closeDrawers();
+
+        invalidateOptionsMenu();
+    }
+
+    private Fragment getHomeFragment() {
+        switch (navItemIndex) {
+            case 0:
+            default:
+                return new HomeFragment();
+            case 1:
+                return new PastFragment();
+            case 2:
+                return new FavoriteFragment();
+            case 3:
+                return new ProgressFragment();
+            case 4:
+                return new SettingsFragment();
+        }
+    }
+
+    private void setToolbarTitle() {
+        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+    }
+
+    private void selectNavMenu() {
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
     private void requestScan() {
@@ -199,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void refreshNotification() {
+        //TODO repair notification
     }
 
     @Override
@@ -250,57 +363,125 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_home:
-                Intent intent_home = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent_home);
-                break;
-            case R.id.nav_history:
-                Intent intentPast = new Intent(MainActivity.this, PastScansActivity.class);
-                startActivity(intentPast);
-                break;
-            case R.id.nav_fav_products:
-                Intent intent_fav = new Intent(MainActivity.this, FavItemsActivity.class);
-                startActivity(intent_fav);
-                break;
-            case R.id.nav_progress:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();\
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.nav_settings:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-                Intent intentSet = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intentSet);
-                break;
-            case R.id.nav_share:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                String url = "http://foltys.net/food-check/app/foodCheck.apk";
-                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.try_app) + url);
-                shareIntent.setType("text/*");
-                Intent chooser = new Intent(Intent.createChooser(shareIntent, getApplicationContext().getResources().getString(R.string.choose_app)));
-                startActivity(chooser);
-                break;
-            case R.id.nav_help:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
-                startActivity(browserIntent);
-                break;
-            case R.id.nav_report:
-                Intent reportIntent = new Intent(MainActivity.this, ReportIssueActivity.class);
-                startActivity(reportIntent);
-                break;
-            case R.id.nav_logout:
-                if (userLogged) {
-                    logout();
-                } else
-                    Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    private void setUpNavigationView() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        //Intent intent_home = new Intent(MainActivity.this, MainActivity.class);
+                        //startActivity(intent_home);
+                        navItemIndex = 0;
+                        CURRENT_TAG = TAG_HOME;
+                        break;
+                    case R.id.nav_history:
+//                        Intent intentPast = new Intent(MainActivity.this, PastScansActivity.class);
+//                        startActivity(intentPast);
+                        navItemIndex = 1;
+                        CURRENT_TAG = TAG_HISTORY;
+                        break;
+                    case R.id.nav_fav_products:
+//                        Intent intent_fav = new Intent(MainActivity.this, FavItemsActivity.class);
+//                        startActivity(intent_fav);
+                        navItemIndex = 2;
+                        CURRENT_TAG = TAG_FAVORITE;
+                        break;
+                    case R.id.nav_progress:
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();\
+//                        Intent intent = new Intent(MainActivity.this, TestActivity.class);
+//                        startActivity(intent);
+                        navItemIndex = 3;
+                        CURRENT_TAG = TAG_PROGRESS;
+                        break;
+                    case R.id.nav_settings:
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+//                        Intent intentSet = new Intent(MainActivity.this, SettingsActivity.class);
+//                        startActivity(intentSet);
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_SETTINGS;
+                        break;
+                    case R.id.nav_share:
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        String url = "http://foltys.net/food-check/app/foodCheck.apk";
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.try_app) + url);
+                        shareIntent.setType("text/*");
+                        Intent chooser = new Intent(Intent.createChooser(shareIntent, getApplicationContext().getResources().getString(R.string.choose_app)));
+                        startActivity(chooser);
+                        break;
+                    case R.id.nav_help:
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
+                        startActivity(browserIntent);
+                        break;
+                    case R.id.nav_report:
+                        Intent reportIntent = new Intent(MainActivity.this, ReportIssueActivity.class);
+                        startActivity(reportIntent);
+                        break;
+                    case R.id.nav_logout:
+                        if (userLogged) {
+                            logout();
+                        } else
+                            //Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show(); TODO
+                            break;
+                }
+                drawer.closeDrawer(GravityCompat.START);
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                item.setChecked(true);
+
+                loadHomeFragment();
+
+                return true;
+
+            }
+
+        });
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
+        toggle.syncState();
+
     }
+
+    private void toggleFab() {
+        if (navItemIndex == 0) {
+            //home
+            scanButton.show();
+            scanButton.extend();
+        } else if (navItemIndex == 2 || navItemIndex == 1) {
+            scanButton.show();
+            scanButton.shrink();
+
+        } else {
+
+            scanButton.hide();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -344,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nameTextViewHeader.setText(R.string.guest);
             emailTextViewHeader.setVisibility(View.GONE);
             personPhotoHeader.setImageResource(R.mipmap.ic_launcher_round);
-            signInButton.setVisibility(View.VISIBLE);
+            //signInButton.setVisibility(View.VISIBLE);
             userLogged = false;
 
         } else {
@@ -364,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             personPhotoHeader.setImageURI(null);
 
             Log.d(TAG, "Image set to url");
-            signInButton.setVisibility(View.GONE);
+            //signInButton.setVisibility(View.GONE);
             userLogged = true;
         }
     }

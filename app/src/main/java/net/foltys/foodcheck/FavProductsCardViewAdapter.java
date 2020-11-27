@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,9 @@ import net.foltys.foodcheck.data.PastScan;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+
 public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProductsCardViewAdapter.ViewHolder> {
     private static final String TAG = "FavProductsCardViewAdapter";
 
@@ -27,16 +31,18 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     private List<PastScan> pastScans = new ArrayList<>();
     private final Context context;
 
-    public FavProductsCardViewAdapter(Context context) {
+    private final Observer<Integer> favClickedObserver;
+
+    public FavProductsCardViewAdapter(Context context, Observer<Integer> favClickedObserver) {
         this.context = context;
+        this.favClickedObserver = favClickedObserver;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favitems_foodproduct_rec_view, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -74,6 +80,11 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageFav);
 
+        holder.itemView.setOnClickListener(view -> {
+            Observable<Integer> favClickEmitter = Observable.just(position);
+            favClickEmitter.subscribe(favClickedObserver);
+        });
+
     }
 
 
@@ -103,6 +114,8 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
         private final TextView sugarsFav;
         private final TextView saltFav;
 
+        public RelativeLayout viewBackground, viewForeground;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -116,6 +129,8 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
             sugarsFav = itemView.findViewById(R.id.sugarsTextView);
             saltFav = itemView.findViewById(R.id.saltTextView);
 
+            viewBackground = itemView.findViewById(R.id.fav_background);
+            viewForeground = itemView.findViewById(R.id.fav_foreground);
         }
     }
 }

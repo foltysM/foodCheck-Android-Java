@@ -22,7 +22,6 @@ public class FavProdRepository {
     }
 
     FavProd getOneFav(String barcode) {
-        //mFavProdDao.loadFavBarcode(barcode).subscribeOn(Schedulders.io());
         return mFavProdDao.loadFavBarcode(barcode);
     }
 

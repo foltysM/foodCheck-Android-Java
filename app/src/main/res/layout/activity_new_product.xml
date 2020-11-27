@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:paddingTop="10dp"
-    tools:context=".NewProductActivity">
+    tools:context=".ui.activity.NewProductActivity">
 
 
     <TableLayout
@@ -83,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/energyTextView"
                 android:text="@string/energy" />
 
             <com.google.android.material.textfield.TextInputEditText

@@ -30,6 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         //TODO account settings there
+        //TODO alergeny
     }
 
     private void setPreferenceSummary(Preference preference, String value) {

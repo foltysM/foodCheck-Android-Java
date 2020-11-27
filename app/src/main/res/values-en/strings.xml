@@ -108,7 +108,14 @@
     <string name="add_new_scan_button">Add new scan button</string>
     <string name="permission_granted">Permission granted</string>
     <string name="need_storage_permission">Need permission to write and read files!</string>
-    <string name="permission_not_granted">Permission not granted!</string>
+    <string name="permission_not_granted">Permission denied!</string>
     <string name="pref_lang_label">Choose app language</string>
     <string name="never">Never</string>
+    <string name="food_ate_again">Did you eat that product again?</string>
+    <string name="delete">DELETE</string>
+    <string name="recycle_bin_icon">Recycle bin icon</string>
+    <string name="undo">Undo</string>
+    <string name="report_content">Please provide as much information as you can about the issue you encountered. Especially what was your app path before issue appeared. Please write us also your phone model and OS version. Thank you! You can also attach screenshots of this issue.</string>
+    <string name="after_click_send">After clicking the \"send\" button, you will be redirected to your email app. That way inform developer about issue that you encountered</string>
+    <string name="generate">Generate</string>
 </resources>

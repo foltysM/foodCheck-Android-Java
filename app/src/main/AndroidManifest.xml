@@ -30,16 +30,16 @@
         android:fullBackupContent="@xml/backup_rules"
         android:theme="@style/AppTheme">
         <activity android:name=".ReportIssueActivity" />
-        <activity android:name=".NewProductActivity" />
+        <activity android:name=".ui.activity.NewProductActivity" />
         <activity android:name=".TestSettingsActivity" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".ProgressActivity" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="locale|orientation" />
-        <activity android:name=".PastScansActivity" />
-        <activity android:name=".AfterScanActivity" />
+        <activity android:name=".ui.activity.PastScansActivity" />
+        <activity android:name=".ui.activity.AfterScanActivity" />
         <activity
-            android:name=".FavItemsActivity"
+            android:name=".ui.activity.FavItemsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"

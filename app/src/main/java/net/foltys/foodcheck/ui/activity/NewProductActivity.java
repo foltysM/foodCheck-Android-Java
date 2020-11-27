@@ -1,9 +1,7 @@
-package net.foltys.foodcheck;
+package net.foltys.foodcheck.ui.activity;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -35,16 +33,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 
+import net.foltys.foodcheck.MainActivity;
+import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.PastScan;
 import net.foltys.foodcheck.data.PastScanViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -66,7 +64,7 @@ public class NewProductActivity extends AppCompatActivity {
     ImageView productImageView;
     EditText nameEditText, energyEditText, weightEditText, fatEditText, saturatesEditText, carbohydratesEditText, sugarsEditText, fibreEditText, proteinEditText, saltEditText;
     Boolean photoSet = false;
-    TextView barcodeTextView;
+    TextView barcodeTextView, energyTextView;
     Uri URI = null;
     String attachmentFile;
     ScrollView parent;
@@ -80,14 +78,13 @@ public class NewProductActivity extends AppCompatActivity {
         scan.setBarcode(intent.getStringExtra("barcode"));
 
         MaterialButton addPhoto = findViewById(R.id.addPhotoButton123);
+        initView();
 
         barcodeTextView.setText(scan.getBarcode());
 
-        initView();
-
 
         mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
-        //0 = jest
+
 
         Log.d("permission", Integer.toString(ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)));
         requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
@@ -225,7 +222,7 @@ public class NewProductActivity extends AppCompatActivity {
                     scan.setFibre(convertEditToDouble(fibreEditText));
                     scan.setProtein(convertEditToDouble(proteinEditText));
 
-                    scan.setPercentEaten(percent[0]);
+                    scan.setPercentEaten(percent[0] / 100);
 
                     final Calendar calendar = Calendar.getInstance();
                     scan.setDay(calendar.get(Calendar.DAY_OF_MONTH));
@@ -254,14 +251,14 @@ public class NewProductActivity extends AppCompatActivity {
                 customDialog.show();
             }
 
-            // TODO Coś ze zdjeciem ogarnac
-
         });
 
     }
 
     private void initView() {
         nameEditText = findViewById(R.id.nameEditText);
+        energyTextView = findViewById(R.id.energyTextView);
+        energyTextView.setText(String.format("%s", R.string.energy + " (" + R.string.kcal + ")"));
         energyEditText = findViewById(R.id.energyEditText);
         weightEditText = findViewById(R.id.weightEditText);
         fatEditText = findViewById(R.id.fatEditText);
@@ -307,13 +304,11 @@ public class NewProductActivity extends AppCompatActivity {
                         productImageView.setImageBitmap(bitmap);
                         photoSet = true;
                         //attachmentFile = saveToInternalStorage(bitmap, scan.getBarcode());
-                        attachmentFile = createDirectoryAndSaveFile(bitmap, scan.getBarcode());
+                        String att = createDirectoryAndSaveFile(bitmap, scan.getBarcode());
+                        attachmentFile = att + "/" + scan.getBarcode() + ".jpg";
 
 
-                        URI = Uri.parse("file://" + attachmentFile + "/" + scan.getBarcode() + ".jpg");
-
-                        //TODO poprawne załączanie photo
-
+                        URI = Uri.parse("file://" + attachmentFile);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -391,7 +386,7 @@ public class NewProductActivity extends AppCompatActivity {
         }
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage, String title) {
+   /* public Uri getImageUri(Context inContext, Bitmap inImage, String title) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, title, null);
@@ -420,7 +415,7 @@ public class NewProductActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
-    }
+    }*/
 
     private String createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
 
@@ -434,9 +429,10 @@ public class NewProductActivity extends AppCompatActivity {
                 Log.d(TAG, "dir created");
             else
                 Log.d(TAG, "dir not created");
+        }
 
 
-            File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/", fileName + "jpg");
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/", fileName + ".jpg");
             if (file.exists()) {
                 file.delete();
             }
@@ -448,7 +444,7 @@ public class NewProductActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+
         return direct.getAbsolutePath();
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundYellow"
-    tools:context=".AfterScanActivity">
+    tools:context=".ui.activity.AfterScanActivity">
 
 
     <RelativeLayout

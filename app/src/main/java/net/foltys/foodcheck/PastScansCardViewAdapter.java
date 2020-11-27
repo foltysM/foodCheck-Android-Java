@@ -1,11 +1,13 @@
 package net.foltys.foodcheck;
 
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,31 +32,34 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
     private List<PastScan> pastScanProducts = new ArrayList<>();
     private List<FavProd> favProducts = new ArrayList<>();
     private final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-    private Observer<RxHelper> observer;
+    private final Observer<RxHelper> observer;
+    private final Observer<Integer> clickObserver;
 
-    private Observable<RxHelper> emitter;
 
-    public PastScansCardViewAdapter(Context context, Observer<RxHelper> observer) {
+    public PastScansCardViewAdapter(Context context, Observer<RxHelper> observer, Observer<Integer> clickObserver) {
         this.context = context;
         this.observer = observer;
+        this.clickObserver = clickObserver;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pastscans_foodproduct_card_view, parent, false);
+
         return new ViewHolder(view);
     }
 
     public void goChangeFav(int pos, Boolean val) {
         RxHelper rxHelper = new RxHelper(pos, val);
-        emitter = Observable.just(rxHelper);
+        Observable<RxHelper> emitter = Observable.just(rxHelper);
         emitter.subscribe(observer);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder called");
+
         holder.productName.setText(pastScanProducts.get(position).getName());
         holder.productDate.setText(String.format("%s", pastScanProducts.get(position).getDay() + "/" + pastScanProducts.get(position).getMonth() + "/" + pastScanProducts.get(position).getYear()));
         int min = pastScanProducts.get(position).getMinutes();
@@ -82,17 +87,11 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.productImage);
 
-//        for (int i = 0; i < favProducts.size(); i++) {
-//            if (pastScanProducts.get(position).getBarcode().equals(favProducts.get(i).getBarcode())) {
-//                holder.favoriteButton.setImageResource(R.drawable.ic_favorite_full);
-//                holder.fav = true;
-//            }else
-//            {
-//                holder.favoriteButton.setImageResource(R.drawable.ic_favorite_border);
-//                holder.fav = false;
-//            }
-//        }
-
+        holder.itemView.setOnClickListener(view -> {
+            Log.d("position", Integer.toString(position));
+            Observable<Integer> clickEmitter = Observable.just(position);
+            clickEmitter.subscribe(clickObserver);
+        });
 
         // check if it is fav
         boolean found = false;
@@ -138,7 +137,6 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         return newDouble;
     }
 
-    //void addObservable(barcod)
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView productName;
@@ -154,6 +152,7 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         private final TextView productSalt;
         private final ImageView favoriteButton;
         private Boolean fav = false;
+        public RelativeLayout viewBackground, viewForeground;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -171,6 +170,8 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
             productProtein = itemView.findViewById(R.id.proteinPastTextView);
             productSalt = itemView.findViewById(R.id.saltPastTextView);
             favoriteButton = itemView.findViewById(R.id.favButton);
+            viewBackground = itemView.findViewById(R.id.past_background);
+            viewForeground = itemView.findViewById(R.id.past_foreground);
 
             favoriteButton.setOnClickListener(v -> {
                 int position = getAdapterPosition();

@@ -1,4 +1,4 @@
-package net.foltys.foodcheck;
+package net.foltys.foodcheck.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -32,6 +32,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.gson.Gson;
 
+import net.foltys.foodcheck.FoodProduct;
+import net.foltys.foodcheck.MainActivity;
+import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.FavProd;
 import net.foltys.foodcheck.data.FavProdViewModel;
 import net.foltys.foodcheck.data.PastScan;
@@ -322,7 +325,7 @@ public class AfterScanActivity extends AppCompatActivity {
                     url,
                     percent[0]);
             mPastScanViewModel.insertPast(scan);
-            Intent toHistoryIntent = new Intent(AfterScanActivity.this, PastScansActivity.class);
+            Intent toHistoryIntent = new Intent(AfterScanActivity.this, MainActivity.class);
             startActivity(toHistoryIntent);
         });
         customDialog.show();

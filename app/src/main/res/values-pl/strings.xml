@@ -56,7 +56,7 @@
     <string name="turn_on_mobile_data">Włącz dane komórkowe</string>
     <string name="cancel">Anuluj</string>
     <string name="turn_on_wifi">Włącz WiFi</string>
-    <string name="show">Pokaż</string>
+    <string name="show">Pokaż:</string>
     <string name="dates">Daty</string>
     <string name="refresh">Odśwież</string>
     <string name="sugars_only">Cukry</string>
@@ -111,4 +111,10 @@
     <string name="permission_granted">Udzielono pozwolenia</string>
     <string name="need_storage_permission">Potrzebne pozwolenie do czytania i zapisywania plików!</string>
     <string name="permission_not_granted">Nie udzielono pozwolenia!</string>
+    <string name="delete">USUŃ</string>
+    <string name="recycle_bin_icon">Ikona kosza</string>
+    <string name="food_ate_again">Czy zjadłeś ponownie ten produkt?</string>
+    <string name="undo">Cofnij</string>
+    <string name="add_new_scan_button">Przycisk dodawania nowego skanu</string>
+    <string name="report_content">Podaj proszę jak najwięcej informacji o problemie, który wystąpił w aplikacji. Koniecznie podaj kroki do odtworzenia błędu (co robiłeś zanim błąd wystąpił). Podaj proszę model telefonu i wersję systemu Android. Dziękujemy! Możesz również załączyć zrzut ekranu z widocznym problemem.</string>
 </resources>

@@ -27,7 +27,7 @@
     <string name="scan_history">Scan history</string>
     <string name="fav_products">Favorite products</string>
     <string name="progress">Progress</string>
-    <string name="recommend_friend">Recommend to a friend!</string>
+    <string name="recommend_friend" translatable="false">Recommend to a friend!</string>
     <string name="help">Help</string>
     <string name="logout">Logout</string>
     <string name="need_camera_permission">This app needs Camera permission!</string>
@@ -84,7 +84,7 @@
     <string name="save_scan">Save scan</string>
     <string name="add_photo">Add photo</string>
     <string name="if_not_given">0, if not given</string>
-    <string name="send_email_using">Send email using...</string>
+    <string name="send_email_using">Send email using…</string>
     <string name="scan_added">Scan added!</string>
     <string name="add_to_official_database">Do you want to send email to request adding the product to official database?</string>
     <string name="send_without_changing">PLEASE SEND THIS EMAIL WITHOUT CHANGING</string>
@@ -119,7 +119,7 @@
     <string name="add_new_scan_button">Add new scan button</string>
     <string name="permission_granted">Permission granted</string>
     <string name="need_storage_permission">Need permission to write and read files!</string>
-    <string name="permission_not_granted">Permission not granted!</string>
+    <string name="permission_not_granted">Permission denied!</string>
     <string name="pref_lang_key" translatable="false">pref_lang_key</string>
     <string name="pref_lang_label">Choose app language</string>
     <string name="english" translatable="false">English</string>
@@ -130,4 +130,11 @@
     <string name="ru" translatable="false">ru</string>
     <string name="pl" translatable="false">pl</string>
     <string name="de" translatable="false">de</string>
+    <string name="undo">Undo</string>
+    <string name="food_ate_again">Did you eat that product again?</string>
+    <string name="delete">DELETE</string>
+    <string name="recycle_bin_icon">Recycle bin icon</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="generate">Generate</string>
 </resources>
