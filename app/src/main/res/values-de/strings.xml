@@ -36,7 +36,7 @@
     <string name="fibre">Ballaststoff</string>
     <string name="progress">Entwicklung</string>
     <string name="confirm_deletion">Streichung bestätigen</string>
-    <string name="show">Zeigen:</string>
+    <string name="show">Zeigen</string>
     <string name="hide">verstecken</string>
     <string name="ok">Ok</string>
     <string name="never">Nie</string>
@@ -126,4 +126,7 @@
     <string name="calories_exceeded">Sie haben Ihre Kaloriengrenze überschritten!</string>
     <string name="scan_history">Frühere Scans</string>
     <string name="add_new_scan_button">Neues Ansehen hinzufügen Knopf</string>
+    <string name="no_scans">Kein Ansehen!</string>
+    <string name="last_scan">Letztes Ansehen</string>
+    <string name="food_quote">\"Kuchen sind auch gesund, man isst nur eine kleine Scheibe\" - Mary Berry</string>
 </resources>

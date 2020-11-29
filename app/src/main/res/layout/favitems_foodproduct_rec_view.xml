@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/backgroundBlue"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:padding="10dp"
     app:cardCornerRadius="15dp"
@@ -66,7 +66,9 @@
         android:layout_width="match_parent"
         android:id="@+id/fav_foreground"
         android:layout_height="match_parent"
-        android:background="@color/background_card_white">
+        android:background="@color/background_card_white"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp">
 
         <RelativeLayout
             android:id="@+id/topRelLayout"
@@ -119,19 +121,22 @@
                 android:src="@mipmap/ic_launcher" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/nutrValuesRelLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/imageRelLayout"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/imageRelLayout">
+            android:layout_toEndOf="@id/imageRelLayout"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <RelativeLayout
                 android:id="@+id/nutrValuesRelLayoutLeft"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
+                android:layout_weight="0.5">
 
                 <TextView
                     android:id="@+id/nutrValues100gTextView"
@@ -168,11 +173,10 @@
 
             <RelativeLayout
                 android:id="@+id/nutrValuesRelLayoutRight"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/nutrValuesRelLayoutLeft">
+                android:layout_weight="0.5">
 
                 <TextView
                     android:id="@+id/carbohydratesTextView"
@@ -205,7 +209,7 @@
                     android:text="@string/salt"
                     android:textSize="12sp" />
             </RelativeLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

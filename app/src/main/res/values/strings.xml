@@ -69,7 +69,7 @@
     <string name="sort_by_days">Sort by days</string>
     <string name="sort_by_months">Sort by months</string>
     <string name="sort_by_years">Sort by years</string>
-    <string name="show">Show:</string>
+    <string name="show">Show</string>
     <string name="sort_by">Sort by:</string>
     <string name="refresh">Refresh</string>
     <string name="calories">Calories</string>
@@ -144,4 +144,6 @@
     <string name="food_quote">“Cakes are healthy too, you just eat a small slice.” ― Mary Berry</string>
     <string name="login">Login</string>
     <string name="number_of_scans">Number of scans:</string>
+    <string name="last_scan">Last scan:</string>
+    <string name="no_scans">No scans!</string>
 </resources>

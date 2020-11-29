@@ -51,7 +51,7 @@
     <string name="send">Послать</string>
     <string name="save_scan">Сохранить сканирование</string>
     <string name="report_issue">Выпуск отчета</string>
-    <string name="show">Показать:</string>
+    <string name="show">Показать</string>
     <string name="no_internet_connection">Нет подключения к Интернету!</string>
     <string name="logout">Выход из системы</string>
     <string name="last_ate">Последний раз ел:</string>
@@ -122,4 +122,11 @@
     <string name="on">включения</string>
     <string name="off">выключения</string>
     <string name="eaten_food_percentage">Процент съеденных продуктов питания</string>
+    <string name="login">Регистрация</string>
+    <string name="no_scans">Никаких сканирований!</string>
+    <string name="food_quote">\"Торты тоже здоровы, ты просто ешь маленький кусочек\". ― Мэри Берри</string>
+    <string name="add_new_scan_button">Добавить новую кнопку сканирования</string>
+    <string name="last_scan">Последнее сканирование:</string>
+    <string name="food_name">Название продукта</string>
+    <string name="logout_successful">Выход успешно выполнен!</string>
 </resources>

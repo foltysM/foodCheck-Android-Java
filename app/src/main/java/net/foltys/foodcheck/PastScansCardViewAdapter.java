@@ -76,7 +76,6 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         holder.productSugars.setText(String.format("%s", context.getResources().getString(R.string.sugars) + " - " + shortenDecimal(pastScanProducts.get(position).getSugars() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
         holder.productProtein.setText(String.format("%s", context.getResources().getString(R.string.protein) + " - " + shortenDecimal(pastScanProducts.get(position).getProtein() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
         holder.productSalt.setText(String.format("%s", context.getResources().getString(R.string.salt) + " - " + shortenDecimal(pastScanProducts.get(position).getSalt() * pastScanProducts.get(position).getPercentEaten()) + context.getResources().getString(R.string.g)));
-        Log.d(TAG, "ID in database" + pastScanProducts.get(position).getId());
 
         String url = pastScanProducts.get(position).getUrl();
 
@@ -96,7 +95,6 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         // check if it is fav
         boolean found = false;
         for (int i = 0; i < favProducts.size(); i++) {
-            Log.d(TAG, "Loop");
             if (favProducts.get(i).getBarcode().equals(pastScanProducts.get(position).getBarcode())) {
                 holder.favoriteButton.setImageResource(R.drawable.ic_favorite_full);
                 holder.fav = true;

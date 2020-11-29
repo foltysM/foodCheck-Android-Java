@@ -43,7 +43,6 @@
             app:borderWidth="0dp" />
     </RelativeLayout>
 
-    <!-- TODO brak pokazywanej wartości-->
     <com.google.android.material.slider.Slider
         android:id="@+id/sliderCustomDialog"
         android:layout_width="wrap_content"

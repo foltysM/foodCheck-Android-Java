@@ -1,12 +1,15 @@
 package net.foltys.foodcheck.ui.fragment;
 
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,7 +62,7 @@ public class PastFragment extends Fragment {
     private SharedPreferences sharedPref;
     private FavProdViewModel mFavProdViewModel;
     private PastScanViewModel mPastScanViewModel;
-    private FrameLayout parent;
+    private RelativeLayout parent;
     private List<PastScan> pasts = new ArrayList<>();
     private List<FavProd> favs = new ArrayList<>();
     private Context context;
@@ -295,17 +298,16 @@ public class PastFragment extends Fragment {
         pastScansCardView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mPastScanViewModel.getAllPastScans().observe(getViewLifecycleOwner(), scans -> {
+            Log.d(TAG, "changed past");
             pasts = scans;
             adapter.setProducts(scans, favs);
-
-            Log.d(TAG, "changed past");
+            checkNotifications();
         });
 
         mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
         mFavProdViewModel.getAllFav().observe(getViewLifecycleOwner(), favProds -> {
             favs = favProds;
             adapter.setProducts(pasts, favProds);
-
             Log.d(TAG, "changed fav");
         });
 
@@ -366,11 +368,7 @@ public class PastFragment extends Fragment {
         checkNotifications();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkNotifications();
-    }
+
 
     private void checkNotifications() {
         if (sharedPref.getBoolean("show_calories_progress", false) || sharedPref.getBoolean("calories_exceeded_alert", true)) {
@@ -381,7 +379,7 @@ public class PastFragment extends Fragment {
             double sum = 0;
             for (int i = 0; i < pasts.size(); i++) {
                 if (pasts.get(i).getDay() == day && pasts.get(i).getMonth() == month && pasts.get(i).getYear() == year)
-                    sum = sum + pasts.get(i).getEnergy(); //TODO zero zanim zaciągnie z bazy
+                    sum = sum + pasts.get(i).getEnergy();
             }
             Log.d("energySum", Double.toString(sum));
 
@@ -389,7 +387,7 @@ public class PastFragment extends Fragment {
                 refreshNotificationMeter(sum);
             }
             if (sharedPref.getBoolean("calories_exceeded_alert", true)) {
-                if (sum > sharedPref.getInt("calories_limit", 2000))
+                if (sum > sharedPref.getInt("calories_limit", 1000))
                     notificationAlert();
             }
         }
@@ -399,11 +397,12 @@ public class PastFragment extends Fragment {
 
     private void refreshNotificationMeter(double sum) {
         //TODO
+        Log.d(TAG, "refresh meter");
     }
 
     private void notificationAlert() {
 
-        Intent intent = new Intent(getActivity(), MainActivity.class); /// TODO
+        Intent intent = new Intent(getActivity(), MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addNextIntentWithParentStack(intent);
@@ -425,7 +424,7 @@ public class PastFragment extends Fragment {
     }
 
     private void createNotificationChannelExceed() {
-        /*// Create the NotificationChannel, but only on API 26+ because
+        // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
@@ -435,18 +434,10 @@ public class PastFragment extends Fragment {
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-        }*/
+        }
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent goToMain = new Intent(PastScansActivity.this, MainActivity.class);
-//        goToMain.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(goToMain);
-//    } todo
 
     private double shortenDecimal(double input) {
         final DecimalFormat decimalFormat = new DecimalFormat("#0.00");

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp"
     app:cardCornerRadius="15dp"
     app:cardElevation="10dp">
@@ -64,7 +64,9 @@
         android:id="@+id/past_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_card_white">
+        android:background="@color/background_card_white"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="5dp">
 
         <RelativeLayout
             android:id="@+id/dateNameRelLayout"
@@ -95,7 +97,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginEnd="15dp"
                 android:text="@string/product_name"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/favButton"
@@ -111,85 +114,93 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/nutValuesRelLayoutLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dateNameRelLayout"
-            android:layout_toEndOf="@id/productImagePast">
-
-            <TextView
-                android:id="@+id/nutValues"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/eatenNutrValues"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/energyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nutValues"
-                android:text="@string/energy"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/fatTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/energyTextView"
-                android:text="@string/fat"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/saturatesTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fatTextView"
-                android:text="@string/saturates"
-                android:textSize="12sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/nutValuesRelLayoutRight"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/dateNameRelLayout"
             android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/nutValuesRelLayoutLeft">
+            android:layout_toEndOf="@id/productImagePast"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/carbohydratesTextView"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/nutValuesRelLayoutLeft"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/carbohydrates"
-                android:textSize="12sp" />
+                android:layout_weight="0.5">
 
-            <TextView
-                android:id="@+id/sugarsPastTextView"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/nutValues"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eatenNutrValues"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/energyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nutValues"
+                    android:text="@string/energy"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/fatTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/energyTextView"
+                    android:text="@string/fat"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/saturatesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fatTextView"
+                    android:text="@string/saturates"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/nutValuesRelLayoutRight"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/carbohydratesTextView"
-                android:text="@string/sugars"
-                android:textSize="12sp" />
+                android:layout_marginStart="5dp"
+                android:layout_weight="0.5">
 
-            <TextView
-                android:id="@+id/proteinPastTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/sugarsPastTextView"
-                android:text="@string/protein"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/carbohydratesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/carbohydrates"
+                    android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/saltPastTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/proteinPastTextView"
-                android:text="@string/salt"
-                android:textSize="12sp" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/sugarsPastTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/carbohydratesTextView"
+                    android:text="@string/sugars"
+                    android:textSize="12sp" />
 
+                <TextView
+                    android:id="@+id/proteinPastTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/sugarsPastTextView"
+                    android:text="@string/protein"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/saltPastTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/proteinPastTextView"
+                    android:text="@string/salt"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/productImagePast"
