@@ -33,7 +33,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 
-import net.foltys.foodcheck.MainActivity;
 import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.PastScan;
 import net.foltys.foodcheck.data.PastScanViewModel;
@@ -118,7 +117,7 @@ public class NewProductActivity extends AppCompatActivity {
 
                 final Dialog customDialog = new Dialog(NewProductActivity.this);
                 customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                customDialog.setContentView(R.layout.custom_dialog);
+                customDialog.setContentView(R.layout.adjust_food_dialog);
                 customDialog.setTitle(R.string.adjust_eaten_product_amount);
 
                 Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);
@@ -314,7 +313,7 @@ public class NewProductActivity extends AppCompatActivity {
                         e.printStackTrace();
                         Toast.makeText(NewProductActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                     }
-                    Log.d(TAG, "catched");
+                    Log.d(TAG, "Catched");
                 } else {
                     Toast.makeText(this, R.string.image_not_picked, Toast.LENGTH_SHORT).show();
                 }
@@ -434,7 +433,8 @@ public class NewProductActivity extends AppCompatActivity {
 
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/", fileName + ".jpg");
             if (file.exists()) {
-                file.delete();
+                if (!file.delete())
+                    Log.d("Photo already exists", "Deletion not successful!");
             }
             try {
                 FileOutputStream out = new FileOutputStream(file);
@@ -470,7 +470,7 @@ public class NewProductActivity extends AppCompatActivity {
                 if (ActivityCompat.checkSelfPermission(NewProductActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     // checks if able to show permission request
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(NewProductActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        // shows snackbar
+                        // shows snackBar
                         Snackbar.make(parent, R.string.need_storage_permission, Snackbar.LENGTH_LONG)
                                 .setAction(R.string.grant_permission, v -> {
                                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

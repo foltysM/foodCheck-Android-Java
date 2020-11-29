@@ -6,11 +6,83 @@
     tools:context=".ui.fragment.HomeFragment">
 
 
-    <com.google.android.material.textview.MaterialTextView
+    <View
+        android:id="@+id/green_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/green_rectangle" />
+
+    <RelativeLayout
+        android:id="@+id/img_rel_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/app_name" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp">
+
+        <View
+            android:layout_width="154dp"
+            android:layout_height="154dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/white_circle" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/photo_home"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_launcher_round" />
+    </RelativeLayout>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/name_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_rel_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:text="@string/guest"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/quote_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_home"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/food_quote"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/quote_text_view"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="40dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/number_of_scans_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/number_of_scans" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/number_of_scans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

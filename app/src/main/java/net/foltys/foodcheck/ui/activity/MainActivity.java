@@ -1,4 +1,4 @@
-package net.foltys.foodcheck;
+package net.foltys.foodcheck.ui.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -39,7 +38,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -51,11 +49,13 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
-import net.foltys.foodcheck.ui.activity.AfterScanActivity;
+import net.foltys.foodcheck.CaptureAct;
+import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.ui.fragment.FavoriteFragment;
 import net.foltys.foodcheck.ui.fragment.HomeFragment;
 import net.foltys.foodcheck.ui.fragment.PastFragment;
 import net.foltys.foodcheck.ui.fragment.ProgressFragment;
+import net.foltys.foodcheck.ui.fragment.SettingsFragment;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -63,7 +63,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 1;
-    private static final int RC_SIGN_IN = 2;
+
     private static final int RC_BARCODE_SCAN = 49374;
 
     //used to attach the fragments
@@ -72,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private RelativeLayout parent;
     private DrawerLayout drawer;
+    private static final int RC_SIGN_IN = 2;
     private static final String TAG_HISTORY = "history";
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton signInButton;
+
     private static final String TAG_FAVORITE = "favorite";
 
     // below variables of header
@@ -87,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     String lang = "";
     SharedPreferences sharedPref;
 
-    // TODO navbar poprawnie
     private static final String TAG_PROGRESS = "progress";
     private static final String TAG_SETTINGS = "settings";
     //to identify current nav menu item
@@ -98,10 +98,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
-
-    // flag to load home fragment when user presses back key
-    private boolean shouldLoadHomeFragOnBackPress = true;
-    private Handler mHandler;
+    private String name = "";
+    private String imageURL = "";
 
 
     @Override
@@ -111,15 +109,13 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         } else {
-            if (shouldLoadHomeFragOnBackPress) {
-                // checking if user is on other navigation menu
-                // rather than home
-                if (navItemIndex != 0) {
-                    navItemIndex = 0;
-                    CURRENT_TAG = TAG_HOME;
-                    loadHomeFragment();
-                    return;
-                }
+            // checking if user is on other navigation menu
+            // rather than home
+            if (navItemIndex != 0) {
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_HOME;
+                loadHomeFragment();
+                return;
             }
 
         }
@@ -129,30 +125,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         //SharedPreferences
-        lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),
-                getString(R.string.en)), getString(R.string.en));
+        //lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),getString(R.string.en)), getString(R.string.en));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        //sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
+
 
         //parent = findViewById(R.id.mainRelLayout);
 
         toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
-        mHandler = new Handler();
+        Handler mHandler = new Handler();
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+
 //        navigationView.setNavigationItemSelectedListener(getAPP);
 
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
 
 
         //drawer.addDrawerListener(toggle);
@@ -166,9 +165,7 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Sign in button init
-        //signInButton = findViewById(R.id.sign_in_button);
-        //signInButton.setSize(SignInButton.SIZE_STANDARD);
+
 
         // variables connected with header
         View header = navigationView.getHeaderView(0);
@@ -176,10 +173,7 @@ public class MainActivity extends AppCompatActivity {
         emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
         personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
 
-        /*signInButton.setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
-        });*/
+
 
         //Microsoft SDK
         AppCenter.start(getApplication(), "bb5ba2c0-ac45-4e09-937b-08d97e6c789c",
@@ -193,9 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
                     // shows snackbar
                     Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.grant_permission, v1 -> {
-                                requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                            }).show();
+                            .setAction(R.string.grant_permission, v1 -> requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE)).show();
                 } else {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
                 }
@@ -204,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //updateUI();
+
         setUpNavigationView();
 
         if (savedInstanceState == null) {
@@ -212,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
 
     }
 
@@ -252,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
             default:
-                return new HomeFragment();
+                return new HomeFragment(name, imageURL);
             case 1:
                 return new PastFragment();
             case 2:
@@ -364,78 +359,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpNavigationView() {
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_home:
-                        //Intent intent_home = new Intent(MainActivity.this, MainActivity.class);
-                        //startActivity(intent_home);
-                        navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
-                        break;
-                    case R.id.nav_history:
-//                        Intent intentPast = new Intent(MainActivity.this, PastScansActivity.class);
-//                        startActivity(intentPast);
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_HISTORY;
-                        break;
-                    case R.id.nav_fav_products:
-//                        Intent intent_fav = new Intent(MainActivity.this, FavItemsActivity.class);
-//                        startActivity(intent_fav);
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_FAVORITE;
-                        break;
-                    case R.id.nav_progress:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();\
-//                        Intent intent = new Intent(MainActivity.this, TestActivity.class);
-//                        startActivity(intent);
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_PROGRESS;
-                        break;
-                    case R.id.nav_settings:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_home:
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_HOME;
+                    break;
+                case R.id.nav_history:
+                    navItemIndex = 1;
+                    CURRENT_TAG = TAG_HISTORY;
+                    break;
+                case R.id.nav_fav_products:
+                    navItemIndex = 2;
+                    CURRENT_TAG = TAG_FAVORITE;
+                    break;
+                case R.id.nav_progress:
+                    navItemIndex = 3;
+                    CURRENT_TAG = TAG_PROGRESS;
+                    break;
+                case R.id.nav_settings:
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
 //                        Intent intentSet = new Intent(MainActivity.this, SettingsActivity.class);
 //                        startActivity(intentSet);
-                        navItemIndex = 4;
-                        CURRENT_TAG = TAG_SETTINGS;
-                        break;
-                    case R.id.nav_share:
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        String url = "http://foltys.net/food-check/app/foodCheck.apk";
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.try_app) + url);
-                        shareIntent.setType("text/*");
-                        Intent chooser = new Intent(Intent.createChooser(shareIntent, getApplicationContext().getResources().getString(R.string.choose_app)));
-                        startActivity(chooser);
-                        break;
-                    case R.id.nav_help:
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
-                        startActivity(browserIntent);
-                        break;
-                    case R.id.nav_report:
-                        Intent reportIntent = new Intent(MainActivity.this, ReportIssueActivity.class);
-                        startActivity(reportIntent);
-                        break;
-                    case R.id.nav_logout:
-                        if (userLogged) {
-                            logout();
-                        } else
-                            //Toast.makeText(this, "You are already logged out", Toast.LENGTH_SHORT).show(); TODO
-                            break;
-                }
-                drawer.closeDrawer(GravityCompat.START);
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
-                }
-                item.setChecked(true);
-
-                loadHomeFragment();
-
-                return true;
-
+                    navItemIndex = 4;
+                    CURRENT_TAG = TAG_SETTINGS;
+                    break;
+                case R.id.nav_share:
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    String url = "http://foltys.net/food-check/app/foodCheck.apk";
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.try_app) + url);
+                    shareIntent.setType("text/*");
+                    Intent chooser = new Intent(Intent.createChooser(shareIntent, getApplicationContext().getResources().getString(R.string.choose_app)));
+                    startActivity(chooser);
+                    break;
+                case R.id.nav_help:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://foltys.net/food-check/help.php"));
+                    startActivity(browserIntent);
+                    break;
+                case R.id.nav_report:
+                    Intent reportIntent = new Intent(MainActivity.this, ReportIssueActivity.class);
+                    startActivity(reportIntent);
+                    break;
+                case R.id.nav_logout:
+                    logout();
+                    break;
+                case R.id.nav_login:
+                    login();
+                    break;
             }
+            drawer.closeDrawer(GravityCompat.START);
+            if (item.isChecked()) {
+                item.setChecked(false);
+            } else {
+                item.setChecked(true);
+            }
+            item.setChecked(true);
+
+            loadHomeFragment();
+
+            return true;
 
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -467,6 +449,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void login() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     private void toggleFab() {
         if (navItemIndex == 0) {
             //home
@@ -477,7 +464,6 @@ public class MainActivity extends AppCompatActivity {
             scanButton.shrink();
 
         } else {
-
             scanButton.hide();
         }
     }
@@ -525,8 +511,13 @@ public class MainActivity extends AppCompatActivity {
             nameTextViewHeader.setText(R.string.guest);
             emailTextViewHeader.setVisibility(View.GONE);
             personPhotoHeader.setImageResource(R.mipmap.ic_launcher_round);
-            //signInButton.setVisibility(View.VISIBLE);
+
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
             userLogged = false;
+            name = getResources().getString(R.string.guest);
+            imageURL = "";
+
 
         } else {
             nameTextViewHeader.setVisibility(View.VISIBLE);
@@ -543,18 +534,26 @@ public class MainActivity extends AppCompatActivity {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(personPhotoHeader);
             personPhotoHeader.setImageURI(null);
+            name = acc.getDisplayName();
+            imageURL = photoUrl;
 
             Log.d(TAG, "Image set to url");
-            //signInButton.setVisibility(View.GONE);
+
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
             userLogged = true;
         }
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame2, new HomeFragment(name, imageURL)).commit();
     }
 
     private void logout() {
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.drawer_menu);
+
         updateUI(null);
         userLogged = false;
+        //navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_SHORT).show());
-        signInButton.setVisibility(View.VISIBLE);
     }
 
     /**

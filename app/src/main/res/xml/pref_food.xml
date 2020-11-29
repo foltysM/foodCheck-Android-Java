@@ -30,4 +30,5 @@
         android:title="@string/pref_lang_label"
         app:defaultValue="@string/en" />
 
+
 </PreferenceScreen>

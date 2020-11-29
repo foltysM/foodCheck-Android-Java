@@ -16,7 +16,7 @@
     <string name="barcode">Barcode</string>
     <string name="weight">Weight</string>
     <string name="fibre">Fibre</string>
-    <string name="error_occured">Error occurred</string>
+    <string name="error_occurred">Error occurred</string>
     <string name="save">Save</string>
     <string name="discard">Discard</string>
     <string name="g">g</string>
@@ -27,7 +27,7 @@
     <string name="scan_history">Scan history</string>
     <string name="fav_products">Favorite products</string>
     <string name="progress">Progress</string>
-    <string name="recommend_friend" translatable="false">Recommend to a friend!</string>
+    <string name="recommend_friend">Recommend to a friend!</string>
     <string name="help">Help</string>
     <string name="logout">Logout</string>
     <string name="need_camera_permission">This app needs Camera permission!</string>
@@ -37,7 +37,7 @@
     <string name="home">Home</string>
     <string name="other">Other</string>
     <string name="profile_picture">Profile picture</string>
-    <string name="ask_before_del">Ask before record delete</string>
+    <string name="ask_before_del">Ask before record deletion</string>
     <string name="data_saved">Data saved!</string>
     <string name="try_app">Try new app for scanning food and keeping diet! Download FoodCheck:</string>
     <string name="choose_app">Choose an application</string>
@@ -110,7 +110,7 @@
     <string name="eatenNutrValues">Eaten nutritional values</string>
     <string name="from_gallery">From gallery</string>
     <string name="take_a_photo">Take a photo</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="never">Never</string>
     <string name="report_issue">Report issue</string>
     <string name="send">Send</string>
@@ -134,7 +134,14 @@
     <string name="food_ate_again">Did you eat that product again?</string>
     <string name="delete">DELETE</string>
     <string name="recycle_bin_icon">Recycle bin icon</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="generate">Generate</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="goal_achieved">You\'ve achieved the goal!</string>
+    <string name="keep_going">Keep going!</string>
+    <string name="full_cat_image">Full cat image</string>
+    <string name="close">Close</string>
+    <string name="click_generate">Click \"generate\" button!</string>
+    <string name="food_quote">“Cakes are healthy too, you just eat a small slice.” ― Mary Berry</string>
+    <string name="login">Login</string>
+    <string name="number_of_scans">Number of scans:</string>
 </resources>

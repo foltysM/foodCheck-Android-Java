@@ -1,4 +1,4 @@
-package net.foltys.foodcheck;
+package net.foltys.foodcheck.ui.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+
+import net.foltys.foodcheck.R;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -30,7 +32,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
 
         //TODO account settings there
-        //TODO alergeny
     }
 
     private void setPreferenceSummary(Preference preference, String value) {

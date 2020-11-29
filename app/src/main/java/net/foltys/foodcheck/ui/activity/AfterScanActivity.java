@@ -28,12 +28,12 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.gson.Gson;
 
 import net.foltys.foodcheck.FoodProduct;
-import net.foltys.foodcheck.MainActivity;
 import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.FavProd;
 import net.foltys.foodcheck.data.FavProdViewModel;
@@ -77,8 +77,8 @@ public class AfterScanActivity extends AppCompatActivity {
         scannedBarcode = getIntent().getStringExtra("barcode");
         favoriteButton = findViewById(R.id.favoriteButton);
         imgProgressBar = findViewById(R.id.imageProgressBar);
-        Button saveButton = findViewById(R.id.saveButton);
-        Button discardButton = findViewById(R.id.discardButton);
+        MaterialButton saveButton = findViewById(R.id.saveButton);
+        MaterialButton discardButton = findViewById(R.id.discardButton);
 
         mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
         mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
@@ -164,7 +164,7 @@ public class AfterScanActivity extends AppCompatActivity {
 
 
         }, error -> {
-            nameTextView.setText(R.string.error_occured);
+            nameTextView.setText(R.string.error_occurred);
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(AfterScanActivity.this);
             builder.setTitle(getResources().getString(R.string.no_product_found))
                     .setMessage(getResources().getString(R.string.add_new_product_manually_question))
@@ -224,7 +224,7 @@ public class AfterScanActivity extends AppCompatActivity {
         //Custom dialog to set eaten amount
         final Dialog customDialog = new Dialog(AfterScanActivity.this);
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setContentView(R.layout.adjust_food_dialog);
         customDialog.setTitle(R.string.adjust_eaten_product_amount);
 
         Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);

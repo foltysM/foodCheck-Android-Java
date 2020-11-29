@@ -1,4 +1,4 @@
-package net.foltys.foodcheck;
+package net.foltys.foodcheck.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import net.foltys.foodcheck.R;
 
 public class ReportIssueActivity extends AppCompatActivity {
 

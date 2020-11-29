@@ -9,7 +9,7 @@
     <string name="fat">Fat</string>
     <string name="carbohydrates">Carbohydrates</string>
     <string name="sugars">of which sugars</string>
-    <string name="scanning">Scanning...</string>
+    <string name="scanning">Scanning…</string>
     <string name="salt">Salt</string>
     <string name="energy">Energy</string>
     <string name="protein">Protein</string>
@@ -19,7 +19,7 @@
     <string name="g">g</string>
     <string name="discard">Discard</string>
     <string name="save">Save</string>
-    <string name="error_occured">Error occured</string>
+    <string name="error_occurred">Error occurred</string>
     <string name="back">Back</string>
     <string name="language">Language</string>
     <string name="just_scanned">You\'ve just scanned:</string>
@@ -37,7 +37,7 @@
     <string name="need_camera_permission">This app needs Camera permission!</string>
     <string name="data_saved">Data saved!</string>
     <string name="profile_picture">Profile picture</string>
-    <string name="ask_before_del">Ask before record delete</string>
+    <string name="ask_before_del">Ask before record deletion</string>
     <string name="home">Home</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="placeholder">placeholder</string>
@@ -68,7 +68,7 @@
     <string name="add_new_product_manually_question">Do you want to add product manually?</string>
     <string name="save_scan">Save scan</string>
     <string name="if_not_given">0, if not given</string>
-    <string name="send_email_using">Send email using...</string>
+    <string name="send_email_using">Send email using…</string>
     <string name="scan_added">Scan added!</string>
     <string name="add_to_official_database">Do you want to send email to request adding the product to official database?</string>
     <string name="send_without_changing">PLEASE SEND THIS EMAIL WITHOUT CHANGING</string>
@@ -102,7 +102,7 @@
     <string name="sort_by_days">Sort by days</string>
     <string name="sort_by_months">Sort by months</string>
     <string name="calories_alert_per_day">Calories alert (per day)</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="report_issue">Report issue</string>
     <string name="send">Send</string>
     <string name="add_new_scan_button">Add new scan button</string>
@@ -118,4 +118,13 @@
     <string name="report_content">Please provide as much information as you can about the issue you encountered. Especially what was your app path before issue appeared. Please write us also your phone model and OS version. Thank you! You can also attach screenshots of this issue.</string>
     <string name="after_click_send">After clicking the \"send\" button, you will be redirected to your email app. That way inform developer about issue that you encountered</string>
     <string name="generate">Generate</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="goal_achieved">You\'ve achieved the goal!</string>
+    <string name="keep_going">Keep going!</string>
+    <string name="full_cat_image">Full cat image</string>
+    <string name="close">Close</string>
+    <string name="click_generate">Click \"generate\" button!</string>
+    <string name="food_quote">“Cakes are healthy too, you just eat a small slice.” ― Mary Berry</string>
+    <string name="login">Login</string>
+    <string name="number_of_scans">Number of scans:</string>
 </resources>

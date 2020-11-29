@@ -5,7 +5,7 @@
     <string name="food_image">Zdjęcie produktu</string>
     <string name="nutrValues100g">Wartości odzywcze w 100g:</string>
     <string name="scan_product">Skanuj produkt</string>
-    <string name="scanning">Skanowanie...</string>
+    <string name="scanning">Skanowanie…</string>
     <string name="protein">Białko</string>
     <string name="salt">Sól</string>
     <string name="food_name">Nazwa produktu</string>
@@ -17,7 +17,7 @@
     <string name="weight">Waga</string>
     <string name="fibre">Błonnik</string>
     <string name="g">g</string>
-    <string name="error_occured">Wystąpił błąd</string>
+    <string name="error_occurred">Wystąpił błąd</string>
     <string name="back">Powrót</string>
     <string name="language">Język</string>
     <string name="just_scanned">Zeskanowałeś:</string>
@@ -75,7 +75,7 @@
     <string name="favorite_button">Dodaj do ulubionych</string>
     <string name="account_settings">Ustawienia konta</string>
     <string name="guest">Gość</string>
-    <string name="send_email_using">Wyślij wiadomość przy użyciu...</string>
+    <string name="send_email_using">Wyślij wiadomość przy użyciu…</string>
     <string name="favorite_removed">Produkt usunięty z listy ulubionych</string>
     <string name="calories_alert_per_day">Dzienny alert kalorii</string>
     <string name="calories">Kalorie</string>
@@ -117,4 +117,14 @@
     <string name="undo">Cofnij</string>
     <string name="add_new_scan_button">Przycisk dodawania nowego skanu</string>
     <string name="report_content">Podaj proszę jak najwięcej informacji o problemie, który wystąpił w aplikacji. Koniecznie podaj kroki do odtworzenia błędu (co robiłeś zanim błąd wystąpił). Podaj proszę model telefonu i wersję systemu Android. Dziękujemy! Możesz również załączyć zrzut ekranu z widocznym problemem.</string>
+    <string name="goal_achieved">Osiągnąłeś cel!</string>
+    <string name="keep_going">Tak trzymaj!</string>
+    <string name="full_cat_image">Obraz najedzonego kota</string>
+    <string name="close">Zamknij</string>
+    <string name="generate">Generuj</string>
+    <string name="congratulations">Gratulacje!</string>
+    <string name="login">Zaloguj się</string>
+    <string name="food_quote">\"Jesteś tym co jesz\"</string>
+    <string name="click_generate">Naciśnij przycisk \"generuj\"!</string>
+    <string name="number_of_scans">Liczba skanów:</string>
 </resources>

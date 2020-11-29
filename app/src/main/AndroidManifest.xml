@@ -29,20 +29,11 @@
         android:supportsRtl="true"
         android:fullBackupContent="@xml/backup_rules"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReportIssueActivity" />
+        <activity android:name=".ui.activity.ReportIssueActivity" />
         <activity android:name=".ui.activity.NewProductActivity" />
-        <activity android:name=".TestSettingsActivity" />
-        <activity android:name=".ProgressActivity" />
-        <activity
-            android:name=".SettingsActivity"
-            android:configChanges="locale|orientation" />
-        <activity android:name=".ui.activity.PastScansActivity" />
         <activity android:name=".ui.activity.AfterScanActivity" />
         <activity
-            android:name=".ui.activity.FavItemsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:configChanges="locale|orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

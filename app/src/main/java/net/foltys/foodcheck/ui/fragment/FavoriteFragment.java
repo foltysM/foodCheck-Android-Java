@@ -1,6 +1,7 @@
 package net.foltys.foodcheck.ui.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,12 +51,18 @@ public class FavoriteFragment extends Fragment {
     PastScanViewModel mPastScanViewModel;
     private List<PastScan> pasts = new ArrayList<>();
     private List<FavProd> favs = new ArrayList<>();
-    private FrameLayout parent;
+    private RelativeLayout parent;
+    private Context context;
 
     public FavoriteFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,14 +78,14 @@ public class FavoriteFragment extends Fragment {
             public void onNext(@io.reactivex.annotations.NonNull Integer integer) {
                 final double[] percent = {100};
 
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
                 builder.setTitle(getResources().getString(R.string.food_ate_again))
                         .setMessage(favs.get(integer).getName())
                         .setPositiveButton(getResources().getString(R.string.yes), (dialog, which) ->
                         {
                             final Dialog customDialog = new Dialog(getActivity());
                             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog);
+                            customDialog.setContentView(R.layout.adjust_food_dialog);
                             customDialog.setTitle(R.string.adjust_eaten_product_amount);
 
                             Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);
@@ -224,21 +231,21 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parent = mView.findViewById(R.id.parent);
+        parent = mView.findViewById(R.id.parent_fav);
 
         RecyclerView favProdCardView = view.findViewById(R.id.cardViewFavProd3);
         FavProdViewModel mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
         favProdCardView.setAdapter(adapter);
         favProdCardView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mPastScanViewModel.getAllPastScans().observe(getActivity(), pastScans -> {
+        mPastScanViewModel.getAllPastScans().observe(getViewLifecycleOwner(), pastScans -> {
             pasts = pastScans;
             adapter.setFavProducts(favs, pastScans);
 
             Log.d(TAG, "Changed");
         });
 
-        mFavProdViewModel.getAllFav().observe(getActivity(), favProds -> {
+        mFavProdViewModel.getAllFav().observe(getViewLifecycleOwner(), favProds -> {
             favs = favProds;
             adapter.setFavProducts(favProds, pasts);
 

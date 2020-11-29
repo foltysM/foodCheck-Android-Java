@@ -3,6 +3,7 @@ package net.foltys.foodcheck.ui.fragment;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -32,7 +33,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
 
-import net.foltys.foodcheck.MainActivity;
 import net.foltys.foodcheck.PastScansCardViewAdapter;
 import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.RxHelper;
@@ -40,6 +40,7 @@ import net.foltys.foodcheck.data.FavProd;
 import net.foltys.foodcheck.data.FavProdViewModel;
 import net.foltys.foodcheck.data.PastScan;
 import net.foltys.foodcheck.data.PastScanViewModel;
+import net.foltys.foodcheck.ui.activity.MainActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,22 +53,26 @@ import io.reactivex.disposables.Disposable;
 
 public class PastFragment extends Fragment {
     public static final String TAG = "PastFragment";
-    final static String CALORIES_METER_CHANNEL_ID = "calories_meter";
-    private static final int CAMERA_REQUEST_CODE = 1;
-    private static final int RC_BARCODE_SCAN = 49374;
+    private final static String CALORIES_METER_CHANNEL_ID = "calories_meter";
     protected View mView;
-    PastScansCardViewAdapter adapter;
-    SharedPreferences sharedPref;
-    FavProdViewModel mFavProdViewModel;
-    PastScanViewModel mPastScanViewModel;
+    private PastScansCardViewAdapter adapter;
+    private SharedPreferences sharedPref;
+    private FavProdViewModel mFavProdViewModel;
+    private PastScanViewModel mPastScanViewModel;
     private FrameLayout parent;
     private List<PastScan> pasts = new ArrayList<>();
     private List<FavProd> favs = new ArrayList<>();
+    private Context context;
 
 
     public PastFragment() {
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,14 +107,14 @@ public class PastFragment extends Fragment {
 
                 final double[] percent = {100};
 
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
                 builder.setTitle(getResources().getString(R.string.food_ate_again))
                         .setMessage(pasts.get(integer).getName())
                         .setPositiveButton(getResources().getString(R.string.yes), (dialog, which) ->
                         {
                             final Dialog customDialog = new Dialog(getActivity());
                             customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            customDialog.setContentView(R.layout.custom_dialog);
+                            customDialog.setContentView(R.layout.adjust_food_dialog);
                             customDialog.setTitle(R.string.adjust_eaten_product_amount);
 
                             Slider slider = customDialog.findViewById(R.id.sliderCustomDialog);
@@ -289,7 +294,7 @@ public class PastFragment extends Fragment {
         pastScansCardView.setAdapter(adapter);
         pastScansCardView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mPastScanViewModel.getAllPastScans().observe(getActivity(), scans -> { //TODO getLifecycleOwner
+        mPastScanViewModel.getAllPastScans().observe(getViewLifecycleOwner(), scans -> {
             pasts = scans;
             adapter.setProducts(scans, favs);
 
@@ -297,7 +302,7 @@ public class PastFragment extends Fragment {
         });
 
         mFavProdViewModel = new ViewModelProvider(this).get(FavProdViewModel.class);
-        mFavProdViewModel.getAllFav().observe(getActivity(), favProds -> {
+        mFavProdViewModel.getAllFav().observe(getViewLifecycleOwner(), favProds -> {
             favs = favProds;
             adapter.setProducts(pasts, favProds);
 
@@ -354,7 +359,7 @@ public class PastFragment extends Fragment {
         }).attachToRecyclerView(pastScansCardView);
 
         // creates an instance of SharedPreferences class to read settings
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         createNotificationChannelExceed();
 
@@ -405,7 +410,7 @@ public class PastFragment extends Fragment {
 
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CALORIES_METER_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CALORIES_METER_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_warning_24)
                 .setContentTitle(getString(R.string.drop_cookies))
                 .setContentText(getString(R.string.calories_exceeded))
@@ -413,7 +418,7 @@ public class PastFragment extends Fragment {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         int notificationId = 1;
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());

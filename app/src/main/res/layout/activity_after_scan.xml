@@ -1,280 +1,351 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout_after"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundYellow"
     tools:context=".ui.activity.AfterScanActivity">
 
-
     <RelativeLayout
-        android:id="@+id/titleRelLayout"
-        android:layout_width="wrap_content"
+        android:id="@+id/drawer_layout_after"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/justScannedTextView"
+        <RelativeLayout
+            android:id="@+id/titleRelLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/just_scanned"
-            android:textSize="25sp" />
+            android:paddingStart="25dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="25dp">
 
-        <ImageView
-            android:id="@+id/favoriteButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/favorite_button"
-            android:src="@drawable/ic_favorite_full" />
+            <TextView
+                android:id="@+id/justScannedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/just_scanned"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
-        <TextView
-            android:id="@+id/productNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/justScannedTextView"
-            android:text="@string/food_name"
-            android:textSize="19sp" />
+            <ImageView
+                android:id="@+id/favoriteButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/favorite_button"
+                android:src="@drawable/ic_favorite_full" />
 
-        <TextView
-            android:id="@+id/weightTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/productNameTextView"
-            android:text="@string/weight"
-            android:textSize="19sp" />
+            <TextView
+                android:id="@+id/productNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/justScannedTextView"
+                android:text="@string/food_name"
+                android:textSize="19sp" />
 
-        <TextView
-            android:id="@+id/barcodeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/weightTextView"
-            android:text="@string/barcode" />
+            <TextView
+                android:id="@+id/weightTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/productNameTextView"
+                android:text="@string/weight"
+                android:textSize="19sp" />
 
-        <TextView
-            android:id="@+id/barcodeResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/weightTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/barcodeTextView" />
+            <TextView
+                android:id="@+id/barcodeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weightTextView"
+                android:text="@string/barcode" />
+
+            <TextView
+                android:id="@+id/barcodeResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weightTextView"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/barcodeTextView" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/imgRelativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/titleRelLayout">
-
-        <ImageView
-            android:id="@+id/productImage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:contentDescription="@string/food_image"
-            android:src="@mipmap/ic_launcher" />
-
-        <ProgressBar
-            android:id="@+id/imageProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/valuesRelLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imgRelativeLayout">
-
-        <TextView
-            android:id="@+id/in100gTextView"
+        <RelativeLayout
+            android:id="@+id/imgRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nutrValues100g"
-            android:textSize="18sp" />
+            android:layout_below="@id/titleRelLayout"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
-        <TextView
-            android:id="@+id/energyTextView"
+            <ImageView
+                android:id="@+id/productImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:contentDescription="@string/food_image"
+                android:src="@mipmap/ic_launcher" />
+
+            <ProgressBar
+                android:id="@+id/imageProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/valuesRelLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/in100gTextView"
-            android:text="@string/energy"
-            android:textSize="16sp" />
+            android:layout_below="@id/imgRelativeLayout"
+            android:paddingHorizontal="6dp">
 
-        <TextView
-            android:id="@+id/energyResultTextView"
+            <TextView
+                android:id="@+id/in100gTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nutrValues100g"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/energyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/in100gTextView"
+                android:text="@string/energy"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/energyResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/in100gTextView"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/energyTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_energy_fat"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/energyTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/fatTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_energy_fat"
+                android:text="@string/fat"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/fatResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_energy_fat"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/fatTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_fat_saturates"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/fatTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/saturatesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_fat_saturates"
+                android:text="@string/saturates"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/saturatesResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_fat_saturates"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/saturatesTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_saturates_carbohydrates"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/saturatesTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/carbohydratesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_saturates_carbohydrates"
+                android:text="@string/carbohydrates"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/carbohydratesResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_saturates_carbohydrates"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/carbohydratesTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_carbohydrates_sugars"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/carbohydratesTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/sugarsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_carbohydrates_sugars"
+                android:text="@string/sugars"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/sugarsResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_carbohydrates_sugars"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/sugarsTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_sugars_fibre"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/sugarsTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/fibreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_sugars_fibre"
+                android:text="@string/fibre"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/fibreResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_sugars_fibre"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/fibreTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_fibre_protein"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/fibreTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/proteinTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_fibre_protein"
+                android:text="@string/protein"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/proteinResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_fibre_protein"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/proteinTextView"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/line_between_protein_salt"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/proteinTextView"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/saltTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_protein_salt"
+                android:text="@string/salt"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/saltResultTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line_between_protein_salt"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/saltTextView"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/percentRelativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/in100gTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/energyTextView"
-            android:textSize="16sp" />
+            android:layout_below="@id/valuesRelLayout"
+            android:layout_marginTop="20dp">
 
-        <TextView
-            android:id="@+id/fatTextView"
-            android:layout_width="wrap_content"
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/buttonsRelLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/energyTextView"
-            android:text="@string/fat"
-            android:textSize="16sp" />
+            android:layout_below="@id/percentRelativeLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp">
 
-        <TextView
-            android:id="@+id/fatResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/energyTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/fatTextView"
-            android:textSize="16sp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:backgroundTint="@color/main_green"
+                android:drawableEnd="@drawable/ic_save_green"
+                android:text="@string/save"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="50dp" />
 
-        <TextView
-            android:id="@+id/saturatesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fatTextView"
-            android:text="@string/saturates"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/saturatesResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fatTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/saturatesTextView"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/carbohydratesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/saturatesTextView"
-            android:text="@string/carbohydrates"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/carbohydratesResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/saturatesTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/carbohydratesTextView"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/sugarsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/carbohydratesTextView"
-            android:text="@string/sugars"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/sugarsResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/carbohydratesTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/sugarsTextView"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/fibreTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sugarsTextView"
-            android:text="@string/fibre"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/fibreResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sugarsTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/fibreTextView"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/proteinTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fibreTextView"
-            android:text="@string/protein"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/proteinResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/fibreTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/proteinTextView"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/saltTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/proteinTextView"
-            android:text="@string/salt"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/saltResultTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/proteinTextView"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@id/saltTextView"
-            android:textSize="16sp" />
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/discardButton"
+                android:layout_width="150dp"
+                android:layout_height="55dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:backgroundTint="@color/main_green"
+                android:drawableEnd="@drawable/ic_cancel"
+                android:text="@string/discard"
+                app:cornerRadius="50dp" />
+        </RelativeLayout>
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/percentRelativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/valuesRelLayout"
-        android:layout_marginTop="20dp">
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/buttonsRelLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp">
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="15dp"
-            android:background="@color/buttonColor"
-            android:drawableEnd="@drawable/ic_save_green"
-            android:text="@string/save"
-            android:textColor="#FFFFFF" />
-
-
-        <Button
-            android:id="@+id/discardButton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:background="@color/buttonColor"
-            android:drawableEnd="@drawable/ic_cancel"
-            android:text="@string/discard"
-            android:textColor="#FFFFFF" />
-    </RelativeLayout>
-</RelativeLayout>
+</ScrollView>
 

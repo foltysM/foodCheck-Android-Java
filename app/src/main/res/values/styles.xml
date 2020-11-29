@@ -26,4 +26,9 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/rounded_shape</item>
+        <item name="colorAccent">@color/main_green</item>
+    </style>
+
 </resources>
