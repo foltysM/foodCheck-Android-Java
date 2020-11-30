@@ -129,4 +129,6 @@
     <string name="last_scan">Последнее сканирование:</string>
     <string name="food_name">Название продукта</string>
     <string name="logout_successful">Выход успешно выполнен!</string>
+    <string name="calories_progress">Прогресс калорий</string>
+    <string name="calories_eaten">Калории, съеденные:</string>
 </resources>

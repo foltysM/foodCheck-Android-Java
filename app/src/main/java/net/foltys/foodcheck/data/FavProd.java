@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "fav_prod_table")
 public class FavProd {
     @NonNull
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey()
     private String barcode;
     private String name;
     private double weight;

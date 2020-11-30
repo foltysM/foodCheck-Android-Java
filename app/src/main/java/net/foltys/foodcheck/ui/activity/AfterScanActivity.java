@@ -326,6 +326,7 @@ public class AfterScanActivity extends AppCompatActivity {
                     percent[0]);
             mPastScanViewModel.insertPast(scan);
             Intent toHistoryIntent = new Intent(AfterScanActivity.this, MainActivity.class);
+            toHistoryIntent.putExtra("notification", true);
             startActivity(toHistoryIntent);
         });
         customDialog.show();

@@ -66,6 +66,8 @@ public class PastFragment extends Fragment {
     private List<PastScan> pasts = new ArrayList<>();
     private List<FavProd> favs = new ArrayList<>();
     private Context context;
+    NotificationManagerCompat notificationManagerProgress;
+    NotificationCompat.Builder progressBuilder;
 
 
     public PastFragment() {
@@ -338,14 +340,10 @@ public class PastFragment extends Fragment {
             public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 final View foregroundView = ((PastScansCardViewAdapter.ViewHolder) viewHolder).viewForeground;
                 getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
-
-
-//                super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
 
             @Override
             public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
-                //super.onSelectedChanged(viewHolder, actionState);
                 if (viewHolder != null) {
                     final View foregroundView = ((PastScansCardViewAdapter.ViewHolder) viewHolder).viewForeground;
                     getDefaultUIUtil().onSelected(foregroundView);
@@ -354,7 +352,6 @@ public class PastFragment extends Fragment {
 
             @Override
             public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                //super.clearView(recyclerView, viewHolder);
                 final View foregroundView = ((PastScansCardViewAdapter.ViewHolder) viewHolder).viewForeground;
                 getDefaultUIUtil().clearView(foregroundView);
             }
@@ -365,9 +362,26 @@ public class PastFragment extends Fragment {
 
         createNotificationChannelExceed();
 
+        if (sharedPref.getBoolean("show_calories_progress", false)) {
+            initProgressNotification();
+        }
         checkNotifications();
     }
 
+    private void initProgressNotification() {
+        notificationManagerProgress = NotificationManagerCompat.from(context);
+        progressBuilder = new NotificationCompat.Builder(context, CALORIES_METER_CHANNEL_ID);
+        progressBuilder.setContentTitle(getResources().getString(R.string.calories_progress))
+                .setSmallIcon(R.drawable.ic_baseline_show_chart_24)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        // Issue the initial notification with zero progress
+        int PROGRESS_MAX = sharedPref.getInt("calories_limit", 2000);
+        int PROGRESS_CURRENT = 0;
+        progressBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+        int notificationId = 2;
+        notificationManagerProgress.notify(notificationId, progressBuilder.build());
+    }
 
 
     private void checkNotifications() {
@@ -387,7 +401,7 @@ public class PastFragment extends Fragment {
                 refreshNotificationMeter(sum);
             }
             if (sharedPref.getBoolean("calories_exceeded_alert", true)) {
-                if (sum > sharedPref.getInt("calories_limit", 1000))
+                if (sum > sharedPref.getInt("calories_limit", 2000))
                     notificationAlert();
             }
         }
@@ -396,13 +410,16 @@ public class PastFragment extends Fragment {
     }
 
     private void refreshNotificationMeter(double sum) {
-        //TODO
+        progressBuilder.setContentText(String.format("%s", getResources().getString(R.string.calories_eaten) + (int) sum));
+        progressBuilder.setProgress(sharedPref.getInt("calories_limit", 2000), (int) sum, false);
+        notificationManagerProgress.notify(2, progressBuilder.build());
         Log.d(TAG, "refresh meter");
     }
 
     private void notificationAlert() {
 
         Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra("notification_full", true);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
         stackBuilder.addNextIntentWithParentStack(intent);

@@ -84,7 +84,7 @@
     <string name="no_product_found">Produkt nie został znaleziony w bazie!</string>
     <string name="save_scan">Zapisz skan</string>
     <string name="add_new_product_manually_question">Czy chcesz dodać produkt ręcznie?</string>
-    <string name="hide">ukryj</string>
+    <string name="hide">Ukryj</string>
     <string name="on">włączony</string>
     <string name="calories_limit">Ustaw limit kalorii</string>
     <string name="take_a_photo">Zrób zdjęcie</string>
@@ -129,4 +129,6 @@
     <string name="number_of_scans">Liczba skanów:</string>
     <string name="no_scans">Brak skanów!</string>
     <string name="last_scan">Ostatni skan:</string>
+    <string name="calories_progress">Postęp zjedzonych kalorii</string>
+    <string name="calories_eaten">Kalorie zjedzone:</string>
 </resources>

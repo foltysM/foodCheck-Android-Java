@@ -84,7 +84,7 @@
     <string name="show_calories_progress">Show calories progress</string>
     <string name="calories_limit">Set calories limit</string>
     <string name="calories_exceeded_alert">Calories limit exceeded alert</string>
-    <string name="hide">hide</string>
+    <string name="hide">Hide</string>
     <string name="on">on</string>
     <string name="off">off</string>
     <string name="all_fields_must_be_filled">All fields must be filled!</string>
@@ -129,4 +129,6 @@
     <string name="number_of_scans">Number of scans:</string>
     <string name="last_scan">Last scan:</string>
     <string name="no_scans">No scans!</string>
+    <string name="calories_progress">Calories progress</string>
+    <string name="calories_eaten">Calories eaten:</string>
 </resources>

@@ -1,22 +1,21 @@
 package net.foltys.foodcheck.ui.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -57,7 +55,6 @@ import net.foltys.foodcheck.ui.fragment.PastFragment;
 import net.foltys.foodcheck.ui.fragment.ProgressFragment;
 import net.foltys.foodcheck.ui.fragment.SettingsFragment;
 
-import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_HOME = "home";
 
     private static final String TAG = "MainActivity";
-    private RelativeLayout parent;
     private DrawerLayout drawer;
     private static final int RC_SIGN_IN = 2;
     private static final String TAG_HISTORY = "history";
@@ -84,10 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView personPhotoHeader;
     // end of variables of header
 
-    private boolean userLogged;
-    String lang = "";
-    SharedPreferences sharedPref;
-
     private static final String TAG_PROGRESS = "progress";
     private static final String TAG_SETTINGS = "settings";
     //to identify current nav menu item
@@ -96,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
     ExtendedFloatingActionButton scanButton;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    // toolbar titles respected to selected nav menu item
-    private String[] activityTitles;
+
     private String name = "";
     private String imageURL = "";
 
@@ -125,41 +116,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        //SharedPreferences
-        //lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),getString(R.string.en)), getString(R.string.en));
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("notification", false))
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame2, new PastFragment()).commit();
+        if (intent.getBooleanExtra("notification_full", false)) {
+            final Dialog congratsDialog = new Dialog(this);
+            congratsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            congratsDialog.setContentView(R.layout.congratulations_dialog);
+            Button okButton = congratsDialog.findViewById(R.id.ok_button);
+            okButton.setOnClickListener(v -> congratsDialog.cancel());
+            congratsDialog.show();
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.activity_main);
 
-
-        //parent = findViewById(R.id.mainRelLayout);
 
         toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
-        Handler mHandler = new Handler();
-
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-//        navigationView.setNavigationItemSelectedListener(getAPP);
-
-
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-
-        //drawer.addDrawerListener(toggle);
-        //toggle.syncState();
-
         // Logging init
+        String token = "391481534194-j4e5bl0pub7t1etg9kav0ibmn0es1otu.apps.googleusercontent.com";
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("391481534194-j4e5bl0pub7t1etg9kav0ibmn0es1otu.apps.googleusercontent.com")
+                .requestIdToken(token)
                 .requestEmail()
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
@@ -185,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // checks if able to show permission request
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
-                    // shows snackbar
-                    Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_LONG)
+                    // shows snackBar
+                    Snackbar.make(drawer, R.string.need_camera_permission, Snackbar.LENGTH_LONG)
                             .setAction(R.string.grant_permission, v1 -> requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE)).show();
                 } else {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
@@ -212,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadHomeFragment() {
         selectNavMenu();
-        //setToolbarTitle();
 
         // if user choose the current menu again
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
@@ -221,20 +206,7 @@ public class MainActivity extends AppCompatActivity {
             toggleFab();
         }
 
-        /*Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame2, fragment, CURRENT_TAG);
-            }
-        };*/
         getSupportFragmentManager().beginTransaction().replace(R.id.frame2, getHomeFragment()).commit();
-        /*if(mPendingRunnable!=null)
-        {
-            mHandler.post(mPendingRunnable);
-        }*/
 
         toggleFab();
 
@@ -247,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
             default:
-                return new HomeFragment(name, imageURL);
+                return HomeFragment.newInstance(name, imageURL);
             case 1:
                 return new PastFragment();
             case 2:
@@ -257,10 +229,6 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 return new SettingsFragment();
         }
-    }
-
-    private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
     }
 
     private void selectNavMenu() {
@@ -305,10 +273,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshNotification() {
-        //TODO repair notification
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -317,17 +281,7 @@ public class MainActivity extends AppCompatActivity {
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         updateUI(account);
-        //SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        lang = sharedPref.getString(sharedPref.getString(getString(R.string.pref_lang_key),
-                getString(R.string.en)), getString(R.string.en));
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
 
     @Override
     // what will be done after click in permission request
@@ -341,8 +295,8 @@ public class MainActivity extends AppCompatActivity {
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     // checks if able to show permission request
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
-                        // shows snackbar
-                        Snackbar.make(parent, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
+                        // shows snackBar
+                        Snackbar.make(drawer, R.string.need_camera_permission, Snackbar.LENGTH_INDEFINITE)
                                 .setAction(R.string.grant_permission, v -> {
                                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                     intent.setData(Uri.parse("package:" + getPackageName()));
@@ -378,9 +332,6 @@ public class MainActivity extends AppCompatActivity {
                     CURRENT_TAG = TAG_PROGRESS;
                     break;
                 case R.id.nav_settings:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-//                        Intent intentSet = new Intent(MainActivity.this, SettingsActivity.class);
-//                        startActivity(intentSet);
                     navItemIndex = 4;
                     CURRENT_TAG = TAG_SETTINGS;
                     break;
@@ -408,11 +359,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             drawer.closeDrawer(GravityCompat.START);
-            if (item.isChecked()) {
-                item.setChecked(false);
-            } else {
-                item.setChecked(true);
-            }
+            item.setChecked(!item.isChecked());
             item.setChecked(true);
 
             loadHomeFragment();
@@ -514,7 +461,6 @@ public class MainActivity extends AppCompatActivity {
 
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
-            userLogged = false;
             name = getResources().getString(R.string.guest);
             imageURL = "";
 
@@ -541,18 +487,14 @@ public class MainActivity extends AppCompatActivity {
 
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
-            userLogged = true;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame2, new HomeFragment(name, imageURL)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame2, HomeFragment.newInstance(name, imageURL)).commit();
     }
 
     private void logout() {
         navigationView.getMenu().clear();
         navigationView.inflateMenu(R.menu.drawer_menu);
-
         updateUI(null);
-        userLogged = false;
-        //navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_SHORT).show());
     }
 
@@ -566,18 +508,5 @@ public class MainActivity extends AppCompatActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-   /* @Override
-    protected void attachBaseContext(Context newBase) {
-        String lang = sharedPref.getString(getApplicationContext().getResources().getString((R.string.pref_lang_key)), "en"); // TODO SHARED PREF JEST NULL
-        super.attachBaseContext(FoodContextWrapper.wrap(newBase, lang));
-    }*/
-
-    @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        super.applyOverrideConfiguration(overrideConfiguration);
-        Locale locale = new Locale(lang);
-        overrideConfiguration.setLocale(locale);
     }
 }

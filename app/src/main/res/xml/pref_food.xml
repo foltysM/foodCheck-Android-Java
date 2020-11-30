@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="show_calories_progress"
         android:summaryOff="@string/hide"
@@ -13,22 +13,14 @@
         android:key="calories_limit"
         android:max="10000"
         android:min="0"
-        android:title="@string/calories_limit" />
+        android:title="@string/calories_limit"
+        app:showSeekBarValue="true" />
     <SwitchPreference
         android:defaultValue="true"
         android:key="calories_exceeded_alert"
         android:summaryOff="@string/off"
         android:summaryOn="@string/on"
         android:title="@string/calories_exceeded_alert" />
-    <!--<PreferenceCategory android:title="@string/account_settings">-->
-    <!--TODO switching lang-->
-    <ListPreference
-        android:defaultValue=""
-        android:entries="@array/pref_lang_option_labels"
-        android:entryValues="@array/pref_lang_option_values"
-        android:key="@string/pref_lang_key"
-        android:title="@string/pref_lang_label"
-        app:defaultValue="@string/en" />
 
 
 </PreferenceScreen>

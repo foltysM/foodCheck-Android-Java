@@ -9,9 +9,9 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class PastScanViewModel extends AndroidViewModel {
-    private PastScanRepository mPastRepository;
+    private final PastScanRepository mPastRepository;
 
-    private LiveData<List<PastScan>> mAllPastScans;
+    private final LiveData<List<PastScan>> mAllPastScans;
 
 
     public PastScanViewModel(@NonNull Application application) {

@@ -10,10 +10,9 @@ import java.util.List;
 
 public class FavProdViewModel extends AndroidViewModel {
 
-    public static final String TAG = "FavProdViewModel";
-    private FavProdRepository mRepo;
+    private final FavProdRepository mRepo;
 
-    private LiveData<List<FavProd>> mAllFav;
+    private final LiveData<List<FavProd>> mAllFav;
 
     public FavProdViewModel(@NonNull Application application) {
         super(application);

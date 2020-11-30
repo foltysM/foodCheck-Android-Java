@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface FavProdDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public void insertFav(FavProd favProd);
+    void insertFav(FavProd favProd);
 
     @Delete
     void deleteFav(FavProd favProd);

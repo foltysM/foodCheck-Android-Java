@@ -1,8 +1,8 @@
 package net.foltys.foodcheck;
 
 public class RxHelper {
-    private int position;
-    private Boolean value;
+    private final int position;
+    private final Boolean value;
 
     public RxHelper(int position, Boolean value) {
         this.position = position;
@@ -13,15 +13,8 @@ public class RxHelper {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public Boolean getValue() {
         return value;
     }
 
-    public void setValue(Boolean value) {
-        this.value = value;
-    }
 }

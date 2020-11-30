@@ -14,7 +14,7 @@ import net.foltys.foodcheck.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    //TODO settings
+    //TODO settings more
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -30,9 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 String val = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, val);
             }
-
         }
-
     }
 
     private void setPreferenceSummary(Preference preference, String value) {

@@ -103,7 +103,7 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
         return favProds.get(pos);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageFav;
         private final TextView productNameFav;
         private final TextView lastAteFav;

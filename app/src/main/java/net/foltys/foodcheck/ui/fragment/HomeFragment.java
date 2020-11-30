@@ -20,16 +20,26 @@ import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.PastScanViewModel;
 
 public class HomeFragment extends Fragment {
-    private final String name;
-    private final String photoURL;
     PastScanViewModel mPastScanViewModel;
     private Context context;
     TextView lastAte;
     TextView number;
 
-    public HomeFragment(String name, String photoURL) {
-        this.name = name;
-        this.photoURL = photoURL;
+//    public HomeFragment(String name, String photoURL) {
+//        this.name = name;
+//        this.photoURL = photoURL;
+//    }
+
+    public HomeFragment() {
+    }
+
+    public static HomeFragment newInstance(String name, String photoURL) {
+        HomeFragment fragment = new HomeFragment();
+        Bundle args = new Bundle();
+        args.putString("name", name);
+        args.putString("url", photoURL);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -60,7 +70,8 @@ public class HomeFragment extends Fragment {
         TextView nameTextView = view.findViewById(R.id.name_home);
         lastAte = view.findViewById(R.id.last_scan);
         number = view.findViewById(R.id.number_of_scans);
-
+        String name = getArguments().getString("name");
+        String photoURL = getArguments().getString("url");
         nameTextView.setText(name);
 
         if (photoURL.equals("")) {

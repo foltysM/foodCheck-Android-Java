@@ -8,8 +8,8 @@ import java.util.List;
 
 public class FavProdRepository {
 
-    private FavProdDao mFavProdDao;
-    private LiveData<List<FavProd>> mAllFavProducts;
+    private final FavProdDao mFavProdDao;
+    private final LiveData<List<FavProd>> mAllFavProducts;
 
     FavProdRepository(Application application) {
         PastScanDatabase db = PastScanDatabase.getDatabase(application);

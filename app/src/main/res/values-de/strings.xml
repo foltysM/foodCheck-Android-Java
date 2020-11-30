@@ -37,7 +37,7 @@
     <string name="progress">Entwicklung</string>
     <string name="confirm_deletion">Streichung bestätigen</string>
     <string name="show">Zeigen</string>
-    <string name="hide">verstecken</string>
+    <string name="hide">Verstecken</string>
     <string name="ok">Ok</string>
     <string name="never">Nie</string>
     <string name="send">Schicken</string>
@@ -129,4 +129,6 @@
     <string name="no_scans">Kein Ansehen!</string>
     <string name="last_scan">Letztes Ansehen</string>
     <string name="food_quote">\"Kuchen sind auch gesund, man isst nur eine kleine Scheibe\" - Mary Berry</string>
+    <string name="calories_progress">Kalorien-Fortschritt</string>
+    <string name="calories_eaten">Gegessene Kalorien:</string>
 </resources>

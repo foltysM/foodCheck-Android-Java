@@ -8,8 +8,8 @@ import java.util.List;
 
 class PastScanRepository {
 
-    private PastScanDao mPastScanDao;
-    private LiveData<List<PastScan>> mAllScans;
+    private final PastScanDao mPastScanDao;
+    private final LiveData<List<PastScan>> mAllScans;
 
     PastScanRepository(Application application) {
         PastScanDatabase db = PastScanDatabase.getDatabase(application);
