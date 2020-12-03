@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="pref_lang_option_labels">
-        <item>@string/english</item>
-        <item>@string/polski</item>
-        <item>@string/deutsch</item>
-        <item>@string/russkij</item>
+    <array name="home_screen_option_labels">
+        <item>@string/home</item>
+        <item>@string/scan_history</item>
+        <item>@string/fav_products</item>
+        <item>@string/progress</item>
     </array>
-    <array name="pref_lang_option_values">
-        <item>"@string/en"</item>
-        <item>"@string/pl"</item>
-        <item>"@string/de"</item>
-        <item>"@string/ru"</item>
+    <array name="home_screen_option_values">
+        <item>@string/home_key</item>
+        <item>@string/past_key</item>
+        <item>@string/fav_key</item>
+        <item>@string/progress_key</item>
     </array>
 
 </resources>

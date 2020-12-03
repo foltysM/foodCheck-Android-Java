@@ -126,10 +126,6 @@
     <string name="polski" translatable="false">polski</string>
     <string name="deutsch" translatable="false">Deutsch</string>
     <string name="russkij" translatable="false">русский</string>
-    <string name="en" translatable="false">en</string>
-    <string name="ru" translatable="false">ru</string>
-    <string name="pl" translatable="false">pl</string>
-    <string name="de" translatable="false">de</string>
     <string name="undo">Undo</string>
     <string name="food_ate_again">Did you eat that product again?</string>
     <string name="delete">DELETE</string>
@@ -148,4 +144,12 @@
     <string name="no_scans">No scans!</string>
     <string name="calories_progress">Calories progress</string>
     <string name="calories_eaten">Calories eaten:</string>
+    <string name="home_key" translatable="false">home_key</string>
+    <string name="pref_home_key" translatable="false">pref_home_key</string>
+    <string name="pref_home_label">Preffered home page</string>
+    <string name="past_key" translatable="false">past_key</string>
+    <string name="progress_key" translatable="false">progress_key</string>
+    <string name="fav_key" translatable="false">fav_key</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
 </resources>

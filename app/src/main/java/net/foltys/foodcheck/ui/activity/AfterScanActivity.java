@@ -104,7 +104,6 @@ public class AfterScanActivity extends AppCompatActivity {
             startActivity(myIntent);
         });
 
-
         barcodeResultTextView.setText(scannedBarcode);
 
         RequestQueue queue = Volley.newRequestQueue(this);

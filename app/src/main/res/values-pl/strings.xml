@@ -131,4 +131,7 @@
     <string name="last_scan">Ostatni skan:</string>
     <string name="calories_progress">Postęp zjedzonych kalorii</string>
     <string name="calories_eaten">Kalorie zjedzone:</string>
+    <string name="pref_home_label">Preferowana strona startowa</string>
+    <string name="to">Do</string>
+    <string name="from">Od</string>
 </resources>

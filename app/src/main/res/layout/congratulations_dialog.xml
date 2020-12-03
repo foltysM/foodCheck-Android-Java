@@ -31,8 +31,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/full_cat_image"
-        android:src="@mipmap/ic_launcher_foodcheck2_round" />
-    <!-- change photo-->
+        android:src="@drawable/ic_full_cat_min" />
+    <!-- TODO licencja-->
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"

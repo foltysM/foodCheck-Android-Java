@@ -112,197 +112,302 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/energyTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/energyLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/in100gTextView"
-                android:text="@string/energy"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/energyResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/in100gTextView"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/energyTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot" />
+
+                <TextView
+                    android:id="@+id/energyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/energy"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/energyResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_energy_fat"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/energyTextView"
+                android:layout_below="@id/energyLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/fatTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/fatLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_energy_fat"
-                android:text="@string/fat"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/fatResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_energy_fat"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/fatTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot_dark" />
+
+                <TextView
+                    android:id="@+id/fatTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/fat"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/fatResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_fat_saturates"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/fatTextView"
+                android:layout_below="@id/fatLinearLayout"
                 android:layout_marginTop="5dp"
+
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/saturatesTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/saturatesLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_fat_saturates"
-                android:text="@string/saturates"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/saturatesResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_fat_saturates"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/saturatesTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot" />
+
+                <TextView
+                    android:id="@+id/saturatesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/saturates"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/saturatesResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_saturates_carbohydrates"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/saturatesTextView"
+                android:layout_below="@id/saturatesLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/carbohydratesTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/carbohydratesLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_saturates_carbohydrates"
-                android:text="@string/carbohydrates"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/carbohydratesResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_saturates_carbohydrates"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/carbohydratesTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot_dark" />
+
+                <TextView
+                    android:id="@+id/carbohydratesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/carbohydrates"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/carbohydratesResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_carbohydrates_sugars"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/carbohydratesTextView"
+                android:layout_below="@id/carbohydratesLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/sugarsTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/sugarsLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_carbohydrates_sugars"
-                android:text="@string/sugars"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/sugarsResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_carbohydrates_sugars"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/sugarsTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot" />
+
+                <TextView
+                    android:id="@+id/sugarsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/sugars"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/sugarsResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_sugars_fibre"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/sugarsTextView"
+                android:layout_below="@id/sugarsLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/fibreTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/fibreLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_sugars_fibre"
-                android:text="@string/fibre"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/fibreResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_sugars_fibre"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/fibreTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot_dark" />
+
+                <TextView
+                    android:id="@+id/fibreTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/fibre"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/fibreResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_fibre_protein"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/fibreTextView"
+                android:layout_below="@id/fibreLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/proteinTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/proteinLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_fibre_protein"
-                android:text="@string/protein"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/proteinResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_fibre_protein"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/proteinTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot" />
+
+                <TextView
+                    android:id="@+id/proteinTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/protein"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/proteinResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/line_between_protein_salt"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/proteinTextView"
+                android:layout_below="@id/proteinLinearLayout"
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
-                android:id="@+id/saltTextView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/saltLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/line_between_protein_salt"
-                android:text="@string/salt"
-                android:textSize="16sp" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/saltResultTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/line_between_protein_salt"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/saltTextView"
-                android:textSize="16sp" />
+                <View
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/green_dot_dark" />
+
+                <TextView
+                    android:id="@+id/saltTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/salt"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/saltResultTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
         </RelativeLayout>
 

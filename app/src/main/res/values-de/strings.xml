@@ -131,4 +131,7 @@
     <string name="food_quote">\"Kuchen sind auch gesund, man isst nur eine kleine Scheibe\" - Mary Berry</string>
     <string name="calories_progress">Kalorien-Fortschritt</string>
     <string name="calories_eaten">Gegessene Kalorien:</string>
+    <string name="pref_home_label">Bevorzugte Startseite</string>
+    <string name="from">Von</string>
+    <string name="to">Bis</string>
 </resources>

@@ -131,4 +131,7 @@
     <string name="logout_successful">Выход успешно выполнен!</string>
     <string name="calories_progress">Прогресс калорий</string>
     <string name="calories_eaten">Калории, съеденные:</string>
+    <string name="pref_home_label">Предварительная домашняя страница</string>
+    <string name="to">вниз</string>
+    <string name="from">из</string>
 </resources>

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_progress"
     android:layout_height="match_parent">
 
 
@@ -55,15 +56,57 @@
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/sort_text" />
 
+        <LinearLayout
+            android:id="@+id/linearDates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spinnerShow"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/fromEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="0.5"
+                android:autofillHints="abc"
+                android:ems="10"
+                android:hint="@string/from"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/toEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="0.5"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/to"
+                android:inputType="date" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/generate_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spinnerShow"
+            android:layout_below="@id/linearDates"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/main_green"
             android:text="@string/generate"
+            app:borderWidth="0dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/export_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearDates"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/generate_button"
+            android:backgroundTint="@color/main_green"
+            android:text="@string/save"
             app:borderWidth="0dp" />
 
     </RelativeLayout>

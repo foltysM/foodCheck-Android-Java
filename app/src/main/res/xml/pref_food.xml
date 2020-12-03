@@ -21,6 +21,13 @@
         android:summaryOff="@string/off"
         android:summaryOn="@string/on"
         android:title="@string/calories_exceeded_alert" />
+    <ListPreference
+        android:defaultValue=""
+        android:entries="@array/home_screen_option_labels"
+        android:entryValues="@array/home_screen_option_values"
+        android:key="@string/pref_home_key"
+        android:title="@string/pref_home_label"
+        app:defaultValue="@string/home_key" />
 
 
 </PreferenceScreen>
