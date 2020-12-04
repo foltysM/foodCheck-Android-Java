@@ -70,10 +70,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="0.5"
-                android:autofillHints="abc"
                 android:ems="10"
                 android:hint="@string/from"
-                android:inputType="date" />
+                android:focusable="false"
+                android:importantForAutofill="no"
+                android:inputType="date"
+                android:longClickable="false" />
 
             <EditText
                 android:id="@+id/toEditText"
@@ -81,10 +83,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="0.5"
-                android:autofillHints=""
+                android:focusable="false"
                 android:ems="10"
+                android:importantForAutofill="no"
                 android:hint="@string/to"
-                android:inputType="date" />
+                android:inputType="date"
+                android:longClickable="false" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton

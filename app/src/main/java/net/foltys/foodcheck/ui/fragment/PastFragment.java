@@ -68,6 +68,7 @@ public class PastFragment extends Fragment {
     private Context context;
     NotificationManagerCompat notificationManagerProgress;
     NotificationCompat.Builder progressBuilder;
+    //TODO recycler from the last
 
 
     public PastFragment() {

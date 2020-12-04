@@ -32,6 +32,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.PastScan;
@@ -63,7 +64,7 @@ public class NewProductActivity extends AppCompatActivity {
     ImageView productImageView;
     EditText nameEditText, energyEditText, weightEditText, fatEditText, saturatesEditText, carbohydratesEditText, sugarsEditText, fibreEditText, proteinEditText, saltEditText;
     Boolean photoSet = false;
-    TextView barcodeTextView, energyTextView;
+    TextView barcodeTextView, energyTextView, fatTextView, saturatesTextView, carbohydratesTextView, sugarsTextView, fibreTextView, proteinTextView, saltTextView;
     Uri URI = null;
     String attachmentFile;
     ScrollView parent;
@@ -257,7 +258,21 @@ public class NewProductActivity extends AppCompatActivity {
     private void initView() {
         nameEditText = findViewById(R.id.nameEditText);
         energyTextView = findViewById(R.id.energyTextView);
-        energyTextView.setText(String.format("%s", R.string.energy + " (" + R.string.kcal + ")"));
+        fatTextView = findViewById(R.id.fatTextView);
+        saturatesTextView = findViewById(R.id.saturatesTextView);
+        carbohydratesTextView = findViewById(R.id.carbohydratesTextView);
+        sugarsTextView = findViewById(R.id.sugarsTextView);
+        fibreTextView = findViewById(R.id.fibreTextView);
+        proteinTextView = findViewById(R.id.proteinTextView);
+        saltTextView = findViewById(R.id.saltTextView);
+        energyTextView.setText(String.format("%s", getResources().getString(R.string.energy) + " (" + getResources().getString(R.string.kcal) + ")"));
+        fatTextView.setText(String.format("%s", getResources().getString(R.string.fat) + " (" + getResources().getString(R.string.g) + ")"));
+        saturatesTextView.setText(String.format("%s", getResources().getString(R.string.saturates) + " (" + getResources().getString(R.string.g) + ")"));
+        carbohydratesTextView.setText(String.format("%s", getResources().getString(R.string.carbohydrates) + " (" + getResources().getString(R.string.g) + ")"));
+        sugarsTextView.setText(String.format("%s", getResources().getString(R.string.sugars) + " (" + getResources().getString(R.string.g) + ")"));
+        fibreTextView.setText(String.format("%s", getResources().getString(R.string.fibre) + " (" + getResources().getString(R.string.g) + ")"));
+        proteinTextView.setText(String.format("%s", getResources().getString(R.string.protein) + " (" + getResources().getString(R.string.g) + ")"));
+        saltTextView.setText(String.format("%s", getResources().getString(R.string.salt) + " (" + getResources().getString(R.string.g) + ")"));
         energyEditText = findViewById(R.id.energyEditText);
         weightEditText = findViewById(R.id.weightEditText);
         fatEditText = findViewById(R.id.fatEditText);
@@ -359,17 +374,10 @@ public class NewProductActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
         String subject = "[New product request " + scan.getBarcode() + " ]";
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        Gson gson = new Gson();
+        Log.d("JSON", gson.toJson(scan));
         String body = getString(R.string.send_without_changing) + "\n" +
-                "Barcode: " + scan.getBarcode() +
-                "\nName: " + scan.getName() +
-                "\nEnergy: " + scan.getEnergy() +
-                "\nWeight:" + scan.getWeight() +
-                "\nFat:" + scan.getFat() +
-                "\nSaturates: " + scan.getSaturates() +
-                "\nCarbohydrates: " + scan.getCarbohydrates() +
-                "\nSugars: " + scan.getSugars() +
-                "\nFibre: " + scan.getFibre() +
-                "\nProtein: " + scan.getProtein();
+                gson.toJson(scan);
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
         if (URI != null) {
             //emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CachedFileProvider.AUTHORITY + "/" + fileName));

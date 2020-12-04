@@ -57,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/weight"
                 android:text="@string/weight" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +100,7 @@
         <TableRow>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/weight"
+                android:id="@+id/fatTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
@@ -120,6 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/saturatesTextView"
                 android:text="@string/saturates" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -137,6 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/carbohydratesTextView"
                 android:text="@string/carbohydrates" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -154,6 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/sugarsTextView"
                 android:text="@string/sugars" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -170,6 +174,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/fibreTextView"
                 android:layout_column="1"
                 android:text="@string/fibre" />
 
@@ -189,6 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/proteinTextView"
                 android:text="@string/protein" />
 
             <com.google.android.material.textfield.TextInputEditText
@@ -206,6 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:id="@+id/saltTextView"
                 android:text="@string/salt" />
 
             <com.google.android.material.textfield.TextInputEditText

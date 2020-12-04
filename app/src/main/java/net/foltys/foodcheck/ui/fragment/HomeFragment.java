@@ -20,15 +20,10 @@ import net.foltys.foodcheck.R;
 import net.foltys.foodcheck.data.PastScanViewModel;
 
 public class HomeFragment extends Fragment {
-    PastScanViewModel mPastScanViewModel;
+    private PastScanViewModel mPastScanViewModel;
     private Context context;
-    TextView lastAte;
-    TextView number;
-
-//    public HomeFragment(String name, String photoURL) {
-//        this.name = name;
-//        this.photoURL = photoURL;
-//    }
+    private TextView lastAte;
+    private TextView number;
 
     public HomeFragment() {
     }

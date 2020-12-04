@@ -1,11 +1,14 @@
 package net.foltys.foodcheck.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "past_scans_table")
-public class PastScan {
+public class PastScan implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String barcode;
@@ -51,6 +54,40 @@ public class PastScan {
     @Ignore
     public PastScan() {
 
+    }
+
+    public static final Creator<PastScan> CREATOR = new Creator<PastScan>() {
+        @Override
+        public PastScan createFromParcel(Parcel in) {
+            return new PastScan(in);
+        }
+
+        @Override
+        public PastScan[] newArray(int size) {
+            return new PastScan[size];
+        }
+    };
+
+    protected PastScan(Parcel in) {
+        id = in.readInt();
+        barcode = in.readString();
+        name = in.readString();
+        weight = in.readDouble();
+        day = in.readInt();
+        month = in.readInt();
+        year = in.readInt();
+        hour = in.readInt();
+        minutes = in.readInt();
+        energy = in.readDouble();
+        carbohydrates = in.readDouble();
+        protein = in.readDouble();
+        fat = in.readDouble();
+        saturates = in.readDouble();
+        sugars = in.readDouble();
+        fibre = in.readDouble();
+        salt = in.readDouble();
+        url = in.readString();
+        percentEaten = in.readDouble();
     }
 
     public int getId() {
@@ -203,5 +240,33 @@ public class PastScan {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(barcode);
+        dest.writeString(name);
+        dest.writeDouble(weight);
+        dest.writeInt(day);
+        dest.writeInt(month);
+        dest.writeInt(year);
+        dest.writeInt(hour);
+        dest.writeInt(minutes);
+        dest.writeDouble(energy);
+        dest.writeDouble(carbohydrates);
+        dest.writeDouble(protein);
+        dest.writeDouble(fat);
+        dest.writeDouble(saturates);
+        dest.writeDouble(sugars);
+        dest.writeDouble(fibre);
+        dest.writeDouble(salt);
+        dest.writeString(url);
+        dest.writeDouble(percentEaten);
     }
 }

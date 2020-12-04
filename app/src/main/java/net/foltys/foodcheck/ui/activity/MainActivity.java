@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             okButton.setOnClickListener(v -> congratsDialog.cancel());
             congratsDialog.show();
         }
+
     }
 
     @Override

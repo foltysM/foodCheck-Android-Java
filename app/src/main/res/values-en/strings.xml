@@ -134,4 +134,6 @@
     <string name="pref_home_label">Preffered home page</string>
     <string name="to">To</string>
     <string name="from">From</string>
+    <string name="wrong_dates">Wrong input dates!</string>
+    <string name="error">Error happened!</string>
 </resources>

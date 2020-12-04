@@ -2,6 +2,7 @@ package net.foltys.foodcheck.ui.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,9 +38,13 @@ import net.foltys.foodcheck.data.PastScanViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -50,18 +56,20 @@ public class ProgressFragment extends Fragment {
     protected Activity mActivity;
     private TextView noDataTextView;
     private int sortBy = 0;
-    private List<PastScan> mPastScans = new ArrayList<>();
+    private final Calendar myCalendar = Calendar.getInstance();
     protected View mView;
     private int showWhat = 0;
     private TextView generateTextView;
     private Context context;
     private RelativeLayout parent;
+    private final String myFormat = "dd/MM/yy";
+    private final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
+    private ArrayList<PastScan> mPastScans = new ArrayList<>();
+    private EditText fromEditText;
+    private EditText toEditText;
 
     public ProgressFragment() {
-
-
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,8 +98,6 @@ public class ProgressFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
         this.mView = view;
         return view;
-
-
     }
 
     @Override
@@ -99,6 +105,29 @@ public class ProgressFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         parent = mView.findViewById(R.id.parent_progress);
         noDataTextView = mView.findViewById(R.id.no_data_textView);
+        fromEditText = mView.findViewById(R.id.fromEditText);
+        toEditText = mView.findViewById(R.id.toEditText);
+        int[] edit = {0};
+
+
+        DatePickerDialog.OnDateSetListener date = (view1, year, month, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel(edit[0]);
+        };
+        fromEditText.setOnClickListener(v -> {
+            new DatePickerDialog(context, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            fromEditText.setText(sdf.format(myCalendar.getTime()));
+            edit[0] = 1;
+        });
+
+        toEditText.setOnClickListener(v ->
+        {
+            new DatePickerDialog(context, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            toEditText.setText(sdf.format(myCalendar.getTime()));
+            edit[0] = 2;
+        });
         if (mPastScans == null || mPastScans.size() == 0)
             noDataTextView.setVisibility(View.VISIBLE);
         else
@@ -114,7 +143,32 @@ public class ProgressFragment extends Fragment {
                 generateTextView.setVisibility(View.GONE);
             } else {
                 noDataTextView.setVisibility(View.GONE);
-                show();
+                try {
+                    String fromStr = fromEditText.getText().toString();
+                    if (fromStr.equals(""))
+                        fromStr = "00/00/00";
+
+                    Date from = sdf.parse(fromStr);
+                    String toStr = toEditText.getText().toString();
+                    Date to;
+                    if (toStr.equals("")) {
+                        to = new Date(1672441200000L);
+                        toStr = "31/12/22";
+                    } else
+                        to = sdf.parse(toStr);
+
+                    if (from.after(to))
+                        Toast.makeText(context, getResources().getString(R.string.wrong_dates), Toast.LENGTH_SHORT).show();
+                    else {
+
+                        show(fromStr, toStr);
+                    }
+
+                } catch (ParseException e) {
+                    Toast.makeText(context, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+
             }
         });
         MaterialButton exportButton = mView.findViewById(R.id.export_button);
@@ -126,7 +180,7 @@ public class ProgressFragment extends Fragment {
 
         PastScanViewModel mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
         mPastScanViewModel.getAllPastScans().observe(getViewLifecycleOwner(), scans -> {
-            mPastScans = scans;
+            mPastScans = (ArrayList<PastScan>) scans;
             if (mPastScans == null || mPastScans.size() == 0) {
                 noDataTextView.setVisibility(View.VISIBLE);
                 generateTextView.setVisibility(View.GONE);
@@ -187,6 +241,21 @@ public class ProgressFragment extends Fragment {
 
     }
 
+    private void updateLabel(int edit) {
+        switch (edit) {
+            case 1:
+                fromEditText.setText(sdf.format(myCalendar.getTime()));
+                break;
+            case 2:
+                toEditText.setText(sdf.format(myCalendar.getTime()));
+                break;
+            case 0:
+            default:
+                Log.d("edit[0]", " error");
+                break;
+        }
+    }
+
     private boolean checkPermission() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
@@ -196,9 +265,9 @@ public class ProgressFragment extends Fragment {
         }
     }
 
-    private void show() {
+    private void show(String from, String to) {
         generateTextView.setVisibility(View.GONE);
-        getParentFragmentManager().beginTransaction().replace(R.id.frame_for_chart, new ChartFragment(sortBy, showWhat, mPastScans)).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.frame_for_chart, ChartFragment.newInstance(sortBy, showWhat, mPastScans, from, to)).commit();
     }
 
     private void takeScreenshot() {
