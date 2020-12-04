@@ -136,4 +136,7 @@
     <string name="from">Od</string>
     <string name="error">Wystąpił błąd!</string>
     <string name="wrong_dates">Niepoprawne daty wejściowe!</string>
+    <string name="sort_products">Sortuj listę produktów</string>
+    <string name="from_last">"Od ostatniego "</string>
+    <string name="from_first">Od pierwszego</string>
 </resources>

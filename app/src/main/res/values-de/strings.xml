@@ -136,4 +136,7 @@
     <string name="to">Bis</string>
     <string name="wrong_dates">Falsche Eingabedaten!</string>
     <string name="error">Fehler ist geschehen!</string>
+    <string name="from_last">Vom letzten</string>
+    <string name="from_first">Von zuerst</string>
+    <string name="sort_products">Sortenproduktliste</string>
 </resources>

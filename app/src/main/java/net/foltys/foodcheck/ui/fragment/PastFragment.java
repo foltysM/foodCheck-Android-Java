@@ -68,8 +68,6 @@ public class PastFragment extends Fragment {
     private Context context;
     NotificationManagerCompat notificationManagerProgress;
     NotificationCompat.Builder progressBuilder;
-    //TODO recycler from the last
-
 
     public PastFragment() {
     }
@@ -100,6 +98,8 @@ public class PastFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         parent = view.findViewById(R.id.parentFrameLayoutPast);
         mPastScanViewModel = new ViewModelProvider(this).get(PastScanViewModel.class);
+        // creates an instance of SharedPreferences class to read settings
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         //On card click observer
         Observer<Integer> clickObserver = new Observer<Integer>() {
@@ -303,6 +303,74 @@ public class PastFragment extends Fragment {
         mPastScanViewModel.getAllPastScans().observe(getViewLifecycleOwner(), scans -> {
             Log.d(TAG, "changed past");
             pasts = scans;
+            //sorting
+            String howToSort = sharedPref.getString(getResources().getString(R.string.pref_sort_key), getResources().getString(R.string.first_key));
+            pasts.sort((o1, o2) -> {
+                if (o1.getYear() > o2.getYear()) {
+                    if (howToSort.equals(getResources().getString(R.string.first_key)))
+                        return 1;
+                    else
+                        return -1;
+                } else if (o1.getYear() < o2.getYear()) {
+                    if (howToSort.equals(getResources().getString(R.string.first_key)))
+                        return -1;
+                    else
+                        return 1;
+                } else {
+                    //comparing months
+                    if (o1.getMonth() > o2.getMonth()) {
+                        if (howToSort.equals(getResources().getString(R.string.first_key)))
+                            return 1;
+                        else
+                            return -1;
+                    } else if (o1.getMonth() < o2.getMonth()) {
+                        if (howToSort.equals(getResources().getString(R.string.first_key)))
+                            return -1;
+                        else
+                            return 1;
+                    } else {
+                        //comparing days
+                        if (o1.getDay() > o2.getDay()) {
+                            if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                return 1;
+                            else
+                                return -1;
+                        } else if (o1.getDay() < o2.getDay()) {
+                            if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                return -1;
+                            else
+                                return 1;
+                        } else {
+                            //comparing hours
+                            if (o1.getHour() > o2.getHour()) {
+                                if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                    return 1;
+                                else
+                                    return -1;
+                            } else if (o1.getHour() < o2.getHour()) {
+                                if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                    return -1;
+                                else
+                                    return 1;
+                            } else {
+                                //comparing minutes
+                                if (o1.getMinutes() > o2.getMinutes()) {
+                                    if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                        return 1;
+                                    else
+                                        return -1;
+                                } else if (o1.getMinutes() < o2.getMinutes()) {
+                                    if (howToSort.equals(getResources().getString(R.string.first_key)))
+                                        return -1;
+                                    else
+                                        return 1;
+                                } else
+                                    return 0;
+                            }
+                        }
+                    }
+                }
+            });
             adapter.setProducts(scans, favs);
             checkNotifications();
         });
@@ -358,8 +426,6 @@ public class PastFragment extends Fragment {
             }
         }).attachToRecyclerView(pastScansCardView);
 
-        // creates an instance of SharedPreferences class to read settings
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         createNotificationChannelExceed();
 

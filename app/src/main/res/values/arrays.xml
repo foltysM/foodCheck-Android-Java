@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="home_screen_option_labels">
-        <item>@string/home</item>
-        <item>@string/scan_history</item>
-        <item>@string/fav_products</item>
-        <item>@string/progress</item>
+    <array name="sort_option_labels">
+        <item>@string/from_first</item>
+        <item>@string/from_last</item>
     </array>
-    <array name="home_screen_option_values">
-        <item>@string/home_key</item>
-        <item>@string/past_key</item>
-        <item>@string/fav_key</item>
-        <item>@string/progress_key</item>
+    <array name="sort_option_values">
+        <item>@string/first_key</item>
+        <item>@string/last_key</item>
     </array>
 
 </resources>

@@ -154,4 +154,10 @@
     <string name="from">From</string>
     <string name="wrong_dates">Wrong input dates!</string>
     <string name="error">Error happened!</string>
+    <string name="first_key" translatable="false">first_key</string>
+    <string name="last_key" translatable="false">last_key</string>
+    <string name="pref_sort_key" translatable="false">pref_sort_key</string>
+    <string name="sort_products">Sort products list</string>
+    <string name="from_last">From last</string>
+    <string name="from_first">From first</string>
 </resources>

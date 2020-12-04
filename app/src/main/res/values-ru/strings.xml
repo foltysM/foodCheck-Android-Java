@@ -136,4 +136,7 @@
     <string name="from">из</string>
     <string name="wrong_dates">Неправильные даты ввода!</string>
     <string name="error">Произошла ошибка!</string>
+    <string name="from_last">С последнего</string>
+    <string name="from_first">С первого</string>
+    <string name="sort_products">Сортировать список продуктов</string>
 </resources>
