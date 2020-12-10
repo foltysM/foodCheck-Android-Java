@@ -70,6 +70,11 @@ public class NewProductActivity extends AppCompatActivity {
     ScrollView parent;
     private PastScanViewModel mPastScanViewModel;
 
+    /**
+     * Method called on activity creation. Initialises header variables and sets buttons on click reactions
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,6 +260,9 @@ public class NewProductActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method initialises UI variables and sets its text
+     */
     private void initView() {
         nameEditText = findViewById(R.id.nameEditText);
         energyTextView = findViewById(R.id.energyTextView);
@@ -290,6 +298,12 @@ public class NewProductActivity extends AppCompatActivity {
         parent = findViewById(R.id.topScrLayout);
     }
 
+    /**
+     * Method from EditText returns its double value
+     *
+     * @param text EditText which will be the source of the value
+     * @return Double value of EditText
+     */
     private double convertEditToDouble(@NotNull EditText text) {
         String a = decimalFormat.format(Double.parseDouble(text.getText().toString()));
         double ans = 0;
@@ -303,6 +317,13 @@ public class NewProductActivity extends AppCompatActivity {
         return ans;
     }
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned, and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that, didn't return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -367,6 +388,9 @@ public class NewProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method prepares needed variables and runs intent to send an email
+     */
     private void sendMail() {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         String email = "michal@foltys.net";
@@ -393,37 +417,14 @@ public class NewProductActivity extends AppCompatActivity {
         }
     }
 
-   /* public Uri getImageUri(Context inContext, Bitmap inImage, String title) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, title, null);
-        return Uri.parse(path);
-    }
 
-    private String saveToInternalStorage(Bitmap bitmapImage, String name) {
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/net.foltys.foodcheck/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File myPath = new File(directory, name + ".jpg");
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 70, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-        return directory.getAbsolutePath();
-    }*/
-
+    /**
+     * Method creates directory and saves taken picture to file
+     *
+     * @param imageToSave Image that needs to be saved
+     * @param fileName    Name of the file to save
+     * @return Directory of saved file
+     */
     private String createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
 
         File direct = new File(Environment.getExternalStorageDirectory() + "/FoodCheck");
@@ -440,22 +441,28 @@ public class NewProductActivity extends AppCompatActivity {
 
 
         File file = new File(Environment.getExternalStorageDirectory().getPath() + "/FoodCheck/", fileName + ".jpg");
-            if (file.exists()) {
-                if (!file.delete())
-                    Log.d("Photo already exists", "Deletion not successful!");
-            }
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                out.flush();
-                out.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (file.exists()) {
+            if (!file.delete())
+                Log.d("Photo already exists", "Deletion not successful!");
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return direct.getAbsolutePath();
     }
 
+    /**
+     * Method shortens double number to 2 decimal numbers
+     *
+     * @param input Number to shorten
+     * @return Shortened number
+     */
     private double shortenDecimal(double input) {
         String a = decimalFormat.format(input);
         double newDouble = 0;
@@ -468,6 +475,13 @@ public class NewProductActivity extends AppCompatActivity {
         return newDouble;
     }
 
+    /**
+     * Callback for the result from requesting permissions
+     *
+     * @param requestCode  The request code passed
+     * @param permissions  The requested permissions. Never null
+     * @param grantResults The grant results for the corresponding permissions which is either PackageManager.PERMISSION_GRANTED or PackageManager.PERMISSION_DENIED. Never null
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

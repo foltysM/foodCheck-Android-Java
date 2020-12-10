@@ -70,6 +70,11 @@ public class AfterScanActivity extends AppCompatActivity {
     private double energy, carbohydrates, fat, fibre, protein, salt, saturates, sugar, weight;
     private String name, url, scannedBarcode;
 
+    /**
+     * Method called while creating activity. Initialises some objects, displays product data on the screen
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,23 +125,23 @@ public class AfterScanActivity extends AppCompatActivity {
             name = product[0].getName();
             nameTextView.setText(name);
             weight = product[0].getWeight();
-            weightResultTextView.setText(String.format(Double.toString(weight), getResources().getString(R.string.g)));
+            weightResultTextView.setText(String.format("%s", weight + getResources().getString(R.string.g)));
             energy = product[0].getEnergy();
-            energyResultTextView.setText(String.format(Double.toString(energy), getResources().getString(R.string.kcal)));
+            energyResultTextView.setText(String.format("%s", energy + " " + getResources().getString(R.string.kcal)));
             fat = product[0].getFat();
-            fatResultTextView.setText(String.format(Double.toString(fat), getResources().getString(R.string.g)));
+            fatResultTextView.setText(String.format("%s", fat + getResources().getString(R.string.g)));
             saturates = product[0].getSaturates();
-            saturatesResultTextView.setText(String.format(Double.toString(saturates), getResources().getString(R.string.g)));
+            saturatesResultTextView.setText(String.format("%s", saturates + getResources().getString(R.string.g)));
             carbohydrates = product[0].getCarbohydrates();
-            carbohydratesResultTextView.setText(String.format(Double.toString(carbohydrates), getResources().getString(R.string.g)));
+            carbohydratesResultTextView.setText(String.format("%s", carbohydrates + getResources().getString(R.string.g)));
             sugar = product[0].getSugar();
-            sugarsResultTextView.setText(String.format(Double.toString(sugar), getResources().getString(R.string.g)));
+            sugarsResultTextView.setText(String.format("%s", sugar + getResources().getString(R.string.g)));
             fibre = product[0].getFibre();
-            fibreResultTextView.setText(String.format(Double.toString(fibre), getResources().getString(R.string.g)));
+            fibreResultTextView.setText(String.format("%s", fibre + getResources().getString(R.string.g)));
             protein = product[0].getProtein();
-            proteinResultTextView.setText(String.format(Double.toString(protein), getResources().getString(R.string.g)));
+            proteinResultTextView.setText(String.format("%s", protein + getResources().getString(R.string.g)));
             salt = product[0].getSalt();
-            saltResultTextView.setText(String.format(Double.toString(salt), getResources().getString(R.string.g)));
+            saltResultTextView.setText(String.format("%s", salt + getResources().getString(R.string.g)));
             product[0].setUrl("http://foltys.net/food-check/img/" + scannedBarcode + ".jpg");
             url = product[0].getUrl();
             Glide.with(AfterScanActivity.this)
@@ -193,6 +198,9 @@ public class AfterScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method initialises all textViews and ImageViews by its id's
+     */
     private void activityInit() {
         Log.d(TAG, "TextView init started");
         barcodeResultTextView = findViewById(R.id.barcodeResultTextView);
@@ -210,6 +218,9 @@ public class AfterScanActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Method displays dialog to adjust eaten product amount and then inserts new object do past scans database
+     */
     private void insertDataToDatabase() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -331,6 +342,12 @@ public class AfterScanActivity extends AppCompatActivity {
         customDialog.show();
     }
 
+    /**
+     * Method shortens double number to 2 decimal numbers
+     *
+     * @param input Number to shorten
+     * @return Shortened number
+     */
     private double shortenDecimal(double input) {
         String a = decimalFormat.format(input);
         double newDouble = 0;
@@ -343,6 +360,9 @@ public class AfterScanActivity extends AppCompatActivity {
         return newDouble;
     }
 
+    /**
+     * Methods inserts product to favorite products database
+     */
     private void insertToFav() {
         FavProd fav = new FavProd(scannedBarcode, name, weight, energy, carbohydrates, protein, fat, saturates, sugar, fibre, salt, url);
         mFavProdViewModel.insertFav(fav);

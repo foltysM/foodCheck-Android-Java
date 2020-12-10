@@ -16,6 +16,12 @@ public abstract class PastScanDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS); // for running database operations asynchronously
     private volatile static PastScanDatabase INSTANCE; // Creating a singleton
 
+    /**
+     * Constructor of PastScanDatabase, responsible for having only one instance of the database in the application
+     *
+     * @param context Global information about and application environment
+     * @return Instance of the database
+     */
     static PastScanDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (PastScanDatabase.class) {
@@ -30,7 +36,17 @@ public abstract class PastScanDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    /**
+     * Abstract method of PastScanDao
+     *
+     * @return PastScanDao object
+     */
     public abstract PastScanDao pastScanDao();
 
+    /**
+     * Abstract method of FavProdDao
+     *
+     * @return FavProdDao object
+     */
     public abstract FavProdDao favProdDao();
 }

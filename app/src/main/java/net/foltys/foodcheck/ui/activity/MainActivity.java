@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,7 +29,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -59,6 +57,9 @@ import net.foltys.foodcheck.ui.fragment.SettingsFragment;
 
 import java.util.Objects;
 
+/**
+ * @author Michal Foltys (michal@foltys.net)
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 1;
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     private String imageURL = "";
 
 
+    /**
+     * Method called while user presses the back button. Responsible for closing navigation drawer in the first step, then returning to previous fragment / activity
+     */
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -114,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * Method called on activity resume. Checks if the activity was resumed after notification click or another user action, then does specified actions
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,10 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method called on activity creation. Initialises Google Sign-in, header variables and sets buttons on click reactions.
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         setContentView(R.layout.activity_main);
 
 
@@ -154,13 +166,11 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
-
         // variables connected with header
         View header = navigationView.getHeaderView(0);
         nameTextViewHeader = header.findViewById(R.id.nameHeaderTextView);
         emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
         personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
-
 
 
         //Microsoft SDK
@@ -198,13 +208,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method checks which fragment should be loaded and then loads it
+     */
     private void loadHomeFragment() {
         selectNavMenu();
 
         // if user choose the current menu again
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
-
             toggleFab();
         }
 
@@ -217,6 +229,11 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
+    /**
+     * Method returns fragment that user chose to load
+     *
+     * @return Instance of the fragment to load
+     */
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
@@ -233,10 +250,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method highlights chosen element of the navigation menu
+     */
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
+    /**
+     * After checking if user has the internet connection, requests new barcode scan
+     */
     private void requestScan() {
         //check if there is an Internet connection
         if (isOnline()) {
@@ -275,6 +298,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method called on the start of activity. Checks if the user was logged, then update UI with his data
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -285,6 +311,13 @@ public class MainActivity extends AppCompatActivity {
         updateUI(account);
     }
 
+    /**
+     * Callback for the result from requesting permissions. Checks if the permission was granted or not
+     *
+     * @param requestCode  The request code passed while requesting permission
+     * @param permissions  The requested permissions. Never null
+     * @param grantResults The grant results for the corresponding permissions which is either PackageManager.PERMISSION_GRANTED or PackageManager.PERMISSION_DENIED. Never null
+     */
     @Override
     // what will be done after click in permission request
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -314,6 +347,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method sets up the navigation view
+     */
     private void setUpNavigationView() {
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -398,11 +434,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method calls Google Sign-In intent
+     */
     private void login() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    /**
+     * Method toggles Floating Action Button to visible or hidden, depending on fragment shown
+     */
     private void toggleFab() {
         if (navItemIndex == 0) {
             //home
@@ -418,6 +460,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Called when an activity you launched exits, giving you the requestCode you started it with, the resultCode it returned, and any additional data from it. The resultCode will be RESULT_CANCELED if the activity explicitly returned that, didn't return any result, or crashed during its operation.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -439,6 +488,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method responsible for updating UI after successful login task
+     *
+     * @param completedTask Completed task of Google Sign-In
+     */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -454,6 +508,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the UI with Google profile picture and user's name and email
+     *
+     * @param acc Object of user's Google account
+     */
     private void updateUI(GoogleSignInAccount acc) {
         if (acc == null) {
             // clearing person data
@@ -493,6 +552,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame2, HomeFragment.newInstance(name, imageURL)).commit();
     }
 
+    /**
+     * Method logs the user out and updates the UI clearing his data
+     */
     private void logout() {
         navigationView.getMenu().clear();
         navigationView.inflateMenu(R.menu.drawer_menu);
@@ -501,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Returns if the device has a connection with the Internet
+     * Method  checks if the device has a connection with the Internet
      *
      * @return true, if it is connected, false if not
      */

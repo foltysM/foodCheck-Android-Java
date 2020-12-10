@@ -69,21 +69,42 @@ public class PastFragment extends Fragment {
     NotificationManagerCompat notificationManagerProgress;
     NotificationCompat.Builder progressBuilder;
 
+    /**
+     * Constructor of PastFragment class. Empty by default
+     */
     public PastFragment() {
     }
 
+    /**
+     * Called when a fragment is first attached to its context.
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
 
+    /**
+     * Method called while creating Fragment. Gets the arguments passed to a fragment
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical fragments can return null (which is the default implementation). This will be called between onCreate(Bundle) and onActivityCreated(Bundle).
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -93,6 +114,12 @@ public class PastFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned, but before any saved state has been restored in to the view. This gives subclasses a chance to initialize themselves once they know their view hierarchy has been completely created. The fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle).
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -435,6 +462,9 @@ public class PastFragment extends Fragment {
         checkNotifications();
     }
 
+    /**
+     * Method initialises progress notification
+     */
     private void initProgressNotification() {
         notificationManagerProgress = NotificationManagerCompat.from(context);
         progressBuilder = new NotificationCompat.Builder(context, CALORIES_METER_CHANNEL_ID);
@@ -451,6 +481,9 @@ public class PastFragment extends Fragment {
     }
 
 
+    /**
+     * Method checks if a notification should be showed
+     */
     private void checkNotifications() {
         if (sharedPref.getBoolean("show_calories_progress", false) || sharedPref.getBoolean("calories_exceeded_alert", true)) {
             final Calendar calendar = Calendar.getInstance();
@@ -476,6 +509,11 @@ public class PastFragment extends Fragment {
 
     }
 
+    /**
+     * Method refresh the progress notification with value passed
+     *
+     * @param sum Value that the notification should be refreshed with
+     */
     private void refreshNotificationMeter(double sum) {
         progressBuilder.setContentText(String.format("%s", getResources().getString(R.string.calories_eaten) + (int) sum));
         progressBuilder.setProgress(sharedPref.getInt("calories_limit", 2000), (int) sum, false);
@@ -483,6 +521,9 @@ public class PastFragment extends Fragment {
         Log.d(TAG, "refresh meter");
     }
 
+    /**
+     * Method responsible for showing calories exceed alert
+     */
     private void notificationAlert() {
 
         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -507,6 +548,9 @@ public class PastFragment extends Fragment {
         notificationManager.notify(notificationId, builder.build());
     }
 
+    /**
+     * Method creates notification channel for both notifications
+     */
     private void createNotificationChannelExceed() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -523,6 +567,12 @@ public class PastFragment extends Fragment {
         }
     }
 
+    /**
+     * Method shortens double number to 2 decimal numbers
+     *
+     * @param input Number to shorten
+     * @return Shortened number
+     */
     private double shortenDecimal(double input) {
         final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String a = decimalFormat.format(input);

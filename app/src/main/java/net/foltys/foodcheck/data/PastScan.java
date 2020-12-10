@@ -30,6 +30,50 @@ public class PastScan implements Parcelable {
     private String url;
     private double percentEaten;
 
+    public static final Creator<PastScan> CREATOR = new Creator<PastScan>() {
+        /**
+         * Creates a new instance of the Parcelable class, instantiating it from the given Parcel whose data had previously been written by Parcelable#writeToParcel.
+         * @param in The Parcel to read the object's data from.
+         * @return A new instance of the Parcelable class.
+         */
+        @Override
+        public PastScan createFromParcel(Parcel in) {
+            return new PastScan(in);
+        }
+
+        /**
+         * Create a new array of the Parcelable class.
+         * @param size Size of the array.
+         * @return An array of the Parcelable class, with every entry initialized to null.
+         */
+        @Override
+        public PastScan[] newArray(int size) {
+            return new PastScan[size];
+        }
+    };
+
+    /**
+     * The constructor of PastScan class, having all parameters included
+     *
+     * @param barcode       Barcode of the product
+     * @param name          Name of the product
+     * @param weight        Weight of the product
+     * @param day           Day when the product was scanned
+     * @param month         Month when the product was scanned
+     * @param year          Year when the product was scanned
+     * @param hour          Hour of time when the product was scanned
+     * @param minutes       Minutes of time when the product was scanned
+     * @param energy        Energy of the product
+     * @param carbohydrates Carbohydrates of the product
+     * @param protein       Protein value of the product
+     * @param fat           Fat value of the product
+     * @param saturates     Saturates value of the product
+     * @param sugars        Sugars value of the product
+     * @param fibre         Fibre value of the product
+     * @param salt          Salt value of the product
+     * @param url           URL to photo of the product
+     * @param percentEaten  Percent of product eaten
+     */
     public PastScan(String barcode, String name, double weight, int day, int month, int year, int hour, int minutes, double energy, double carbohydrates, double protein, double fat, double saturates, double sugars, double fibre, double salt, String url, double percentEaten) {
         this.barcode = barcode;
         this.name = name;
@@ -51,23 +95,19 @@ public class PastScan implements Parcelable {
         this.percentEaten = percentEaten;
     }
 
+    /**
+     * Another constructor of PastScan class, with 0 parameters
+     */
     @Ignore
     public PastScan() {
 
     }
 
-    public static final Creator<PastScan> CREATOR = new Creator<PastScan>() {
-        @Override
-        public PastScan createFromParcel(Parcel in) {
-            return new PastScan(in);
-        }
-
-        @Override
-        public PastScan[] newArray(int size) {
-            return new PastScan[size];
-        }
-    };
-
+    /**
+     * Another constructor with Parcel object as parameter
+     *
+     * @param in Parcel object what includes information to create new PastScan object
+     */
     protected PastScan(Parcel in) {
         id = in.readInt();
         barcode = in.readString();
@@ -247,6 +287,12 @@ public class PastScan implements Parcelable {
         return 0;
     }
 
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written. May be 0 or PARCELABLE_WRITE_RETURN_VALUE. Value is either 0 or a combination of PARCELABLE_WRITE_RETURN_VALUE, and android.os.Parcelable.PARCELABLE_ELIDE_DUPLICATES
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);

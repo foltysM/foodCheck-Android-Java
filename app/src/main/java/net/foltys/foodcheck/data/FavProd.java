@@ -21,6 +21,23 @@ public class FavProd {
     private double salt;
     private String url;
 
+    /**
+     * The constructor of FavProd class
+     *
+     * @param barcode       Barcode of the scanned product
+     * @param name          Name of the product
+     * @param weight        Weight value of the product
+     * @param energy        Energy value of the product
+     * @param carbohydrates Carbohydrates value of the product
+     * @param protein       Protein value of the product
+     * @param fat           Fat value of the product
+     * @param saturates     Saturates value of the product
+     * @param sugars        Sugars value of the product
+     * @param fibre         Fibre value of the product
+     * @param salt          Salt value of the product
+     * @param url           URL to the picture of the product
+     */
+
     public FavProd(@NonNull String barcode, String name, double weight, double energy, double carbohydrates, double protein, double fat, double saturates, double sugars, double fibre, double salt, String url) {
         this.barcode = barcode;
         this.name = name;

@@ -33,11 +33,24 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
 
     private final Observer<Integer> favClickedObserver;
 
+    /**
+     * Constructor of FavProductsCardView Adapter class
+     *
+     * @param context            Context
+     * @param favClickedObserver On favorite click observer
+     */
     public FavProductsCardViewAdapter(Context context, Observer<Integer> favClickedObserver) {
         this.context = context;
         this.favClickedObserver = favClickedObserver;
     }
 
+    /**
+     * Called when RecyclerView needs a new RecyclerView.ViewHolder of the given type to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +58,12 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
         return new ViewHolder(view);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position. This method should update the contents of the RecyclerView.ViewHolder.itemView to reflect the item at the given position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -88,17 +107,34 @@ public class FavProductsCardViewAdapter extends RecyclerView.Adapter<FavProducts
     }
 
 
+    /**
+     * Method returns size of favorite products list
+     *
+     * @return Size of favorite products list
+     */
     @Override
     public int getItemCount() {
         return favProds.size();
     }
 
+    /**
+     * Methods sets favorite list and past scans list and notify that it was changed
+     *
+     * @param favProducts List of favorite products
+     * @param pastScans   List of past scans
+     */
     public void setFavProducts(List<FavProd> favProducts, List<PastScan> pastScans) {
         this.favProds = favProducts;
         this.pastScans = pastScans;
         notifyDataSetChanged();
     }
 
+    /**
+     * Method returns favorite product object by its position
+     *
+     * @param pos Position on the list
+     * @return Favorite product with specified position
+     */
     public FavProd getFavAt(int pos) {
         return favProds.get(pos);
     }

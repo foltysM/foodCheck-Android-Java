@@ -68,14 +68,17 @@ public class ProgressFragment extends Fragment {
     private EditText fromEditText;
     private EditText toEditText;
 
+    /**
+     * Constructor of Progress Fragment. Empty by default
+     */
     public ProgressFragment() {
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Called when a fragment is first attached to its context.
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -85,13 +88,23 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    /**
+     * Method called on fragment detach. Clearing context field
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         this.context = null;
     }
 
-
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical fragments can return null (which is the default implementation). This will be called between onCreate(Bundle) and onActivityCreated(Bundle).
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -100,6 +113,12 @@ public class ProgressFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned, but before any saved state has been restored in to the view. This gives subclasses a chance to initialize themselves once they know their view hierarchy has been completely created. The fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle).
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -157,6 +176,7 @@ public class ProgressFragment extends Fragment {
                     } else
                         to = sdf.parse(toStr);
 
+                    assert from != null;
                     if (from.after(to))
                         Toast.makeText(context, getResources().getString(R.string.wrong_dates), Toast.LENGTH_SHORT).show();
                     else {
@@ -241,6 +261,11 @@ public class ProgressFragment extends Fragment {
 
     }
 
+    /**
+     * Method updates EditText with current date
+     *
+     * @param edit Indicates which label should be updated
+     */
     private void updateLabel(int edit) {
         switch (edit) {
             case 1:
@@ -249,13 +274,17 @@ public class ProgressFragment extends Fragment {
             case 2:
                 toEditText.setText(sdf.format(myCalendar.getTime()));
                 break;
-            case 0:
             default:
                 Log.d("edit[0]", " error");
                 break;
         }
     }
 
+    /**
+     * Method checks if user granted permission to write storage. If not, requests it
+     *
+     * @return True, if permission is granted
+     */
     private boolean checkPermission() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
@@ -265,11 +294,20 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    /**
+     * Method inflates new chart fragment
+     *
+     * @param from Date from which chart should be generated
+     * @param to   Date to which chart should be generated
+     */
     private void show(String from, String to) {
         generateTextView.setVisibility(View.GONE);
         getParentFragmentManager().beginTransaction().replace(R.id.frame_for_chart, ChartFragment.newInstance(sortBy, showWhat, mPastScans, from, to)).commit();
     }
 
+    /**
+     * Method saves a screenshot of the chart
+     */
     private void takeScreenshot() {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
@@ -299,6 +337,13 @@ public class ProgressFragment extends Fragment {
         }
     }
 
+    /**
+     * Callback for the result from requesting permissions.
+     *
+     * @param requestCode  The request code passed
+     * @param permissions  The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions which is either PackageManager.PERMISSION_GRANTED or PackageManager.PERMISSION_DENIED. Never null.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

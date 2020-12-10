@@ -36,12 +36,26 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
     private final Observer<Integer> clickObserver;
 
 
+    /**
+     * Constructor of the PastScansCardViewAdapter class
+     *
+     * @param context       Context
+     * @param observer      Favorite change observer
+     * @param clickObserver On past scan click observer
+     */
     public PastScansCardViewAdapter(Context context, Observer<RxHelper> observer, Observer<Integer> clickObserver) {
         this.context = context;
         this.observer = observer;
         this.clickObserver = clickObserver;
     }
 
+    /**
+     * Called when RecyclerView needs a new RecyclerView.ViewHolder of the given type to represent an item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,12 +64,24 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         return new ViewHolder(view);
     }
 
+    /**
+     * Method responsible for binding observer and emitter, and value change of specified element
+     *
+     * @param pos Element position on the list
+     * @param val Value that the element will be changed to
+     */
     public void goChangeFav(int pos, Boolean val) {
         RxHelper rxHelper = new RxHelper(pos, val);
         Observable<RxHelper> emitter = Observable.just(rxHelper);
         emitter.subscribe(observer);
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position. This method should update the contents of the RecyclerView.ViewHolder.itemView to reflect the item at the given position.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder called");
@@ -108,21 +134,44 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
 
     }
 
+    /**
+     * Method returns size of past scans list
+     *
+     * @return Size of past scans list
+     */
     @Override
     public int getItemCount() {
         return pastScanProducts.size();
     }
 
+    /**
+     * Methods sets favorite list and past scans list and notify that it was changed
+     *
+     * @param favorites List of favorite products
+     * @param products  List of past scans
+     */
     public void setProducts(List<PastScan> products, List<FavProd> favorites) {
         this.pastScanProducts = products;
         this.favProducts = favorites;
         notifyDataSetChanged();
     }
 
+    /**
+     * Method returns past scan object by its position
+     *
+     * @param pos Position on the list
+     * @return Scan with specified position
+     */
     public PastScan getPastAt(int pos) {
         return pastScanProducts.get(pos);
     }
 
+    /**
+     * Method shortens double number to 2 decimal numbers
+     *
+     * @param input Number to shorten
+     * @return Shortened number
+     */
     private double shortenDecimal(double input) {
         String a = decimalFormat.format(input);
         double newDouble = 0;
@@ -134,7 +183,6 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         }
         return newDouble;
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView productName;

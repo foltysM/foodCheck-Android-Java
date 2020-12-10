@@ -1,8 +1,9 @@
 package net.foltys.foodcheck;
 
+import org.jetbrains.annotations.NotNull;
+
 public class FoodProduct {
     private int id;
-    private String Date;
     private String name;
     private String barcode;
     private int energy;
@@ -17,9 +18,26 @@ public class FoodProduct {
     private String url;
     private boolean favorite;
 
-    public FoodProduct(int id, String date, String name, String barcode, int energy, double fat, double saturates, double carbohydrates, double sugar, double fibre, double protein, double salt, double weight, String url, boolean favorite) {
+    /**
+     * Constructor of FoodProduct class. Object of this class is being created while receiving response from REST API. Structure equal to database structure
+     *
+     * @param id            Product's id from the database
+     * @param name          Product's name
+     * @param barcode       Product's barcode
+     * @param energy        Product's energy
+     * @param fat           Product's fat
+     * @param saturates     Product's saturates
+     * @param carbohydrates Product's carbohydrates
+     * @param sugar         Product's sugar
+     * @param fibre         Product's fibre
+     * @param protein       Product's protein
+     * @param salt          Product's salt
+     * @param weight        Product's weight
+     * @param url           Product's image URL
+     * @param favorite      Defines if the product is on the favorite list
+     */
+    public FoodProduct(int id, String name, String barcode, int energy, double fat, double saturates, double carbohydrates, double sugar, double fibre, double protein, double salt, double weight, String url, boolean favorite) {
         this.id = id;
-        Date = date;
         this.name = name;
         this.barcode = barcode;
         this.energy = energy;
@@ -41,14 +59,6 @@ public class FoodProduct {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getDate() {
-        return Date;
-    }
-
-    public void setDate(String date) {
-        Date = date;
     }
 
     public String getName() {
@@ -155,11 +165,16 @@ public class FoodProduct {
         this.favorite = favorite;
     }
 
+    /**
+     * Method joins all fields into one JSON String
+     *
+     * @return String of joined data in JSON format
+     */
+    @NotNull
     @Override
     public String toString() {
         return "FoodProduct{" +
                 "id=" + id +
-                ", Date='" + Date + '\'' +
                 ", name='" + name + '\'' +
                 ", barcode='" + barcode + '\'' +
                 ", energy=" + energy +

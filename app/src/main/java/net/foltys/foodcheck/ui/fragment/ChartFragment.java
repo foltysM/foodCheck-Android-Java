@@ -19,6 +19,7 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
 import com.anychart.core.cartesian.series.Column;
+import com.anychart.core.ui.LabelsFactory;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
@@ -49,9 +50,22 @@ public class ChartFragment extends Fragment {
     private Date from, to;
     private Context context;
 
+    /**
+     * Constructor of the ChartFragment class
+     */
     public ChartFragment() {
     }
 
+    /**
+     * Method returns new Instance of Chart Fragment with parameters attached
+     *
+     * @param sortBy    Parameter indicates the user's choice by what the products should be sorted
+     * @param showWhat  Parameter that indicates which product parameter will be shown of the chart
+     * @param pastScans List of all past scans
+     * @param from      Date from which user wants to have the chart generated
+     * @param to        Date to which user wants to have the chart generated
+     * @return New instance of ChartFragment
+     */
     public static ChartFragment newInstance(int sortBy, int showWhat, ArrayList<PastScan> pastScans, String from, String to) {
         ChartFragment fragment = new ChartFragment();
         Bundle args = new Bundle();
@@ -64,12 +78,22 @@ public class ChartFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Called when a fragment is first attached to its context.
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
 
+    /**
+     * Method called while creating Fragment. Gets the arguments passed to a fragment
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +120,14 @@ public class ChartFragment extends Fragment {
         }
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical fragments can return null (which is the default implementation). This will be called between onCreate(Bundle) and onActivityCreated(Bundle).
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,6 +136,12 @@ public class ChartFragment extends Fragment {
     }
 
 
+    /**
+     * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned, but before any saved state has been restored in to the view. This gives subclasses a chance to initialize themselves once they know their view hierarchy has been completely created. The fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle).
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,6 +152,9 @@ public class ChartFragment extends Fragment {
         showChart();
     }
 
+    /**
+     * Method prepares chart variables and shows the chart
+     */
     private void showChart() {
         Cartesian cartesian = AnyChart.column();
         Column column = cartesian.column(data);
@@ -133,6 +174,9 @@ public class ChartFragment extends Fragment {
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
         cartesian.xAxis(0).title(getResources().getString(R.string.dates));
+
+        LabelsFactory xAxisLabels = cartesian.xAxis(0).labels();
+        xAxisLabels.rotation(270);
         cartesian.yAxis(0).title(what);
 
 
@@ -143,23 +187,27 @@ public class ChartFragment extends Fragment {
         anyChartView.setChart(cartesian);
     }
 
+    /**
+     * Method gets specified data from all past scans
+     *
+     * @return List of filtered and customized data
+     */
     private ArrayList<DataEntry> getData() {
         ArrayList<ProductDateValue> mProductDateValue = new ArrayList<>();
         for (int i = 0; i < mPastScans.size(); i++) {
             String date;
             String y = Integer.toString(mPastScans.get(i).getYear());
-            Date scanDate = null;
+
+            Date scanDate;
+
             try {
                 scanDate = sdf.parse(mPastScans.get(i).getDay() + "/" + mPastScans.get(i).getMonth() + "/" + y.substring(y.length() - 2));
             } catch (ParseException e) {
                 e.printStackTrace();
-                //continue;
+                continue;
             }
             //checks if the date is between from and to
-            Log.d("from", String.valueOf(from));
-            Log.d("date", String.valueOf(scanDate));
-            Log.d("to", String.valueOf(to));
-            if (from.after(scanDate) || scanDate.after(to)) {
+            if (from.after(scanDate) || (scanDate != null && scanDate.after(to))) {
                 Log.d("date", "not between from and to");
             } else {
                 switch (sortBy) {

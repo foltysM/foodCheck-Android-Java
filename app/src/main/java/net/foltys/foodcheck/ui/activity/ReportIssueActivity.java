@@ -17,6 +17,11 @@ public class ReportIssueActivity extends AppCompatActivity {
     Button sendButton;
     EditText reportContent;
 
+    /**
+     * Method called while creating activity. Initialises some objects, prepares listener of send button
+     *
+     * @param savedInstanceState savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,16 +37,20 @@ public class ReportIssueActivity extends AppCompatActivity {
             emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
             String subject = "[FoodCheck issue report]";
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-
             emailIntent.putExtra(Intent.EXTRA_TEXT, reportContent.getText().toString());
-
-
             startActivityForResult(emailIntent, EMAIL_REQUEST_CODE);
 
         });
     }
 
 
+    /**
+     * Method called while going back to the activity after calling intent. In case sending email was requested, taking user to the main menu
+     *
+     * @param requestCode Request code specifies what action was requested
+     * @param resultCode  Result code specifies if the action was successful
+     * @param data        If some data was passed back, it will be there
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -54,16 +54,29 @@ public class FavoriteFragment extends Fragment {
     private RelativeLayout parent;
     private Context context;
 
+    /**
+     * Constructor of Favorite Fragment, empty by default
+     */
     public FavoriteFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Called when a fragment is first attached to its context.
+     *
+     * @param context Context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
 
+    /**
+     * Method called while creating Fragment. Initialises dialogs and buttons behaviour
+     *
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,6 +231,14 @@ public class FavoriteFragment extends Fragment {
 
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and non-graphical fragments can return null (which is the default implementation). This will be called between onCreate(Bundle) and onActivityCreated(Bundle).
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to. The fragment should not add the view itself, but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -228,6 +249,12 @@ public class FavoriteFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Called immediately after onCreateView(LayoutInflater, ViewGroup, Bundle) has returned, but before any saved state has been restored in to the view. This gives subclasses a chance to initialize themselves once they know their view hierarchy has been completely created. The fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view               The View returned by onCreateView(LayoutInflater, ViewGroup, Bundle).
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -299,6 +326,12 @@ public class FavoriteFragment extends Fragment {
 
     }
 
+    /**
+     * Method shortens double number to 2 decimal numbers
+     *
+     * @param input Number to shorten
+     * @return Shortened number
+     */
     private double shortenDecimal(double input) {
         final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String a = decimalFormat.format(input);
