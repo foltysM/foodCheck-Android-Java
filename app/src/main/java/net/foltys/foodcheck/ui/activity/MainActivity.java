@@ -43,9 +43,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.microsoft.appcenter.AppCenter;
-import com.microsoft.appcenter.analytics.Analytics;
-import com.microsoft.appcenter.crashes.Crashes;
 
 import net.foltys.foodcheck.CaptureAct;
 import net.foltys.foodcheck.R;
@@ -171,11 +168,6 @@ public class MainActivity extends AppCompatActivity {
         nameTextViewHeader = header.findViewById(R.id.nameHeaderTextView);
         emailTextViewHeader = header.findViewById(R.id.emailHeaderTextView);
         personPhotoHeader = header.findViewById(R.id.personPhotoHeader);
-
-
-        //Microsoft SDK
-        AppCenter.start(getApplication(), "bb5ba2c0-ac45-4e09-937b-08d97e6c789c",
-                Analytics.class, Crashes.class);
 
         scanButton = findViewById(R.id.scanButton);
 

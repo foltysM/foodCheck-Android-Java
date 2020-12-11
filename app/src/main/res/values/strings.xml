@@ -146,7 +146,7 @@
     <string name="calories_eaten">Calories eaten:</string>
     <string name="home_key" translatable="false">home_key</string>
     <string name="pref_home_key" translatable="false">pref_home_key</string>
-    <string name="pref_home_label">Preffered home page</string>
+    <string name="pref_home_label">Preferred home page</string>
     <string name="past_key" translatable="false">past_key</string>
     <string name="progress_key" translatable="false">progress_key</string>
     <string name="fav_key" translatable="false">fav_key</string>

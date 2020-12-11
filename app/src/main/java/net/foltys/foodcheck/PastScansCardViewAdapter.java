@@ -203,7 +203,6 @@ public class PastScansCardViewAdapter extends RecyclerView.Adapter<PastScansCard
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-
             productImage = itemView.findViewById(R.id.productImagePast);
             productName = itemView.findViewById(R.id.productNamePast);
             productDate = itemView.findViewById(R.id.datePastScans);
