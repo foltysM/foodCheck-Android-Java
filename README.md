@@ -25,11 +25,15 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
-<div>
-<h3 align="center">Playing cards recognition software</h3>
+<div align="center">
+<a href="https://github.com/github_username/repo_name">
+    <img src="images/foodCheckLogo-192px.png" alt="Logo" width="80" height="80">
+  </a>
+<h3 align="center">Foodcheck</h3>
+
 
   <p align="center">
-    App developed as a part of Engineering Thesis at Warsaw Univeristy of Technology
+    App developed as a part of Engineering Thesis at Warsaw Univeristy of Technology. Developed as a help to keep diet and overview nutritional values eaten.
     <br />
     <a href="https://github.com/foltysM/foodCheck-Android-Java"><strong>Explore the docs »</strong></a>
     <br />
@@ -51,7 +55,8 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#key-functions">Key functions</a></li>
+        <li><a href="#main-features">Main features</a></li>
+        <li><a href="#app-contents">App contents</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -62,7 +67,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -74,27 +78,70 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-After providing the input file or choosing one of the built-in test images, process starts. Flow diagram is attached below.
-<p align="center">
-<img src="images/diagram.png" class="centerAlign" style="width:20%">
+Aim for the project was to create so called "live fit helper" app. It was designed to measure all nutritional values eaten, basing on food products database. User can mark products as favorite, set goals and review the history of scans. 
 
-</p>
+### Main features:
+
+- [x] Barcode scanner
+- [x] Food products database connection via API
+- [x] Google account login and cloud data save
+- [x] 3 language translation
 
 
-### Key functions
-* fillRectangle function fills card inner rectangle with white. It is called only when number of contours exceeds 50 - it's Jack, Queen or King.
-Area of maximal fitting rectangle is calculated for every contour. Last but not list biggest contour is filled with white using fillPoly function.
+<!-- App contents -->
+### App contents
 
-![queen1]
+* Homepage
 
-* isRed function checks whether the card has black or red symbol. Original image is converted to HSV, then thresholding is made. As the next step, erosion is applied. Further, software searches for contours. If area of any exceeds 200, card contains red symbol. Below, image after thresholding can be seen
+Main screen of the app. Displays user Google Account photo, name, random food quote and simplified scan data.
+Contains scan button implemented as floating button
 
-![queen2]
+![screenshot1]
 
-* findTemplate finds model contour on pre-prepared image. Image is scaled down and converted to grayscale. Next steps are similar to contours matching on test images. Returns the larges contour found.
+* Barcode Scanner
 
-![two]
+Core feature of the app. Provides possibility to scan food barcodes. Implemented using ZXing library.
 
+![screenshot3]
+
+* Side menu
+
+Main option menu. Opened by sliding from left to right or by clicking hamburger symbol in top left of every screen. 
+Contains all key features links. User can be redirected to each of them.
+
+![screenshot2]
+
+* Scanned product data screen
+
+After barcode scan, this screen shows up. It contains all necessery information about the product. User can add to or remove it from favorites. Scan can be saved or rejected.
+
+![screenshot4]
+
+* Input screen (for products not in the database)
+
+If product was not found in the database, user can input nutritional values manually. After his approval, data can be moved to database (after admin approval).
+
+* Scan history list
+
+Displays past scan history. Each item is placed in one card. Most important data is stored in every card. E.g. user can see if a product is his favorite and remove if necessary. Screen also allows user to make new scan.
+
+![screenshot5]
+
+* Favorite products list
+
+Similar to scan history, every favorite product is stored as an item on card list. User can read its data and remove it if necessary.
+
+* Progress menu
+
+Here, all statistics and goals are stored. User can set the goals and see progress in different time-frames.
+
+* Settings menu
+
+Settings menu provides user ability to change app settings, e.g. set scan order way.
+
+* Notifications
+
+App provides possibility of setting notifications for calories over limit or e.g. proteins goal achieved.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -102,9 +149,17 @@ Area of maximal fitting rectangle is calculated for every contour. Last but not 
 
 ### Built With
 
-* [C++](https://isocpp.org/)
-* [Visual Studio](https://visualstudio.microsoft.com/)
-* [OpenCV](https://opencv.org/)
+* [Android Studio](https://developer.android.com/studio)
+* [Java](https://www.java.com/pl/)
+* [ZXing](https://github.com/zxing/zxing)
+* [Material](https://material.io/)
+* [CardView](https://developer.android.com/guide/topics/ui/layout/cardview)
+* [Gson](https://github.com/google/gson)
+* [Room](https://developer.android.com/jetpack/androidx/releases/room)
+* [Volley](https://developer.android.com/training/volley)
+* [RxJava](https://github.com/ReactiveX/RxAndroid)
+* [Glide](https://github.com/bumptech/glide)
+* [AnyChart](https://github.com/AnyChart/AnyChart-Android/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -123,19 +178,13 @@ To get a local copy up and running follow these simple example steps.
    ```commandline
    git clone https://github.com/foltysM/foodCheck-Android-Java
    ```
-2. Install all necessary external references for OpenCV.
+2. Compile and install app on your local device or AVD
 3. Run program
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-<!-- ROADMAP -->
-## Roadmap
 
-- [x] Finding symbol models
-- [x] Recognizing card color
-- [x] Working for all 13 types of cards
-- [x] Accuracy > 90%
 
 
 See the [open issues](https://github.com/foltysM/foodCheck-Android-Java/issues) for a full list of proposed features (and known issues).
@@ -203,4 +252,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [screenshot3]: images/screenshot3.png
 [screenshot4]: images/screenshot4.png
 [screenshot5]: images/screenshot5.png
+
 
